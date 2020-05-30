@@ -14,3 +14,4 @@
   - [brew update]
   - [brew list tmux || brew install tmux]
   - [brew cask list hammerspoon || brew cask install hammerspoon]
+  - [test ~/.tmux && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm]
