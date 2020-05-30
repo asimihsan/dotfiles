@@ -1,0 +1,16 @@
+- defaults:
+    link:
+      relink: true
+
+- clean: ['~']
+
+- link:
+    ~/.tmux.conf: tmux.conf
+    ~/.hammerspoon:
+      if: '[ `uname` = Darwin ]'
+      path: hammerspoon
+
+- shell:
+  - [brew update]
+  - [brew list tmux || brew install tmux]
+  - [brew cask list hammerspoon || brew cask install hammerspoon]
