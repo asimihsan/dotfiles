@@ -90,63 +90,37 @@ wifiWatcher:start()
 -- ----------------------------------------------------------------------------
 
 -- ----------------------------------------------------------------------------
---  chrony NTP
+--  Attempt to wake up NAS when waking up
 -- ----------------------------------------------------------------------------
-local shuttingDown = false
-
-function shutDownChrony()
-    if not shuttingDown then
-        shuttingDown = true
-        hs.execute("/usr/local/bin/chronyc shutdown")
-        hs.timer.doAfter(5.0, function() shuttingDown = false end)
+function checkWakeUpNasResult(rc, stderr, stderr)
+    if rc ~= 0 then
+        print(string.format("Unexpected result waking up NAS: rc=%d stderr=%s stdout=%s", rc, stderr, stdout))
     end
+end
+
+function checkMountResult(rc, stderr, stderr)
+    if rc ~= 0 then
+        print(string.format("Unexpected result running mount: rc=%d stderr=%s stdout=%s", rc, stderr, stdout))
+    end
+end
+
+function wakeUpNas()
+    print("Waking up NAS...")
+    local t = hs.task.new("/usr/local/bin/wakeonlan", checkWakeUpNasResult, {"00:11:32:EC:EF:A7"})
+    t:start()
+end
+
+function mountSharedFolders()
+    print("Running mount...")
+    local t = hs.task.new("/Users/asimi/bin/mount.sh", checkMountResult)
+    t:start()
 end
 
 hs.network.reachability.internet():setCallback(function(self, flags)
     if (flags & hs.network.reachability.flags.reachable) > 0 then
-        logger.i("internet is reachable")
-        shutDownChrony()
-    else
-        logger.i("internet is not reachable")
-        shutDownChrony()
+        logger.i("internet is reachable, so do mounting")
+        mountSharedFolders()
     end
 end):start()
-hs.network.reachability.forHostName("ntp.corp.amazon.com"):setCallback(function(self, flags)
-    if (flags & hs.network.reachability.flags.reachable) > 0 then
-        logger.i("internet AND CORP is reachable")
-        -- a default route exists, so an active internet connection is present
-        shutDownChrony()
-    else
-        -- no default route exists, so no active internet connection is present
-        logger.i("internet AND CORP is not reachable")
-        shutDownChrony()
-    end
-end):start()
--- ----------------------------------------------------------------------------
 
--- ----------------------------------------------------------------------------
---  Toggle bluetooth around sleeping
--- ----------------------------------------------------------------------------
-function checkBluetoothResult(rc, stderr, stderr)
-    if rc ~= 0 then
-        print(string.format("Unexpected result executing `blueutil`: rc=%d stderr=%s stdout=%s", rc, stderr, stdout))
-    end
-end
-
-function bluetooth(power)
-    print("Setting bluetooth to " .. power)
-    local t = hs.task.new("/usr/local/bin/blueutil", checkBluetoothResult, {"--power", power})
-    t:start()
-end
-
-function f(event)
-    if event == hs.caffeinate.watcher.systemWillSleep then
-        bluetooth("off")
-    elseif event == hs.caffeinate.watcher.screensDidWake then
-        bluetooth("on")
-    end
-end
-
-watcher = hs.caffeinate.watcher.new(f)
-watcher:start()
--- ----------------------------------------------------------------------------
+hs.timer.doEvery(60, mountSharedFolders)
