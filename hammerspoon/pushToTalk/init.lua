@@ -94,8 +94,12 @@ function changeMicrophoneState(mute)
     end
     -- Hack to really unmute the microphone
     local defaultInputDevice = hs.audiodevice.defaultInputDevice()
-    local defaultVolumne = inputVolumes[defaultInputDevice:uid()]
-    hs.applescript('set volume input volume ' .. defaultVolumne)
+    local defaultVolume = inputVolumes[defaultInputDevice:uid()]
+    if defaultVolume == nil then
+      log.i('No default volume found when unmuting!')
+      return
+    end
+    hs.applescript('set volume input volume ' .. defaultVolume)
     menubarIcon:setIcon(icons.microphone)
   end
 end
