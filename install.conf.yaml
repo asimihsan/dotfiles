@@ -1,17 +1,26 @@
 - defaults:
-    link:
-      relink: true
+      link:
+          relink: true
 
-- clean: ['~']
+- clean: ["~"]
 
 - link:
-    ~/.tmux.conf: tmux.conf
-    ~/.hammerspoon:
-      if: '[ `uname` = Darwin ]'
-      path: hammerspoon
+      ~/.tmux.conf: tmux.conf
+      ~/.hammerspoon:
+          if: "[ `uname` = Darwin ]"
+          path: hammerspoon
+      ~/.zshrc: zshrc
 
 - shell:
-  - [brew update]
-  - [brew list tmux || brew install tmux]
-  - [brew list hammerspoon || brew install hammerspoon]
-  - [test ~/.tmux || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm]
+      - [brew update]
+      - [brew list tmux || brew install tmux]
+      - [brew list hammerspoon || brew install hammerspoon]
+      - [
+            test ~/.tmux || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm,
+        ]
+
+- create:
+      - ~/bin
+
+- link:
+      ~/bin/mac_update.sh: mac_update.sh
