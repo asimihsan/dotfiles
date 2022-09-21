@@ -21,8 +21,8 @@ spoon.SpoonInstall.use_syncinstall = true
 -- I'm using a local copy of [1]
 --
 -- [1] https://github.com/semperos/hammerspoon-push-to-talk
-local pushToTalk = require("pushToTalk")
-pushToTalk.init{}
+-- local pushToTalk = require("pushToTalk")
+-- pushToTalk.init{}
 
 -- ----------------------------------------------------------------------------
 --  caffeine, prevent display from sleeping
