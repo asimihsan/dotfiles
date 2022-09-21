@@ -4,7 +4,7 @@
 --
 local log = hs.logger.new('PushToTalk','debug')
 local settings = {
-  pushToTalk = true
+  pushToTalk = false
 }
 
 local inputVolumes = {}
