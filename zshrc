@@ -24,3 +24,9 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="$PATH":$HOME/flutter/bin
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# For P
+alias dotnet=/usr/local/share/dotnet/x64/dotnet
+# Add .NET Core SDK tools
+export PATH="$PATH:/Users/asimi/.dotnet/tools"
+alias pmc='coyote test'
