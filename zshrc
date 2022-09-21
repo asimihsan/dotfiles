@@ -20,3 +20,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 . "$HOME/.nvm/nvm.sh"
+
+export PATH="$PATH":$HOME/flutter/bin
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
