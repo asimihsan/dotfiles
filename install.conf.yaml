@@ -22,6 +22,7 @@
 
 - create:
       - ~/bin
+      - ~/workplace
 
 - link:
       ~/bin/mac_update.sh: mac_update.sh
