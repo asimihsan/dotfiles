@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# brew install jq pv zstd
+
+set -euxo pipefail
+
+DESTINATION=/Volumes/minio/docker-images
+TMPFILE=$(mktemp $DESTINATION/backup-docker-images-XXXXX)
+trap 'rm -f $TMPFILE' EXIT
+echo "tmpfile is $TMPFILE"
+
+mount.sh
+
+docker images | tail -n +2 | grep -v "none" | awk '{printf("%s:%s\n", $1, $2)}' | while read -r IMAGE
+do
+    new_digest=$(docker images "$IMAGE" --quiet)
+    filename=$(echo "$IMAGE" | tr '/' '_' | tr ':' '_')_docker_"$(hostname)"_"$new_digest"
+    echo "filename is $filename"
+    compress_target="$DESTINATION"/"$filename".tar.zst
+    [ -f "$compress_target" ] && continue
+
+    size=$(docker inspect "$IMAGE" | jq '.[].Size')
+    nice -n 19 bash -c 'docker save '"$IMAGE"' | pv --cursor --size '"$size"' --buffer-size 1024 -N "'"$IMAGE"' docker save" | zstd -7 | pv --cursor --buffer-size 1024 -N "'"$IMAGE"' zstd compress" > '"$TMPFILE"
+    mv "$TMPFILE" "$compress_target"
+done
