@@ -12,6 +12,19 @@
       ~/.zshrc: zshrc
       ~/.gitconfig: gitconfig
 
+- create:
+      - ~/bin
+      - ~/workplace
+
+- link:
+      ~/bin/mac_update.sh: mac_update.sh
+      ~/bin/backup-docker-images: backup-docker-images
+      ~/bin/bib2filename.py: bib2filename.py
+      ~/bin/curltime: curltime
+      ~/bin/k2pdfopt: k2pdfopt
+      ~/bin/mount.sh: mount.sh
+      ~/bin/pikchr: pikchr
+
 - shell:
       - [brew update]
       - [brew list tmux || brew install tmux]
@@ -20,10 +33,3 @@
             test ~/.tmux || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm,
         ]
       - [npm install -g critical netlify-cli aws-cdk svgo]
-
-- create:
-      - ~/bin
-      - ~/workplace
-
-- link:
-      ~/bin/mac_update.sh: mac_update.sh
