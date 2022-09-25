@@ -17,11 +17,12 @@
       - ~/workplace
 
 - link:
-      ~/bin/mac_update.sh: mac_update.sh
       ~/bin/backup-docker-images: backup-docker-images
       ~/bin/bib2filename.py: bib2filename.py
       ~/bin/curltime: curltime
       ~/bin/k2pdfopt: k2pdfopt
+      ~/bin/mac_update.sh: mac_update.sh
+      ~/bin/merge-zsh-history: merge-zsh-history
       ~/bin/mount.sh: mount.sh
       ~/bin/pikchr: pikchr
 
@@ -29,6 +30,7 @@
       - [brew update]
       - [brew list tmux || brew install tmux]
       - [brew list hammerspoon || brew install hammerspoon]
+      - [brew list pv || brew install pv]
       - [
             test ~/.tmux || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm,
         ]
