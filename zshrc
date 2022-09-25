@@ -30,3 +30,11 @@ alias dotnet=/usr/local/share/dotnet/x64/dotnet
 # Add .NET Core SDK tools
 export PATH="$PATH:/Users/asimi/.dotnet/tools"
 alias pmc='coyote test'
+
+eval "$(rbenv init - zsh)"
+
+export ANDROID_NDK_HOME=$HOME/Library/Android/sdk/ndk/25.1.8937393
+
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
