@@ -7,7 +7,7 @@ export PATH="$HOME/.bin:$PATH"
 export PATH="/usr/local/bin:$HOME/bin:$PATH"
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-alias zstd=/usr/local/bin/zstd
+alias zstd=$(brew --prefix zstd)/bin/zstd
 
 . "$HOME/.cargo/env"
 
