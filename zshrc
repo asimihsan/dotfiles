@@ -38,3 +38,9 @@ export ANDROID_NDK_HOME=$HOME/Library/Android/sdk/ndk/25.1.8937393
 export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
+
+brew_path() {
+    brew list $1 | sponge | head -1 | xargs dirname | sed 's/\(^.*\/hbase\/[^\/]*\).*/\1/'
+}
+
+export GOROOT=$(brew_path go)/libexec
