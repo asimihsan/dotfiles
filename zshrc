@@ -44,3 +44,6 @@ brew_path() {
 }
 
 export GOROOT=$(brew_path go)/libexec
+
+# Newer dotnet for Dafny
+export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec"
