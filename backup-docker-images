@@ -2,24 +2,25 @@
 
 # brew install jq pv zstd
 
-set -euxo pipefail
+set -euo pipefail
+
+mount.sh
 
 DESTINATION=/Volumes/minio/docker-images
 TMPFILE=$(mktemp $DESTINATION/backup-docker-images-XXXXX)
 trap 'rm -f $TMPFILE' EXIT
 echo "tmpfile is $TMPFILE"
 
-mount.sh
-
-docker images | tail -n +2 | grep -v "none" | awk '{printf("%s:%s\n", $1, $2)}' | while read -r IMAGE
+docker images | tail -n +2 | grep -v "none" | while read -r LINE
 do
-    new_digest=$(docker images "$IMAGE" --quiet)
-    filename=$(echo "$IMAGE" | tr '/' '_' | tr ':' '_')_docker_"$(hostname)"_"$new_digest"
+    image_id=$(echo "$LINE" | awk '{print $3}')
+    filename=$(echo "$LINE" | awk -vhostname="$(hostname)" '{printf $1 "_" $2 "_" hostname "_" $3}')
     echo "filename is $filename"
     compress_target="$DESTINATION"/"$filename".tar.zst
     [ -f "$compress_target" ] && continue
 
-    size=$(docker inspect "$IMAGE" | jq '.[].Size')
-    nice -n 19 bash -c 'docker save '"$IMAGE"' | pv --cursor --size '"$size"' --buffer-size 1024 -N "'"$IMAGE"' docker save" | zstd -7 -T0 | pv --cursor --buffer-size 1024 -N "'"$IMAGE"' zstd compress" > '"$TMPFILE"
+    size=$(docker inspect "$image_id" | jq -r '.[].Size')
+    image_tag=$(docker inspect cda51f0affc9 | jq -r '.[].RepoTags[0]')
+    nice -n 19 bash -c 'docker save '"$image_tag"' | pv --cursor --size '"$size"' --buffer-size 1024 -N "'"$filename"' docker save" | zstd -q -19 -T0 | pv --cursor --buffer-size 1024 -N "'"$filename"' zstd compress" > '"$TMPFILE"
     mv "$TMPFILE" "$compress_target"
 done
