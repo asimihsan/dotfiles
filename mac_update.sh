@@ -7,7 +7,7 @@ sudo echo starting...
 sudo softwareupdate --download --all --agree-to-license
 brew update
 brew upgrade
-[[ $(command -v flutter &>/dev/null) ]] && flutter upgrade
+[[ $(command -v flutter &>/dev/null) ]] && flutter upgrade --force
 conda update --all --yes
 
 rustup update stable
