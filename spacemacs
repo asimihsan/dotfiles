@@ -38,17 +38,16 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      ansible
-     auto-completion
      better-defaults
      emacs-lisp
      git
      go
-     helm
-     lsp
      markdown
      multiple-cursors
      org
+     parinfer
      python
+     rust
      spell-checking
      swift
      syntax-checking
@@ -56,13 +55,18 @@ This function should only modify configuration layer settings."
      treemacs
      version-control
 
+     ;; completion
+     compleseus
+     ;; helm
+
      ;; (git :variables
      ;;     git-magit-status-fullscreen f)
      (shell :variables
+            shell-default-shell 'ansi-term
             shell-default-height 30
+            shell-default-term-shell "/opt/homebrew/bin/zsh"
             shell-default-position 'bottom)
-   )
-
+     )
 
    ;; List of additional packages that will be installed without being wrapped
    ;; in a layer (generally the packages are installed only and should still be
