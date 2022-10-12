@@ -43,5 +43,7 @@ brew_path() {
 
 export GOROOT=$(brew_path go)/libexec
 
-# Newer dotnet for Dafny
-export DOTNET_ROOT="/opt/homebrew/opt/dotnet/libexec"
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/amazon-corretto-17.jdk/Contents/Home"
+
+alias make=$(brew_path make)/bin/gmake
+
