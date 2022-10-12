@@ -7,6 +7,7 @@ set -euo pipefail
 
 /usr/bin/osascript <<EOF
 mount volume "smb://wrongtalk@snail.local/Incoming"
+mount volume "smb://wrongtalk@snail.local/OldHardDrives"
 mount volume "smb://wrongtalk@snail.local/SouthEast01"
 mount volume "smb://wrongtalk@snail.local/archivebox"
 mount volume "smb://wrongtalk@snail.local/dump"
