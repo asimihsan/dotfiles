@@ -5,12 +5,13 @@
 - clean: ["~"]
 
 - link:
-      ~/.tmux.conf: tmux.conf
+      ~/.gitconfig: gitconfig
       ~/.hammerspoon:
           if: "[ `uname` = Darwin ]"
           path: hammerspoon
+      ~/.spacemacs: spacemacs
+      ~/.tmux.conf: tmux.conf
       ~/.zshrc: zshrc
-      ~/.gitconfig: gitconfig
 
 - create:
       - ~/bin
