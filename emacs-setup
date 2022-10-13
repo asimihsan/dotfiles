@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+set -euxo pipefail
+
+brew install git ripgrep
+brew install coreutils fd
+xcode-select --install || true
+
+brew tap homebrew/cask-fonts
+brew install --cask font-source-code-pro
+brew install --cask font-fira-sans
+brew install --cask font-fira-code
+brew install --cask font-fira-code-nerd-font
+rustup component add rls
+
+brew tap railwaycat/emacsmacport
+brew install emacs-mac --with-native-comp --with-mac-metal --with-modules
+
+rm -rf $HOME/.emacs.d
+git clone https://github.com/hlissner/doom-emacs ~/.emacs.d
+doom install
+doom upgrade
+doom sync
+doom env
