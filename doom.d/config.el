@@ -79,3 +79,12 @@
 (map! :leader
       :desc "M-x"
       "SPC" 'execute-extended-command)
+
+;; Setting this larger causes Helm to slow down, but 100 limits all search
+;; results.
+(after! helm
+  (setq helm-candidate-number-limit 100))
+
+(grep-apply-setting
+ 'grep-find-command
+ '("rg -i -n -H --no-heading -e ''" . 30))
