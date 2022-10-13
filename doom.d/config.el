@@ -85,6 +85,6 @@
 (after! helm
   (setq helm-candidate-number-limit 100))
 
-(grep-apply-setting
- 'grep-find-command
- '("rg -i -n -H --no-heading -e ''" . 30))
+;; (grep-apply-setting
+;;  'grep-find-command
+;;  '("rg -i -n -H --no-heading -e ''" . 30))
