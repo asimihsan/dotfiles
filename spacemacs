@@ -579,6 +579,8 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
+  (require 'all-the-icons)
+  (setq dotspacemacs-startup-buffer-show-icons t)
   (require 'fzf)
   (require 'rg)
   (rg-enable-default-bindings)
