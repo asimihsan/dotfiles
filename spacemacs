@@ -56,7 +56,7 @@ This function should only modify configuration layer settings."
      version-control
 
      ;; completion
-     compleseus
+      compleseus
      ;; helm
 
      ;; (git :variables
@@ -401,7 +401,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil unicode symbols are displayed in the mode line.
    ;; If you use Emacs as a daemon and wants unicode characters only in GUI set
    ;; the value to quoted `display-graphic-p'. (default t)
-   dotspacemacs-mode-line-unicode-symbols t
+   dotspacemacs-mode-line-unicode-symbols nil
 
    ;; If non-nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters point
@@ -588,8 +588,9 @@ before packages are loaded."
   ;; Follow symlinks if the destination is under version control.
   (setq vc-follow-symlinks t)
 
-  ;; (when (string= system-type "darwin")
-  ;;  setq dired-use-ls-dired nil)
+  ;; On MacOS, `ls` does not support `--dired'
+  (when (string= system-type "darwin")
+    (setq dired-use-ls-dired nil))
 )
 
 
