@@ -5,6 +5,7 @@
 - clean: ["~"]
 
 - link:
+      ~/.doom.d: doom.d
       ~/.gitconfig: gitconfig
       ~/.hammerspoon:
           if: "[ `uname` = Darwin ]"
