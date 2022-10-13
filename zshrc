@@ -47,3 +47,5 @@ export JAVA_HOME="/Library/Java/JavaVirtualMachines/amazon-corretto-17.jdk/Conte
 
 alias make=$(brew_path make)/bin/gmake
 
+export PATH=$HOME/.emacs.d/bin:"$PATH"
+
