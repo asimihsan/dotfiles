@@ -85,6 +85,5 @@
 (after! helm
   (setq helm-candidate-number-limit 100))
 
-;; (grep-apply-setting
-;;  'grep-find-command
-;;  '("rg -i -n -H --no-heading -e ''" . 30))
+;; Wants treemacs to show fixed font
+(setq doom-themes-treemacs-enable-variable-pitch nil)
