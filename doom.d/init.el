@@ -22,9 +22,9 @@
 
        :completion
        company           ; the ultimate code completion backend
-       (helm +fuzzy +icons)              ; the *other* search engine for love and life
+       ;;(helm +fuzzy +icons)              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
-       ;;ivy               ; a search engine for love and life
+       (ivy +childframe +fuzzy +icons +prescient)               ; a search engine for love and life
        (vertico +icons)           ; the search engine of the future
 
        :ui
@@ -110,7 +110,7 @@
 
        :os
        (:if IS-MAC macos)  ; improve compatibility with macOS
-       ;;tty               ; improve the terminal Emacs experience
+       tty               ; improve the terminal Emacs experience
 
        :lang
        ;;agda              ; types of types of types of types...
