@@ -1,6 +1,6 @@
 [buildPlans.iosevka-custom]
 family = "Iosevka Custom"
-spacing = "normal"
+spacing = "fixed"
 serifs = "sans"
 
 # Disables cv## and ss## OpenType features, default false.
