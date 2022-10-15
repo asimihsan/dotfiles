@@ -7,10 +7,7 @@ brew install coreutils fd
 xcode-select --install || true
 
 brew tap homebrew/cask-fonts
-brew install --cask font-source-code-pro
-brew install --cask font-fira-sans
-brew install --cask font-fira-code
-brew install --cask font-fira-code-nerd-font
+brew install --cask font-iosevka-nerd-font
 rustup component add rls
 
 brew tap railwaycat/emacsmacport
