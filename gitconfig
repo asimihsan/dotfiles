@@ -39,3 +39,5 @@
         autoSetupRemote = true
 [credential "https://dev.azure.com"]
 	useHttpPath = true
+[oh-my-zsh]
+	hide-status = 1

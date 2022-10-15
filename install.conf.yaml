@@ -5,6 +5,7 @@
 - clean: ["~"]
 
 - link:
+      ~/config: config
       ~/.doom.d: doom.d
       ~/.gitconfig: gitconfig
       ~/.hammerspoon:
