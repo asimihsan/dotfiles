@@ -9,8 +9,14 @@ no-cv-ss = true
 ## Disable ligations, default false.
 no-ligation = true
 
+[buildPlans.iosevka-custom.metric-override]
 # Built-in line height, default 1250.
+# 1000 looks identical to Pragmata Pro.
 leading = 1000
+
+[buildPlans.iosevka-custom.variants]
+# Pragmata Pro variant.
+inherits = "ss08"
 
 [buildPlans.iosevka-custom.weights.regular]
 shape = 400
