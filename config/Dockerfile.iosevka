@@ -8,28 +8,32 @@
 
 FROM debian:stable-20221004
 
-ARG OTFCC_VER=0.10.4
-ARG PREMAKE_VER=5.0.0-alpha15
 ARG NODE_VER=14
 
 # Version from https://github.com/be5invis/Iosevka/releases/.
-ENV FONT_VERSION=16.3.4
+ARG FONT_VERSION=16.3.4
+ARG FONT_SHA256SUM=c09f9fd4f8ec07816796a258ef52f4ffffc0fe3698c4bea4e014be87c60bdd0d
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 RUN --mount=type=cache,target=/var/cache,sharing=locked \
     --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt/lists,sharing=locked \
+    set -ex && \
     apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
         build-essential \
-        jq \
-        file \
-        curl \
         ca-certificates \
+        curl \
+        file \
+        jq \
         ttfautohint \
     && curl -sSL https://deb.nodesource.com/setup_${NODE_VER}.x | bash - \
     && apt-get install -y nodejs \
+    && curl -sSL --proto '=https' --tlsv1.2 \
+        https://github.com/be5invis/Iosevka/archive/v${FONT_VERSION}.tar.gz \
+        -o $HOME/iosevka.tar.gz \
+    && [ $(sha256sum $HOME/iosevka.tar.gz | cut -f1 -d ' ') = ${FONT_SHA256SUM} ] \
     && rm -rf /var/lib/apt/lists/*
 
 COPY iosevka-run.sh /iosevka-run.sh
