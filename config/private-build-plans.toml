@@ -16,7 +16,7 @@ leading = 1000
 
 [buildPlans.iosevka-custom.variants]
 # Pragmata Pro variant.
-inherits = "ss08"
+# inherits = "ss08"
 
 [buildPlans.iosevka-custom.weights.regular]
 shape = 400

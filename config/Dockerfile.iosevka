@@ -14,6 +14,11 @@ ARG NODE_VER=14
 ARG FONT_VERSION=16.3.4
 ARG FONT_SHA256SUM=c09f9fd4f8ec07816796a258ef52f4ffffc0fe3698c4bea4e014be87c60bdd0d
 
+ARG NERD_FONTS_BASE_URL="https://github.com/ryanoasis/nerd-fonts/raw/master/src/glyphs/"
+
+COPY iosevka-run.sh $HOME/iosevka-run.sh
+COPY download-glyphs.sh $HOME/download-glyphs.sh
+
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 RUN --mount=type=cache,target=/var/cache,sharing=locked \
@@ -26,6 +31,8 @@ RUN --mount=type=cache,target=/var/cache,sharing=locked \
         ca-certificates \
         curl \
         file \
+        fontforge \
+        python3-fontforge \
         jq \
         ttfautohint \
     && curl -sSL https://deb.nodesource.com/setup_${NODE_VER}.x | bash - \
@@ -34,9 +41,8 @@ RUN --mount=type=cache,target=/var/cache,sharing=locked \
         https://github.com/be5invis/Iosevka/archive/v${FONT_VERSION}.tar.gz \
         -o $HOME/iosevka.tar.gz \
     && [ $(sha256sum $HOME/iosevka.tar.gz | cut -f1 -d ' ') = ${FONT_SHA256SUM} ] \
+    # && $HOME/download-glyphs.sh \
     && rm -rf /var/lib/apt/lists/*
-
-COPY iosevka-run.sh /iosevka-run.sh
 
 WORKDIR /build
 # ENTRYPOINT ["/bin/bash", "/iosevka-run.sh"]

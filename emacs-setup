@@ -8,6 +8,10 @@ xcode-select --install || true
 rustup component add rls
 rustup component add clippy
 
+# flycheck
+brew install shellcheck
+brew install hadolint
+
 brew tap railwaycat/emacsmacport
 brew install emacs-mac --with-native-comp --with-mac-metal --with-modules
 

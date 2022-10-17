@@ -11,3 +11,4 @@ iosevka-docker-shell:
 
 iosevka-font-build:
 	docker run -it --volume $(MAKEFILE_DIR):/build iosevka /bin/bash /build/iosevka-run.sh
+	rsync -av dist/iosevka-custom/ttf/ $HOME/Library/Fonts
