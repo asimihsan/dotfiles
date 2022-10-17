@@ -15,8 +15,11 @@ brew install hadolint
 brew tap railwaycat/emacsmacport
 brew install emacs-mac --with-native-comp --with-mac-metal --with-modules
 
-git clone https://github.com/hlissner/doom-emacs ~/.emacs.d
-doom install
-doom upgrade
-doom sync
-doom env
+if [ ! -d $HOME/.emacs.d ]
+then
+    git clone https://github.com/hlissner/doom-emacs $HOME/.emacs.d
+    doom install
+    doom upgrade
+    doom sync
+    doom env
+fi

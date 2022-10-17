@@ -49,3 +49,6 @@ alias make=$(brew_path make)/bin/gmake
 
 export PATH=$HOME/.emacs.d/bin:"$PATH"
 
+alias rsync=$(brew_path rsync)/bin/rsync
+
+
