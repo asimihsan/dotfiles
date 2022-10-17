@@ -51,3 +51,4 @@
 
 (package! deadgrep)
 (package! exec-path-from-shell)
+(package! counsel)
