@@ -105,10 +105,10 @@
   (centaur-tabs-group-by-projectile-project))
 (map! :leader
       :desc "Go to right tab"
-      "M-<right>" #'centaur-tabs-forward)
+      "<right>" #'centaur-tabs-forward)
 (map! :leader
       :desc "Go to left tab"
-      "M-<left>" #'centaur-tabs-backward)
+      "<left>" #'centaur-tabs-backward)
 (defun centaur-tabs-hide-tab (x)
   "Do no to show buffer X in tabs."
   (let ((name (format "%s" x)))
