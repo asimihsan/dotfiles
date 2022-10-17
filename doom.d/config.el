@@ -99,6 +99,7 @@
 
 ;; Make cmd key do Meta
 (setq mac-command-modifier 'meta)
+(setq mac-option-modifier 'super)
 
 ;; Centaur tabs setup
 (after! centaur-tabs
