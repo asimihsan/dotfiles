@@ -50,4 +50,4 @@
 ;(unpin! t)
 
 (package! deadgrep)
-
+(package! exec-path-from-shell)

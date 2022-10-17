@@ -5,15 +5,12 @@ set -euxo pipefail
 brew install git ripgrep
 brew install coreutils fd
 xcode-select --install || true
-
-brew tap homebrew/cask-fonts
-brew install --cask font-iosevka-nerd-font
 rustup component add rls
+rustup component add clippy
 
 brew tap railwaycat/emacsmacport
 brew install emacs-mac --with-native-comp --with-mac-metal --with-modules
 
-rm -rf $HOME/.emacs.d
 git clone https://github.com/hlissner/doom-emacs ~/.emacs.d
 doom install
 doom upgrade

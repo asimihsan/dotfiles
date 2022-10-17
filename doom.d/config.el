@@ -86,3 +86,53 @@
 
 ;; Wants treemacs to show fixed font
 (setq doom-themes-treemacs-enable-variable-pitch nil)
+
+;; Fix MacOS path issue for flycheck
+(after! exec-path-from-shell
+  (exec-path-from-shell-initialize))
+
+(after! flycheck
+  (setq flycheck-rustic-clippy-executable "cargo-clippy")
+  (unless (member 'rustic-clippy flycheck-checkers)
+    (setq flycheck-checkers (cons 'rustic-clippy flycheck-checkers)))
+  )
+
+;; Make cmd key do Meta
+(setq mac-command-modifier 'meta)
+
+;; Centaur tabs setup
+(after! centaur-tabs
+  (centaur-tabs-group-by-projectile-project))
+(map! :leader
+      :desc "Go to right tab"
+      "M-<right>" #'centaur-tabs-forward)
+(map! :leader
+      :desc "Go to left tab"
+      "M-<left>" #'centaur-tabs-backward)
+(defun centaur-tabs-hide-tab (x)
+  "Do no to show buffer X in tabs."
+  (let ((name (format "%s" x)))
+    (or
+     ;; Current window is not dedicated window.
+     (window-dedicated-p (selected-window))
+
+     ;; Buffer name not match below blacklist.
+     (string-prefix-p "*epc" name)
+     (string-prefix-p "*helm" name)
+     (string-prefix-p "*Helm" name)
+     (string-prefix-p "*Compile-Log*" name)
+     (string-prefix-p "*lsp" name)
+     (string-prefix-p "*company" name)
+     (string-prefix-p "*Flycheck" name)
+     (string-prefix-p "*tramp" name)
+     (string-prefix-p " *Mini" name)
+     (string-prefix-p "*help" name)
+     (string-prefix-p "*straight" name)
+     (string-prefix-p " *temp" name)
+     (string-prefix-p "*Help" name)
+     (string-prefix-p "*mybuf" name)
+
+     ;; Is not magit buffer.
+     (and (string-prefix-p "magit" name)
+	  (not (file-name-extension name)))
+     )))
