@@ -49,6 +49,6 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
+(package! counsel)
 (package! deadgrep)
 (package! exec-path-from-shell)
-(package! counsel)
