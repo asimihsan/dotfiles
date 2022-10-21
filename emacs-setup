@@ -22,6 +22,9 @@ npm install --global markdownlint-cli
 npm install --global textlint
 npm install --global prettier
 
+# HTML flycheck
+brew instal tidy-html5
+
 brew tap railwaycat/emacsmacport
 brew install emacs-mac --with-native-comp --with-mac-metal --with-modules
 
