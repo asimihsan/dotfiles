@@ -97,7 +97,8 @@
   (setq flycheck-rustic-clippy-executable "cargo-clippy")
   (unless (member 'rustic-clippy flycheck-checkers)
     (setq flycheck-checkers (cons 'rustic-clippy flycheck-checkers)))
-  )
+  (setq plantuml-jar-path (getenv "PLANTUML_JAR"))
+)
 
 ;; Make cmd key do Meta
 (setq mac-command-modifier 'meta)
