@@ -51,4 +51,5 @@ export PATH=$HOME/.emacs.d/bin:"$PATH"
 
 alias rsync=$(brew_path rsync)/bin/rsync
 
+export PATH=$(brew_path sqlite)/bin:"$PATH"
 
