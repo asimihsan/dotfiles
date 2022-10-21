@@ -8,6 +8,10 @@ xcode-select --install || true
 rustup component add rls
 rustup component add clippy
 
+# dictionary
+brew install wordnet
+brew install sqlite
+
 # flyspell
 brew install aspell
 
@@ -16,6 +20,7 @@ brew install shellcheck
 brew install hadolint
 npm install --global markdownlint-cli
 npm install --global textlint
+npm install --global prettier
 
 brew tap railwaycat/emacsmacport
 brew install emacs-mac --with-native-comp --with-mac-metal --with-modules
