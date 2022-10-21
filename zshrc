@@ -54,3 +54,4 @@ alias rsync=$(brew_path rsync)/bin/rsync
 export PATH=$(brew_path sqlite)/bin:"$PATH"
 export PATH=$(brew_path tidy-html5)/bin:"$PATH"
 
+export PLANTUML_JAR=$(brew_path plantuml)/libexec/plantuml.jar
