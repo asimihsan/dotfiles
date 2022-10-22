@@ -25,6 +25,7 @@ brew instal tidy-html5
 npm install --global eslint
 npm install --global yaml-language-server
 npm install --global bash-ls
+brew install shfmt
 
 brew tap railwaycat/emacsmacport
 brew install emacs-mac --with-native-comp --with-mac-metal --with-modules
