@@ -140,3 +140,5 @@
      (and (string-prefix-p "magit" name)
 	  (not (file-name-extension name)))
      )))
+
+(setq mode-require-final-newline t)
