@@ -18,7 +18,7 @@ brew install aspell
 # flycheck
 brew install shellcheck
 brew install hadolint
-npm install --global markdownlint-cli
+brew install markdownlint-cli
 npm install --global textlint
 npm install --global prettier
 brew instal tidy-html5
@@ -30,8 +30,7 @@ brew install shfmt
 brew tap railwaycat/emacsmacport
 brew install emacs-mac --with-native-comp --with-mac-metal --with-modules
 
-if [ ! -d $HOME/.emacs.d ]
-then
+if [ ! -d $HOME/.emacs.d ]; then
     git clone https://github.com/hlissner/doom-emacs $HOME/.emacs.d
     doom install
     doom upgrade
