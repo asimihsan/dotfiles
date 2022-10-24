@@ -587,6 +587,8 @@
 			</dict>
 			<key>Log Directory</key>
 			<string>/Users/asimi/logs</string>
+			<key>Minimum Contrast</key>
+			<real>0.49527994791666669</real>
 			<key>Mouse Reporting</key>
 			<true/>
 			<key>Mouse Reporting allow mouse wheel</key>
