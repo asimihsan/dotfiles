@@ -15,6 +15,8 @@ cargo install cargo-prefetch
 cargo prefetch --top-deps=200
 cargo prefetch --top-downloads=200
 
+npm install --upgrade aws-cdk
+
 brew doctor
 [[ $(command -v flutter &>/dev/null) ]] && flutter doctor
 
