@@ -56,4 +56,13 @@ export PATH="$PATH":$(brew_path tidy-html5)/bin
 
 export PLANTUML_JAR=$(brew_path plantuml)/libexec/plantuml.jar
 
-alias ls=/bin/ls
+# brew install coreutils
+alias ls="gls --color"
+
+# brew install vivid
+export LS_COLORS="$(vivid generate molokai)"
+
+# brew install exa
+alias ll='exa -lh --git'
+
+export PATH="$HOME"/go/bin:"$PATH"
