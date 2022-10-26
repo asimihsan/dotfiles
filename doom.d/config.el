@@ -98,7 +98,7 @@
   (unless (member 'rustic-clippy flycheck-checkers)
     (setq flycheck-checkers (cons 'rustic-clippy flycheck-checkers)))
   (setq plantuml-jar-path (getenv "PLANTUML_JAR"))
-)
+  )
 
 ;; Make cmd key do Meta
 (setq mac-command-modifier 'meta)
@@ -141,4 +141,10 @@
 	  (not (file-name-extension name)))
      )))
 
+;; Require newlint at end of file.
 (setq mode-require-final-newline t)
+
+;; <SPC> M-x n is new tab.
+(map! :leader
+      :desc "M-n"
+      "M-n" 'centaur-tabs--create-new-tab)
