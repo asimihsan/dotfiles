@@ -26,6 +26,7 @@ npm install --global eslint
 npm install --global yaml-language-server
 npm install --global bash-ls
 brew install shfmt
+go install golang.org/x/tools/gopls@latest
 
 # textlint
 npm install textlint-rule-en-capitalization
