@@ -148,3 +148,10 @@
 (map! :leader
       :desc "M-n"
       "M-n" 'centaur-tabs--create-new-tab)
+
+;; (require 'my-rust-mod "/Users/asimi/workplace/emacs-rust-module/target/debug/libemacs_rust_module.dylib")
+;; (add-to-list 'load-path "/Users/asimi/workplace/emacs-rust-module/target/debug/")
+;; (module-load "/Users/asimi/workplace/emacs-rust-module/target/debug/libemacs_rust_module.dylib")
+;; (require 'my-rust-mod)
+;; (after! 'my-rust-mod
+;;   (map! :leader "P" :desc "My message from rust" #'my-message-from-rust))
