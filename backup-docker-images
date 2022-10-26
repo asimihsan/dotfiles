@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# brew install jq pv zstd
+# brew install jq pv zstd sd
 
 set -euo pipefail
 
@@ -11,10 +11,11 @@ TMPFILE=$(mktemp $DESTINATION/backup-docker-images-XXXXX)
 trap 'rm -f $TMPFILE' EXIT
 echo "tmpfile is $TMPFILE"
 
-docker images | tail -n +2 | grep -v "none" | while read -r LINE
-do
+docker images | tail -n +2 | grep -v "none" | while read -r LINE; do
     image_id=$(echo "$LINE" | awk '{print $3}')
-    filename=$(echo "$LINE" | awk -vhostname="$(hostname)" '{printf $1 "_" $2 "_" hostname "_" $3}')
+    filename=$(echo "$LINE" |
+        awk -vhostname="$(hostname)" '{printf $1 "_" $2 "_" hostname "_" $3}' |
+        sd '/' '-')
     echo "filename is $filename"
     compress_target="$DESTINATION"/"$filename".tar.zst
     [ -f "$compress_target" ] && continue
