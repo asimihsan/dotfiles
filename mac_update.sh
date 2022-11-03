@@ -7,7 +7,9 @@ sudo echo starting...
 sudo softwareupdate --download --all --agree-to-license
 brew update
 brew upgrade
-[[ $(command -v flutter &>/dev/null) ]] && flutter upgrade --force
+if command -v flutter; then
+    flutter upgrade --force
+fi
 conda update --all --yes
 
 rustup update stable
@@ -18,7 +20,9 @@ cargo prefetch --top-downloads=200
 npm install --upgrade aws-cdk
 
 brew doctor
-[[ $(command -v flutter &>/dev/null) ]] && flutter doctor
+if command -v flutter; then
+    flutter doctor
+fi
 
 doom upgrade
 doom sync
