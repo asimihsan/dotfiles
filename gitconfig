@@ -41,3 +41,15 @@
 	useHttpPath = true
 [oh-my-zsh]
 	hide-status = 1
+
+[user]
+  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+6ch0i+pdf+48pQ/S180rtxe9yELTC9w/GYBZoRl89
+
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+
+[commit]
+  gpgsign = true
