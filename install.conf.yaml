@@ -24,6 +24,7 @@
     ~/bin/bib2filename.py: bib2filename.py
     ~/bin/curltime: curltime
     ~/bin/emacs-setup: emacs-setup
+    ~/bin/e: e
     ~/bin/mac_update.sh: mac_update.sh
     ~/bin/merge-zsh-history: merge-zsh-history
     ~/bin/mount.sh: mount.sh
