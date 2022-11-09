@@ -29,7 +29,7 @@ export PATH="$PATH":$HOME/flutter/bin
 export PATH="$PATH:/Users/asimi/.dotnet/tools"
 alias pmc='coyote test'
 
-eval "$(rbenv init - zsh)"
+source /Users/asimi/.rvm/scripts/rvm
 
 export ANDROID_NDK_HOME=$HOME/Library/Android/sdk/ndk/25.1.8937393
 
@@ -66,3 +66,6 @@ export LS_COLORS="$(vivid generate molokai)"
 alias ll='exa -lh --git'
 
 export PATH="$HOME"/go/bin:"$PATH"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
