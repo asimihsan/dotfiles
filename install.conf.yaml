@@ -23,6 +23,7 @@
     ~/bin/backup-docker-images: backup-docker-images
     ~/bin/bib2filename.py: bib2filename.py
     ~/bin/curltime: curltime
+    ~/bin/download-youtube: download-youtube
     ~/bin/emacs-setup: emacs-setup
     ~/bin/e: e
     ~/bin/mac_update.sh: mac_update.sh
