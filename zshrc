@@ -29,8 +29,6 @@ export PATH="$PATH":$HOME/flutter/bin
 export PATH="$PATH:/Users/asimi/.dotnet/tools"
 alias pmc='coyote test'
 
-source /Users/asimi/.rvm/scripts/rvm
-
 export ANDROID_NDK_HOME=$HOME/Library/Android/sdk/ndk/25.1.8937393
 
 export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
@@ -69,8 +67,7 @@ alias ll='exa -lh --git'
 
 export PATH="$HOME"/go/bin:"$PATH"
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
+eval "$($(brew_path rbenv)/bin/rbenv init - zsh)"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /opt/homebrew/bin/terraform terraform
