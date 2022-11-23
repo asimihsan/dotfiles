@@ -41,7 +41,7 @@ brew_path() {
 
 export GOROOT=$(brew_path go)/libexec
 
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/amazon-corretto-17.jdk/Contents/Home"
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/amazon-corretto-11.jdk/Contents/Home"
 export GRAALVM_HOME="/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.3.0/Contents/Home"
 export PATH="${PATH}":"${GRAALVM_HOME}"/bin
 
@@ -71,3 +71,7 @@ eval "$($(brew_path rbenv)/bin/rbenv init - zsh)"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /opt/homebrew/bin/terraform terraform
+
+# Hishtory Config:
+export PATH="$PATH:/Users/asimi/.hishtory"
+source /Users/asimi/.hishtory/config.zsh
