@@ -41,7 +41,7 @@ brew_path() {
 
 export GOROOT=$(brew_path go)/libexec
 
-export JAVA_HOME="/Library/Java/JavaVirtualMachines/amazon-corretto-11.jdk/Contents/Home"
+source "/Users/asimi/.sdkman/bin/sdkman-init.sh"
 export GRAALVM_HOME="/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.3.0/Contents/Home"
 export PATH="${PATH}":"${GRAALVM_HOME}"/bin
 
@@ -75,3 +75,7 @@ complete -o nospace -C /opt/homebrew/bin/terraform terraform
 # Hishtory Config:
 export PATH="$PATH:/Users/asimi/.hishtory"
 source /Users/asimi/.hishtory/config.zsh
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"

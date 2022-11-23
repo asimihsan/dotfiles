@@ -7,6 +7,12 @@ sudo echo starting...
 sudo softwareupdate --download --all --agree-to-license
 brew update
 brew upgrade
+
+if ! command -v sdk; then
+    curl -s "https://get.sdkman.io" | bash
+fi
+sdk selfupdate
+
 if command -v flutter; then
     flutter upgrade --force
 fi
