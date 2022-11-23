@@ -24,7 +24,8 @@
 
 [credential]
         helper = cache --timeout=3600
-	helper = /usr/local/share/gcm-core/git-credential-manager-core
+	helper = 
+	helper = /usr/local/share/gcm-core/git-credential-manager
 
 [init]
         defaultBranch = main
@@ -37,8 +38,6 @@
 
 [push]
         autoSetupRemote = true
-[credential "https://dev.azure.com"]
-	useHttpPath = true
 [oh-my-zsh]
 	hide-status = 1
 
@@ -53,3 +52,5 @@
 
 [commit]
   gpgsign = true
+[credential "https://dev.azure.com"]
+	useHttpPath = true
