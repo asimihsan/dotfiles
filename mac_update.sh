@@ -18,6 +18,7 @@ cargo prefetch --top-deps=200
 cargo prefetch --top-downloads=200
 
 npm install --upgrade aws-cdk
+hishtory update
 
 brew doctor
 if command -v flutter; then
