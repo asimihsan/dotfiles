@@ -76,6 +76,10 @@ complete -o nospace -C /opt/homebrew/bin/terraform terraform
 export PATH="$PATH:/Users/asimi/.hishtory"
 source /Users/asimi/.hishtory/config.zsh
 
+# Better history
+bindkey -s '^e' "hishtory export | fzf --scheme=history --tac --no-sort --preview 'echo {}' --preview-window down:5:wrap --bind '?:toggle-preview'\n"
+
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
