@@ -83,3 +83,4 @@ bindkey -s '^e' "hishtory export | tac | awk '!a[\$0]++' | tac | fzf --scheme=hi
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
