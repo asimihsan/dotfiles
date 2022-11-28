@@ -77,7 +77,7 @@ export PATH="$PATH:/Users/asimi/.hishtory"
 source /Users/asimi/.hishtory/config.zsh
 
 # Better history
-bindkey -s '^e' "hishtory export | fzf --scheme=history --tac --no-sort --preview 'echo {}' --preview-window down:5:wrap --bind '?:toggle-preview'\n"
+bindkey -s '^e' "hishtory export | tac | awk '!a[\$0]++' | tac | fzf --scheme=history --tac --no-sort --preview 'echo {}' --preview-window down:5:wrap --bind '?:toggle-preview'^M"
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
