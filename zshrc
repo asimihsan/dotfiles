@@ -29,7 +29,10 @@ export PATH="$PATH":$HOME/flutter/bin
 export PATH="$PATH:/Users/asimi/.dotnet/tools"
 alias pmc='coyote test'
 
-export ANDROID_NDK_HOME=$HOME/Library/Android/sdk/ndk/25.1.8937393
+export ANDROID_HOME=/$HOME/Library/Android/sdk
+export ANDROID_NDK_HOME=$ANDROID_HOME/ndk/25.1.8937393
+export ANDROID_NDK=$ANDROID_NDK_HOME
+export NDK=$ANDROID_HOME/ndk/25.1.8937393
 
 export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
