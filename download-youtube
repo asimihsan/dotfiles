@@ -4,11 +4,12 @@ set -euxo pipefail
 
 nice -n 19 taskpolicy -c background yt-dlp \
     -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4] / bv*+ba/b" \
-    --keep-video \
+    --no-keep-video \
     --no-keep-fragments \
     --sub-langs "en.*" \
-    --no-embed-thumbnail \
+    --no-embed-subs \
+    --embed-thumbnail \
     --embed-metadata \
-    --no-embed-chapters \
+    --embed-chapters \
     --ffmpeg-location $(which ffmpeg) \
     "$@"
