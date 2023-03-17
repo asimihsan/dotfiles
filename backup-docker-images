@@ -11,6 +11,8 @@ TMPFILE=$(mktemp $DESTINATION/backup-docker-images-XXXXX)
 trap 'rm -f $TMPFILE' EXIT
 echo "tmpfile is $TMPFILE"
 
+docker system prune --force
+
 docker images | tail -n +2 | grep -v "none" | while read -r LINE; do
     image_id=$(echo "$LINE" | awk '{print $3}')
     filename=$(echo "$LINE" |
