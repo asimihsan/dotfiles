@@ -23,7 +23,6 @@ cargo install cargo-prefetch
 cargo prefetch --top-deps=200
 cargo prefetch --top-downloads=200
 
-npm install --upgrade aws-cdk
 hishtory update
 
 brew doctor
@@ -31,7 +30,9 @@ if command -v flutter; then
     flutter doctor
 fi
 
-doom upgrade
-doom sync
-doom purge
-doom env
+dotnet tool update --global P
+
+# doom upgrade
+# doom sync
+# doom purge
+# doom env
