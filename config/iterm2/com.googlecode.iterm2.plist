@@ -696,8 +696,33 @@
 			<string>kNextWindowPointerAction</string>
 		</dict>
 	</dict>
+	<key>Print In Black And White</key>
+	<true/>
 	<key>PromptOnQuit</key>
 	<false/>
+	<key>Snippets</key>
+	<array>
+		<dict>
+			<key>guid</key>
+			<string>8FC8804B-3D2B-466F-9673-E48F2EE34BEA</string>
+			<key>title</key>
+			<string>xcode-select</string>
+			<key>value</key>
+			<string>xcode-select</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+		<dict>
+			<key>guid</key>
+			<string>E0442B84-FA0D-48DD-B4E1-ECFB2E2DF2C2</string>
+			<key>title</key>
+			<string>xcode-select</string>
+			<key>value</key>
+			<string>xcode-select</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+	</array>
 	<key>SoundForEsc</key>
 	<false/>
 	<key>ToolbeltTools</key>
