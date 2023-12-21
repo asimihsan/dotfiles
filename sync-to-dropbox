@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+LOG_FILE="$HOME/bin/logs/rclone_sync.log"
+MAX_LOG_SIZE=10485760  # 10MB
+
+mkdir -p "$(dirname "$LOG_FILE")"
+
+# Check if log file size is greater than MAX_LOG_SIZE
+if [ -e "$LOG_FILE" ] && [ "$(stat -f%z "$LOG_FILE")" -ge "$MAX_LOG_SIZE" ]; then
+    mv "$LOG_FILE" "$LOG_FILE.old"
+fi
+
+log() {
+    echo "$1" | tee -a "$LOG_FILE"
+}
+
+SRC_DIR="/Users/asimi/backup"
+# trim .local suffix from hostname
+HOSTNAME=$(hostname | sed 's/.local//g')
+RCLONE_REMOTE="dropbox_backup:Apps/borg-backup-$HOSTNAME"
+
+log "Starting backup: $(date)"
+borg compact --cleanup-commits "$SRC_DIR"
+borg with-lock "$SRC_DIR" \
+    rclone sync $SRC_DIR "$RCLONE_REMOTE" \
+        --transfers=2 \
+        --bwlimit=1M \
+        --progress \
+        --checksum \
+        --order-by modtime,mixed \
+        --verbose \
+        --exclude ".DS_Store" \
+        --check-first \
+        --delete-during \
+        --dropbox-batch-mode off \
+        --log-file="$LOG_FILE"
+log "Backup completed: $(date)"
