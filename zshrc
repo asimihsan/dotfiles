@@ -7,8 +7,6 @@ export PATH="$HOME/.bin:$PATH"
 export PATH="/usr/local/bin:$HOME/bin:$PATH"
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-alias zstd=$(brew --prefix zstd)/bin/zstd
-
 . "$HOME/.cargo/env"
 
 export PYENV_ROOT="$HOME/.pyenv"
@@ -16,8 +14,8 @@ command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
 . "$HOME/.nvm/nvm.sh"
 
@@ -27,7 +25,6 @@ export PATH="$PATH":$HOME/flutter/bin
 
 # Add .NET Core SDK tools
 export PATH="$PATH:/Users/asimi/.dotnet/tools"
-alias pmc='coyote test'
 
 export ANDROID_HOME=/$HOME/Library/Android/sdk
 export ANDROID_NDK_HOME=$ANDROID_HOME/ndk/25.1.8937393
@@ -42,31 +39,20 @@ brew_path() {
     brew list $1 | sponge | head -1 | xargs dirname | sed 's/\(^.*\/hbase\/[^\/]*\).*/\1/'
 }
 
-export GOROOT=$(brew_path go)/libexec
-
-source "/Users/asimi/.sdkman/bin/sdkman-init.sh"
-export GRAALVM_HOME="/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.3.0/Contents/Home"
-export PATH="${PATH}":"${GRAALVM_HOME}"/bin
-
-alias make=$(brew_path make)/bin/gmake
-
 export PATH=$HOME/.emacs.d/bin:"$PATH"
-
-alias rsync=$(brew_path rsync)/bin/rsync
 
 export PATH=$(brew_path sqlite)/bin:"$PATH"
 export PATH="$PATH":$(brew_path tidy-html5)/bin
+export PATH=$(brew_path poetry)/bin:"$PATH"
 
 export PLANTUML_JAR=$(brew_path plantuml)/libexec/plantuml.jar
 
 # brew install coreutils
-alias ls="gls --color"
 
 # brew install vivid
 export LS_COLORS="$(vivid generate molokai)"
 
 # brew install exa
-alias ll='exa -lh --git'
 
 export PATH="$HOME"/go/bin:"$PATH"
 
@@ -88,5 +74,40 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-alias wget=$(brew_path wget)/bin/wget
+source /Users/asimi/.docker/init-zsh.sh || true # Added by Docker Desktop
+
+if which pyenv-virtualenv-init >/dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
+
+export POETRY_HTTP_BASIC_DEFAULT_USERNAME=$(op read "op://pvsttlycpwhbo6vjsedtjbgyc4/mdu_pypi_readonly/username")
+export POETRY_HTTP_BASIC_DEFAULT_PASSWORD=$(op read "op://pvsttlycpwhbo6vjsedtjbgyc4/mdu_pypi_readonly/password")
+export JIRA_API_TOKEN=$(op read "op://Private/Level Jira API token/password")
+export LOCALSTACK_AUTH_TOKEN=$(op read "op://Private/LocalStack Auth Token/password")
+export OPENAI_API_KEY=$(op read "op://Private/OpenAPI API key work/password")
+
+#export OTEL_EXPORTER_OTLP_ENDPOINT="https://api.honeycomb.io/"
+#export OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=gqCJm5CcK4koptUfObqTQH"
+#export OTEL_SERVICE_NAME="mdu-cloud-integration-gateway"
+
+export PATH=$(brew_path protobuf)/bin:"$PATH"
+
+[[ -s "/Users/asimi/.gvm/scripts/gvm" ]] && source "/Users/asimi/.gvm/scripts/gvm"
+
+GO_VERSION=1.21
+export PATH="/opt/homebrew/opt/go@$GO_VERSION/bin:$PATH"
+export GOROOT=$(brew_path go@$GO_VERSION)/libexec
+
+export SUMOLOGIC_ACCESS_ID=$(op read "op://Private/SumoLogic Level/Access ID")
+export SUMOLOGIC_ACCESS_KEY=$(op read "op://Private/SumoLogic Level/Access Key")
+
+export PATH=$PATH:$(go env GOPATH)/bin
+
+alias ll='exa -lh --git'
+alias ls="gls --color"
+alias make=$(brew_path make)/bin/gmake
+alias pmc='coyote test'
 alias poetry=$(brew_path poetry)/bin/poetry
+alias rsync=$(brew_path rsync)/bin/rsync
+alias wget=$(brew_path wget)/bin/wget
+alias zstd=$(brew --prefix zstd)/bin/zstd
