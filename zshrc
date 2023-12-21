@@ -3,7 +3,7 @@ ZSH_THEME="robbyrussell"
 plugins=(git)
 source $ZSH/oh-my-zsh.sh
 
-export PATH="$HOME/.bin:$PATH"
+export PATH="$HOME/.bin:$HOME/bin:$PATH"
 export PATH="/usr/local/bin:$HOME/bin:$PATH"
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
@@ -39,6 +39,13 @@ brew_path() {
     brew list $1 | sponge | head -1 | xargs dirname | sed 's/\(^.*\/hbase\/[^\/]*\).*/\1/'
 }
 
+export GOROOT=$(brew_path go)/libexec
+
+export GRAALVM_HOME="/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.3.0/Contents/Home"
+export PATH="${PATH}":"${GRAALVM_HOME}"/bin
+
+alias make=$(brew_path make)/bin/gmake
+
 export PATH=$HOME/.emacs.d/bin:"$PATH"
 
 export PATH=$(brew_path sqlite)/bin:"$PATH"
@@ -67,10 +74,6 @@ source /Users/asimi/.hishtory/config.zsh
 
 # Better history
 # bindkey -s '^e' "hishtory export | tac | awk '!a[\$0]++' | tac | fzf --scheme=history --tac --no-sort --preview 'echo {}' --preview-window down:5:wrap --bind '?:toggle-preview'^M"
-
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
@@ -111,3 +114,11 @@ alias poetry=$(brew_path poetry)/bin/poetry
 alias rsync=$(brew_path rsync)/bin/rsync
 alias wget=$(brew_path wget)/bin/wget
 alias zstd=$(brew --prefix zstd)/bin/zstd
+alias poetry=$(brew_path poetry)/bin/poetry
+alias ctags=$(brew_path universal-ctags)/bin/ctags
+
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+
+export LOCALSTACK_API_KEY=6xxZjUgHLg
+export NDK_HOME=$HOME/Library/Android/sdk/ndk/25.1.8937393
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-21.jdk/Contents/Home
