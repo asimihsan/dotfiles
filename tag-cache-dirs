@@ -1,0 +1,193 @@
+#!/usr/bin/env python3
+
+"""
+Cache Directory Tagger
+
+This script is designed to traverse a directory tree and tag common build directories
+with a 'CACHEDIR.TAG' file to indicate they are used for caching purposes. It supports
+both fixed directories typically found in a user's home directory and project-specific
+directories that may contain build artifacts or dependencies.
+
+The script can perform a dry run to display the directories it would tag without making
+any changes. It also allows specifying a root directory to focus the search, which is
+useful for targeting specific projects or subdirectories.
+
+Usage:
+  Run the script with Python 3.6 or higher. It accepts the following command-line arguments:
+    --dry-run: Perform a dry run without making any changes.
+    --root-dir: Specify a root directory to focus the search.
+
+  Example:
+    python3 tag_cache_dirs.py --dry-run
+    python3 tag_cache_dirs.py --root-dir /path/to/project
+
+Maintenance:
+  To add or remove directories from the tagging process, update the 'fixed_dirs' and
+  'project_configs' lists in the 'main' function with the appropriate directory names
+  and marker files. The 'ProjectDirConfig' dataclass can be used to define new project
+  directory configurations.
+
+  The script uses the 'os.walk' function to traverse the directory tree and applies
+  optimizations to avoid redundant tagging and unnecessary filesystem operations.
+
+Author: Asim Ihsan
+Created: 2023-12-02
+Last Updated: 2023-12-02
+"""
+
+import argparse
+from abc import ABC, abstractmethod
+from typing import List, Dict
+import os
+from pathlib import Path
+from dataclasses import dataclass
+
+
+class BuildDirFinder(ABC):
+    @abstractmethod
+    def find_directories(self) -> List[Path]:
+        pass
+
+
+class FixedDirFinder(BuildDirFinder):
+    directories: List[Path]
+
+    def __init__(self, directories: List[str]):
+        self.directories = [Path.home() / d for d in directories]
+
+    def find_directories(self) -> List[Path]:
+        return [d for d in self.directories if d.exists()]
+
+
+@dataclass(frozen=True)
+class ProjectDirConfig:
+    directory_name: str
+    marker_file: str | None = None
+
+
+class ProjectDirFinder(BuildDirFinder):
+    configs: List[ProjectDirConfig]
+    root_dir: Path
+
+    def __init__(self, configs: List[ProjectDirConfig], root_dir: Path | None = None):
+        self.configs = configs
+        self.root_dir = root_dir.expanduser() if root_dir else Path.home()
+
+    def find_directories(self) -> Dict[ProjectDirConfig, List[Path]]:
+        found_dirs = {config: [] for config in self.configs}
+        for root, dirnames, _ in os.walk(self.root_dir, topdown=True):
+            root_path = Path(root)
+            if (root_path / "CACHEDIR.TAG").exists():
+                dirnames.clear()
+                continue  # Skip this directory and all its subdirectories
+
+            for config in self.configs:
+                if config.directory_name not in dirnames:
+                    continue  # Skip if the target directory is not present
+
+                target_path = root_path / config.directory_name
+                if config.marker_file and not (root_path / config.marker_file).exists():
+                    continue  # Skip if the marker file is not present
+
+                # At this point, we either have no marker file requirement,
+                # or the marker file exists. We can add the directory.
+                found_dirs[config].append(target_path)
+                dirnames.remove(config.directory_name)  # Prune the search
+
+        return found_dirs
+
+
+def touch_cachedir_tag(directory: Path, dry_run: bool = False) -> None:
+    tag_path = directory / "CACHEDIR.TAG"
+    if tag_path.exists():
+        return
+    if dry_run:
+        print(f"Would touch {tag_path}")
+        return
+    print(f"Touching {tag_path}")
+    tag_path.write_text("Signature: 8a477f597d28d172789f06886806bc55")
+
+
+def main(dry_run: bool = False, root_dir: Path | None = None) -> None:
+    fixed_dirs = [
+        ".cargo",
+        ".rustup",
+        ".npm",
+        ".virtualenvs",
+        "anaconda3",
+        "miniconda3",
+        ".m2",
+        ".gradle",
+        ".ivy2",
+        ".nuget",
+        ".gem",
+        ".stack",
+    ]
+    fixed_finder = FixedDirFinder(fixed_dirs)
+
+    project_configs = [
+        # Python
+        ProjectDirConfig("venv", "requirements.txt"),
+        ProjectDirConfig("venv", "pyproject.toml"),
+        ProjectDirConfig("__pycache__"),
+        ProjectDirConfig(".pytest_cache"),
+        ProjectDirConfig(".mypy_cache"),
+        ProjectDirConfig(".tox"),
+        ProjectDirConfig(".coverage"),
+        ProjectDirConfig(".eggs"),
+        ProjectDirConfig(".cache"),
+        ProjectDirConfig(".hypothesis"),
+
+        # JavaScript
+        ProjectDirConfig("node_modules"),
+        ProjectDirConfig(".yarn"),
+
+        # Rust
+        ProjectDirConfig("target", "Cargo.toml"),
+
+        # Flutter
+        ProjectDirConfig(".dart_tool"),
+        ProjectDirConfig("build", "pubspec.yaml"),
+
+        # CDK
+        ProjectDirConfig("cdk.out", "cdk.json"),
+
+        # Terraform
+        ProjectDirConfig(".terraform"),
+
+        # Go
+        ProjectDirConfig("vendor", "go.mod"),
+
+        # Java Gradle
+        ProjectDirConfig(".gradle"),
+    ]
+    project_finder = ProjectDirFinder(project_configs, root_dir=root_dir)
+
+    # Find and tag fixed directories
+    for directory in fixed_finder.find_directories():
+        touch_cachedir_tag(directory, dry_run)
+
+    # Find and tag project directories
+    found_project_dirs = project_finder.find_directories()
+    for config, directories in found_project_dirs.items():
+        for directory in directories:
+            touch_cachedir_tag(directory, dry_run)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Tag cache directories")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Don't actually touch the CACHEDIR.TAG files",
+    )
+    parser.add_argument(
+        "--root-dir",
+        type=Path,
+        help="Root directory to search for project directories",
+    )
+
+    args = parser.parse_args()
+    if args.dry_run:
+        print("Dry run, won't actually touch any CACHEDIR.TAG files")
+    main(args.dry_run, args.root_dir)
