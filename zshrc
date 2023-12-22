@@ -75,8 +75,6 @@ source /Users/asimi/.hishtory/config.zsh
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-source /Users/asimi/.docker/init-zsh.sh || true # Added by Docker Desktop
-
 if which pyenv-virtualenv-init >/dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
