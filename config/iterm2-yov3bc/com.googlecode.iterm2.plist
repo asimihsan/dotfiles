@@ -8,6 +8,10 @@
 	<true/>
 	<key>Default Bookmark Guid</key>
 	<string>000A45BE-5199-4E34-B456-9ED6A4FCCBA5</string>
+	<key>DimInactiveSplitPanes</key>
+	<true/>
+	<key>DimOnlyText</key>
+	<true/>
 	<key>EscapeShellCharsWithBackslash</key>
 	<false/>
 	<key>HapticFeedbackForEsc</key>

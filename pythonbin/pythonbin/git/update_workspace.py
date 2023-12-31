@@ -149,7 +149,7 @@ class WorkerMessage(BaseModel):
     status: WorkerStatus
 
 
-def update_git_repo_wrapper(repo_path, queue: multiprocessing.Queue) -> None:
+def update_git_repo_wrapper(repo_path, queue: multiprocessing.Queue) -> bool:
     queue.put(WorkerMessage(repo_path=repo_path, status=WorkerStatus.STARTED))
     try:
         result = update_git_repo(repo_path)
@@ -157,8 +157,10 @@ def update_git_repo_wrapper(repo_path, queue: multiprocessing.Queue) -> None:
             queue.put(WorkerMessage(repo_path=repo_path, status=WorkerStatus.SUCCESS))
         else:
             queue.put(WorkerMessage(repo_path=repo_path, status=WorkerStatus.FAILED))
+        return result
     except Exception:
         queue.put(WorkerMessage(repo_path=repo_path, status=WorkerStatus.FAILED))
+    return False
 
 
 def progress_listener(queue: multiprocessing.Queue,
@@ -229,9 +231,10 @@ def main() -> None:
             while True:
                 if seen_errors:
                     progress_idle.wait()
-                    git_dir = seen_errors.pop()
-                    if update_git_repo(git_dir, non_interactive=False):
-                        git_dirs.add(git_dir)
+                    for git_dir in seen_errors:
+                        if update_git_repo(git_dir, non_interactive=False):
+                            git_dirs.add(git_dir)
+                    seen_errors.clear()
                     continue
 
                 if len(future_to_git_dir) == concurrent_limit:
@@ -246,6 +249,8 @@ def main() -> None:
                                 seen_errors.add(git_dir)
                         except Exception:
                             seen_errors.add(git_dir)
+                        if len(seen_errors) > 0:
+                            break
                     continue
 
                 if git_dirs:
