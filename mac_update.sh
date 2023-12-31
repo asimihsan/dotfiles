@@ -8,6 +8,8 @@ sudo softwareupdate --download --all --agree-to-license
 brew update
 brew upgrade
 
+(cd ~/.dotfiles && git pull --rebase)
+
 if command -v flutter; then
     flutter upgrade --force
 fi
