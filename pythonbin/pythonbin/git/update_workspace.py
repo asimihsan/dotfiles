@@ -73,6 +73,7 @@ def is_git_repo(path):
 def reset_submodules(repo_path):
     repo = Repo(repo_path)
     repo.git.submodule('update', '--init', '--recursive')
+    repo.git.submodule('foreach', '--recursive', 'git fetch --all')
     repo.git.submodule('foreach', '--recursive', 'git reset --hard')
     repo.git.submodule('foreach', '--recursive', 'git clean -fdx')
 
@@ -102,6 +103,7 @@ def handle_dirty_repo(repo_path):
         return True
     elif action == "r":
         repo.git.reset('--hard')
+        repo.git.clean('-fdx')
         reset_submodules(repo_path)  # Reset submodules
         console.print(f"[green]Reset to HEAD and cleaned untracked files in {repo_path}.[/green]")
         return True
@@ -193,6 +195,7 @@ def progress_listener(queue: multiprocessing.Queue,
                 time.sleep(0.5)  # Briefly show failure
                 progress.remove_task(task_id)
             elif message.status == "exit":  # Special exit message
+                print("Exiting progress listener")
                 break
 
 
@@ -268,6 +271,7 @@ def main() -> None:
             console.print("[bold red]Script aborted.[/bold red]")
             sys.exit(1)
 
+    print("Waiting for progress listener to exit")
     progress_queue.put(WorkerMessage(repo_path="", status="exit"))
     progress_process.join()
 
