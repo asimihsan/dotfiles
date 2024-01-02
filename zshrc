@@ -76,6 +76,7 @@ export LOCALSTACK_API_KEY=6xxZjUgHLg
 export NDK_HOME=$HOME/Library/Android/sdk/ndk/25.1.8937393
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-21.jdk/Contents/Home
 export PATH=$HOME/flutter/bin:$PATH
+export PATH=$PATH:$HOME/.local/bin
 
 # -----------------------------------------------------------------------------
 #   Homebrew paths.
