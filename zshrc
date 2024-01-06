@@ -76,7 +76,7 @@ export LOCALSTACK_API_KEY=6xxZjUgHLg
 export NDK_HOME=$HOME/Library/Android/sdk/ndk/25.1.8937393
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-21.jdk/Contents/Home
 export PATH=$HOME/flutter/bin:$PATH
-export PATH=$PATH:$HOME/.local/bin
+export PATH=$PATH:/Users/asimi/.local/bin
 
 # -----------------------------------------------------------------------------
 #   Homebrew paths.
@@ -98,7 +98,6 @@ alias make="${brew_prefix}/opt/make/bin/gmake"
 # Update PATH for sqlite, tidy-html5, poetry, and protobuf
 export PATH="${brew_prefix}/opt/sqlite/bin:$PATH"
 export PATH="$PATH:${brew_prefix}/opt/tidy-html5/bin"
-export PATH="${brew_prefix}/opt/poetry/bin:$PATH"
 export PATH="${brew_prefix}/opt/protobuf/bin:$PATH"
 
 # Set PLANTUML_JAR
@@ -108,10 +107,10 @@ export PLANTUML_JAR="${brew_prefix}/opt/plantuml/libexec/plantuml.jar"
 eval "$(${brew_prefix}/opt/rbenv/bin/rbenv init - zsh)"
 
 alias make=${brew_prefix}/opt/make/bin/gmake
-alias poetry=${brew_prefix}/opt/poetry/bin/poetry
 alias rsync=${brew_prefix}/opt/rsync/bin/rsync
 alias wget=${brew_prefix}/opt/wget/bin/wget
 alias ctags=${brew_prefix}/opt/universal-ctags/bin/ctags
+alias node=${brew_prefix}/opt/node@20/bin/node
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
