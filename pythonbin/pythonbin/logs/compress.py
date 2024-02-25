@@ -62,9 +62,11 @@ def compress_file(file_path: pathlib.Path, compression_level: int) -> None:
     # Create a temporary file
     with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
         # Initialize zstandard compressor
-        cctx = zstd.ZstdCompressor(level=compression_level)
-        with file_path.open('rb') as source, cctx.stream_writer(tmp_file) as compressor:
-            shutil.copyfileobj(source, compressor)
+        cctx = zstd.ZstdCompressor(level=compression_level, write_content_size=True, write_checksum=True, threads=-1)
+        with file_path.open('rb') as source:
+            source_size = file_path.stat().st_size
+            with cctx.stream_writer(tmp_file, size=source_size) as compressor:
+                shutil.copyfileobj(source, compressor)
 
     # Verify the compressed file
     if verify_compressed_file(pathlib.Path(tmp_file.name)):

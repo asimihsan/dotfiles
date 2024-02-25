@@ -143,4 +143,3 @@ alias ls="gls --color"
 alias pmc='coyote test'
 alias zstd=$(brew --prefix zstd)/bin/zstd
 
-eval "$(github-copilot-cli alias -- "$0")"
