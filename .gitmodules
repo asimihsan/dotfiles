@@ -1,0 +1,6 @@
+[submodule "pythonbin/pythonbin/treesitter/external/tree-sitter-markdown"]
+	path = pythonbin/pythonbin/treesitter/external/tree-sitter-markdown
+	url = https://github.com/MDeiml/tree-sitter-markdown.git
+[submodule "pythonbin/pythonbin/vtreesitter/external/tree-sitter-markdown"]
+	path = pythonbin/pythonbin/vtreesitter/external/tree-sitter-markdown
+	url = git@github.com:tree-sitter-grammars/tree-sitter-markdown.git

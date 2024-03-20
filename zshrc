@@ -10,7 +10,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 . "$HOME/.cargo/env"
 
 export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 
 export NVM_DIR="$HOME/.nvm"

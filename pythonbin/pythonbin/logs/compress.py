@@ -1,14 +1,13 @@
 import argparse
-import functools
 import os
 import pathlib
+import shutil
+import signal
+import tempfile
+import time
 
 import psutil
 import zstandard as zstd
-import shutil
-import tempfile
-import time
-import signal
 
 
 def main(logs_dir: pathlib.Path, compression_level: int, modification_time_limit: int) -> None:
@@ -22,6 +21,10 @@ def main(logs_dir: pathlib.Path, compression_level: int, modification_time_limit
     """
     log_files = (f for f in logs_dir.iterdir() if f.is_file())
     for log_file in log_files:
+        # If already compressed, skip
+        if log_file.suffix == ".zst":
+            continue
+
         # Check if the file was last modified more than 'modification_time_limit' minutes ago
         if time.time() - os.path.getmtime(log_file) > modification_time_limit * 60:
             # Check if any process has an open file handle to the log file
