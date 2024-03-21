@@ -61,3 +61,21 @@ class JiraClient:
                 issue_parser = IssueParser(issue)
                 child_issue = issue_parser.parse()
                 yield child_issue
+
+    def get_epic_by_key(self, epic_key: str) -> Optional[Epic]:
+        try:
+            issue = self.jira.issue(epic_key)
+            epic_parser = EpicParser(issue)
+            epic = epic_parser.parse(
+                program_manager_field=self.program_manager_field,
+                launch_date_field=self.launch_date_field,
+                target_date_field=self.target_date_field,
+            )
+
+            for child_issue in self.get_child_issues(epic.key):
+                epic.child_issues.append(child_issue)
+
+            return epic
+        except Exception as e:
+            print(f"Error fetching epic {epic_key}: {e}")
+            return None

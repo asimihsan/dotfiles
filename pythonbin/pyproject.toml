@@ -45,6 +45,8 @@ numpy = "^1.26.4"
 jira = "^3.6.0"
 dateparser = "^1.2.0"
 markdown = "^3.6"
+numpydoc = "^1.6.0"
+pynput = "^1.7.6"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12.0"
