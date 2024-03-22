@@ -22,7 +22,7 @@ options = ["--url"]
 type = "string"
 
 [tool.poetry.dependencies]
-python = "^3.11.7"
+python = "^3.11"
 gitpython = "^3.1.40"
 questionary = "^2.0.1"
 rich = "^13.7.0"
@@ -47,6 +47,12 @@ dateparser = "^1.2.0"
 markdown = "^3.6"
 numpydoc = "^1.6.0"
 pynput = "^1.7.6"
+librosa = "^0.10.1"
+jupyter = "^1.0.0"
+pyautogui = "^0.9.54"
+pillow = "^10.2.0"
+opencv-python = "^4.9.0.80"
+pyscreeze = "^0.1.30"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12.0"
