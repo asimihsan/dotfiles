@@ -132,6 +132,7 @@ load_all_secrets() {
     load_secret "Private/Level Jira API token/password" "JIRA_API_TOKEN"
     load_secret "Private/LocalStack Auth Token/password" "LOCALSTACK_AUTH_TOKEN"
     load_secret "Private/OpenAPI API key work/password" "OPENAI_API_KEY"
+    load_secret "Private/Notion API key for Level workspace/credential" "NOTION_KEY"
     echo "All secrets have been loaded."
 }
 
