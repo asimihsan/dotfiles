@@ -10,6 +10,7 @@ update-workspace = "pythonbin.git.update_workspace:main"
 ghreview = "pythonbin.gh.ghreview:main"
 compress-logs = "pythonbin.logs.compress:run_main"
 load = "pythonbin.load.load:run_main"
+updater = "pythonbin.updater.updater:run_main"
 
 [tool.poe.tasks.scrape]
 script = "pythonbin.scraper.scrape:run_main"
