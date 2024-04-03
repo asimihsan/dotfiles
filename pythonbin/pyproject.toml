@@ -51,7 +51,7 @@ pynput = "^1.7.6"
 librosa = "^0.10.1"
 jupyter = "^1.0.0"
 pyautogui = "^0.9.54"
-pillow = "^10.2.0"
+pillow = "^10.3.0"
 opencv-python = "^4.9.0.80"
 pyscreeze = "^0.1.30"
 
