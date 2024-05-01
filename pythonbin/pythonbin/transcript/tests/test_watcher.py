@@ -1,4 +1,5 @@
 import datetime
+import threading
 import time
 from typing import Generator
 
@@ -8,9 +9,9 @@ from pythonbin.transcript.config import Config
 from pythonbin.transcript.transcript import (
     PrintObserver,
     TranscriptFileWatcher,
-    Observer,
 )
-from pythonbin.transcript.parser import Transcript
+from pythonbin.transcript.observer.observer import Observer
+from pythonbin.transcript.model import Transcript
 
 
 @pytest.fixture
@@ -28,9 +29,11 @@ def empty_test_file_for_writing(tmp_path) -> Generator[str, None, None]:
 class TestObserver(Observer):
     def __init__(self):
         self.seen_payloads = []
+        self.payload_event = threading.Event()
 
     def update(self, payload: Transcript):
         self.seen_payloads.append(payload)
+        self.payload_event.set()
 
 
 def test_observer_receives_updates(empty_test_file_for_writing):
@@ -43,11 +46,11 @@ def test_observer_receives_updates(empty_test_file_for_writing):
     with open(empty_test_file_for_writing, "w") as f:
         f.write("[00:02:00.00] Me: Adding a new line for testing.\n\n")
 
-    time.sleep(2)
+    observer.payload_event.wait(timeout=5)
 
     assert len(observer.seen_payloads) == 1
     assert len(observer.seen_payloads[0].entries) == 1
     entry = observer.seen_payloads[0].entries[0]
-    assert entry.time == datetime.time(0, 2)
+    assert entry.time == datetime.timedelta(seconds=120)
     assert entry.speaker == "Me"
     assert entry.text == "Adding a new line for testing."

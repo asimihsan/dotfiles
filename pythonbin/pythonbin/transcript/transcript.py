@@ -1,17 +1,15 @@
+import pathlib
 import time
 import os
-from typing import Protocol
 
 from watchdog.observers import Observer as WatchdogObserver
-from watchdog.events import FileSystemEventHandler
+from watchdog.events import FileSystemEventHandler, FileSystemEvent
 
-from pythonbin.transcript.parser import Transcript, TranscriptParser
+from pythonbin.transcript.observer.llm_observer import LLMObserver
+from pythonbin.transcript.observer.observer import Observer
+from pythonbin.transcript.parser import TranscriptParser
+from pythonbin.transcript.model import Transcript
 from .config import Config
-
-
-class Observer(Protocol):
-    def update(self, payload: Transcript):
-        ...
 
 
 class PrintObserver(Observer):
@@ -34,7 +32,6 @@ class TranscriptFileWatcher:
 
         self.filepath = filepath
         self.config = config
-        self.watchdog_observer = observer
         self.last_modified = os.path.getmtime(filepath)
         self.running = True
         self.observer = observer
@@ -44,40 +41,19 @@ class TranscriptFileWatcher:
         else:
             self.transcript_parser = transcript_parser
 
-        self.setup_watcher()
-
-    def setup_watcher(self):
-        """Set up file system watcher with fallback to polling."""
-        if self.can_use_watchdog():
-            self.setup_watchdog()
-        else:
-            self.setup_polling()
-
-    def can_use_watchdog(self):
-        # Placeholder for determining if watchdog can be used
-        return True
+        self.setup_watchdog()
 
     def setup_watchdog(self):
         """Set up watchdog observer."""
-        event_handler = FileChangeHandler(self.handle_file_change)
+        event_handler = FileChangeHandler(self.handle_file_change, self.filepath)
         self.watchdog_observer = WatchdogObserver()
         self.watchdog_observer.schedule(
             event_handler, os.path.dirname(self.filepath), recursive=False
         )
         self.watchdog_observer.start()
 
-    def setup_polling(self):
-        """Fallback to polling if watchdog is not available."""
-        while self.running:
-            self.poll_for_changes()
-            time.sleep(self.config.polling_interval)
-
-    def poll_for_changes(self):
-        """Check file for changes by last modified time."""
-        current_modified = os.path.getmtime(self.filepath)
-        if current_modified != self.last_modified:
-            self.last_modified = current_modified
-            self.handle_file_change()
+        # always trigger once at the beginning
+        self.handle_file_change()
 
     def handle_file_change(self):
         """Handle the file change event."""
@@ -94,15 +70,14 @@ class TranscriptFileWatcher:
 
 
 class FileChangeHandler(FileSystemEventHandler):
-    def __init__(self, change_callback):
+    def __init__(self, change_callback, filepath: str):
         self.change_callback = change_callback
+        self.filepath = filepath
 
-    def on_any_event(self, event):
-        print(f"Event: {event}")
-        if event.is_directory:
+    def on_modified(self, event: FileSystemEvent):
+        if event.src_path != self.filepath:
             return
-        if event.src_path.endswith(".txt"):
-            self.change_callback()
+        self.change_callback()
 
 
 def get_newest_file(directory, file_extension=".txt"):
@@ -127,7 +102,9 @@ def run_main():
         print("No transcript file available to monitor.")
         return
 
-    observer = PrintObserver()
+    prompt_path = pathlib.Path("~/Obsidian/Level/Chats/Prompt.md").expanduser()
+    observer = LLMObserver(prompt_path)
+
     config = Config()
     watcher = TranscriptFileWatcher(newest_file, config, observer)
     time.sleep(20)
