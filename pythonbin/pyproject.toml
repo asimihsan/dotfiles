@@ -11,6 +11,8 @@ ghreview = "pythonbin.gh.ghreview:main"
 compress-logs = "pythonbin.logs.compress:run_main"
 load = "pythonbin.load.load:run_main"
 updater = "pythonbin.updater.updater:run_main"
+extract = "pythonbin.extract.extract:run_main"
+transcript = "pythonbin.transcript.transcript:run_main"
 
 [tool.poe.tasks.scrape]
 script = "pythonbin.scraper.scrape:run_main"
@@ -22,41 +24,60 @@ help = "URL to scrape"
 options = ["--url"]
 type = "string"
 
+[tool.poe.tasks.extract]
+script = "pythonbin.extract.extract:run_main"
+help = "Extract text from file"
+
+[[tool.poe.tasks.extract.args]]
+name = "path"
+help = "Path to file"
+type = "string"
+positional = true
+
+[[tool.poe.tasks.extract.args]]
+name = "write"
+help = "Write to TXT file"
+options = ["--write"]
+type = "boolean"
+
 [tool.poetry.dependencies]
-python = "^3.11"
-gitpython = "^3.1.40"
-questionary = "^2.0.1"
-rich = "^13.7.0"
-pydantic = "^2.5.3"
-pathspec = "^0.12.1"
-playwright = "^1.40.0"
-boilerpy3 = "^1.0.7"
 beautifulsoup4 = "^4.12.2"
+boilerpy3 = "^1.0.7"
+dateparser = "^1.2.0"
+gitpython = "^3.1.43"
 html5lib = "^1.1"
-zstandard = "^0.22.0"
-psutil = "^5.9.7"
-litellm = "^1.16.16"
-semver = "^3.0.2"
-markdown-it-py = {extras = ["plugins"], version = "^3.0.0"}
+jira = "^3.6.0"
+jupyter = "^1.0.0"
+librosa = "^0.10.1"
+litellm = "^1.35.31"
+markdown = "^3.6"
+markdown-it-py = { extras = ["plugins"], version = "^3.0.0" }
 mdformat = "^0.7.17"
 mistletoe = "^1.2.1"
-tree-sitter = "^0.20.4"
-scipy = "^1.12.0"
 numpy = "^1.26.4"
-jira = "^3.6.0"
-dateparser = "^1.2.0"
-markdown = "^3.6"
-numpydoc = "^1.6.0"
-pynput = "^1.7.6"
-librosa = "^0.10.1"
-jupyter = "^1.0.0"
-pyautogui = "^0.9.54"
-pillow = "^10.2.0"
+numpydoc = "^1.7.0"
 opencv-python = "^4.9.0.80"
+pathspec = "^0.12.1"
+pillow = "^10.2.0"
+playwright = "^1.43.0"
+psutil = "^5.9.7"
+pyautogui = "^0.9.54"
+pydantic = "^2.7.1"
+pynput = "^1.7.6"
 pyscreeze = "^0.1.30"
+python = ">=3.11,<3.12"
+questionary = "^2.0.1"
+rich = "^13.7.0"
+scipy = "^1.13.0"
+semver = "^3.0.2"
+tree-sitter = "^0.21.3"
+unstructured = { extras = ["all-docs"], version = "^0.13.4" }
+watchdog = "^4.0.0"
+zstandard = "^0.22.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12.0"
+pyright = "1.1.360"
 
 [build-system]
 requires = ["poetry-core"]
