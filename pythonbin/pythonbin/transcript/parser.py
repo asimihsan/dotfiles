@@ -1,20 +1,8 @@
 import re
-from dataclasses import dataclass
 import datetime
 from typing import Generator
 
-
-@dataclass
-class Transcript:
-    entries: list["TranscriptEntry"]
-
-
-@dataclass
-class TranscriptEntry:
-    time: datetime.timedelta
-    speaker: str
-    text: str
-
+from pythonbin.transcript.model import TranscriptEntry
 
 timestamp_pattern = r"^\[(\d{2}:\d{2}:\d{2}\.\d{2})]"
 speaker_pattern = r"(.*?):"
