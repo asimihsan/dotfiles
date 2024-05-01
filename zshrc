@@ -74,7 +74,7 @@ export PATH=$PATH:$(go env GOPATH)/bin
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 export LOCALSTACK_API_KEY=6xxZjUgHLg
 export NDK_HOME=$HOME/Library/Android/sdk/ndk/25.1.8937393
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-21.jdk/Contents/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-17.jdk/Contents/Home
 export PATH=$HOME/flutter/bin:$PATH
 export PATH=$PATH:/Users/asimi/.local/bin
 
@@ -133,6 +133,7 @@ load_all_secrets() {
     load_secret "Private/LocalStack Auth Token/password" "LOCALSTACK_AUTH_TOKEN"
     load_secret "Private/OpenAPI API key work/password" "OPENAI_API_KEY"
     load_secret "Private/Notion API key for Level workspace/credential" "NOTION_KEY"
+    load_secret "Private/Anthropic API key/credential" "ANTHROPIC_API_KEY"
     echo "All secrets have been loaded."
 }
 
