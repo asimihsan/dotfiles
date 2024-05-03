@@ -7,7 +7,7 @@ from unstructured.partition.auto import partition
 def extract(path: str) -> str:
     elements = partition(
         filename=path,
-        strategy='hi_res',
+        strategy="hi_res",
         # extract_image_block_types=["Image"],
         # extract_image_block_output_dir=os.path.dirname(path),
         request_timeout=10,
@@ -34,8 +34,8 @@ def run_main(path: str, write: bool = False):
             print(f"Error: Directory {output_dir} does not exist.")
             sys.exit(1)
 
-        output_path = os.path.splitext(path)[0] + '.txt'
-        with open(output_path, 'w') as f:
+        output_path = os.path.splitext(path)[0] + ".txt"
+        with open(output_path, "w") as f:
             f.write(output)
     else:
         print(output)

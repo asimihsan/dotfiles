@@ -33,11 +33,23 @@ def commit_and_push(repo, branch_name):
 
 def create_pull_request(repo_path, base_branch, head_branch):
     try:
-        subprocess.run(["gh", "pr", "create",
-                        "--title", "Update dependencies",
-                        "--body", "Automated update of dependencies",
-                        "--base", base_branch,
-                        "--head", head_branch], cwd=repo_path, check=True)
+        subprocess.run(
+            [
+                "gh",
+                "pr",
+                "create",
+                "--title",
+                "Update dependencies",
+                "--body",
+                "Automated update of dependencies",
+                "--base",
+                base_branch,
+                "--head",
+                head_branch,
+            ],
+            cwd=repo_path,
+            check=True,
+        )
     except subprocess.CalledProcessError as e:
         print(f"Failed to create pull request: {e}", file=sys.stderr)
         raise
@@ -47,8 +59,12 @@ def wait_for_checks(repo_path, pr_branch):
     try:
         # Wait for checks to complete
         while True:
-            result = subprocess.run(["gh", "pr", "checks", pr_branch, "--json", "status", "--jq", ".status"],
-                                    cwd=repo_path, capture_output=True, text=True)
+            result = subprocess.run(
+                ["gh", "pr", "checks", pr_branch, "--json", "status", "--jq", ".status"],
+                cwd=repo_path,
+                capture_output=True,
+                text=True,
+            )
             status = result.stdout.strip()
 
             if status == "COMPLETED":

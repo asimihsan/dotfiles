@@ -25,23 +25,22 @@ console = Console()
 
 def add_untracked_to_gitignore(repo_path: Path, untracked_files: list[str]) -> None:
     common_exclude_patterns = {
-        'python': ['**/.python-version', '**/__pycache__/', '**/*.pyc', '.python-version'],
-        'terraform': ['**/.terraform/', '**/*.tfstate', '**/*.tfstate.backup'],
-        'cdk': ['**/cdk.out/', '**/cdk.context.json'],
-        'cdktf': ['**/.gen/', '**/cdktf.out/'],
-        'java': ['**/*.class', '**/target/', '**/build/'],
-        'javascript': ['**/node_modules/', '**/package-lock.json', '**/yarn.lock'],
-
-        'intellij': ['**/.idea/', '**/*.iml'],
-        'CACHEDIR.TAG': ['**/CACHEDIR.TAG'],
+        "python": ["**/.python-version", "**/__pycache__/", "**/*.pyc", ".python-version"],
+        "terraform": ["**/.terraform/", "**/*.tfstate", "**/*.tfstate.backup"],
+        "cdk": ["**/cdk.out/", "**/cdk.context.json"],
+        "cdktf": ["**/.gen/", "**/cdktf.out/"],
+        "java": ["**/*.class", "**/target/", "**/build/"],
+        "javascript": ["**/node_modules/", "**/package-lock.json", "**/yarn.lock"],
+        "intellij": ["**/.idea/", "**/*.iml"],
+        "CACHEDIR.TAG": ["**/CACHEDIR.TAG"],
     }
 
     # Flatten the pattern list
     all_exclude_patterns = [pattern for patterns in common_exclude_patterns.values() for pattern in patterns]
 
-    exclude_file_path = repo_path / '.git' / 'info' / 'exclude'
+    exclude_file_path = repo_path / ".git" / "info" / "exclude"
     patterns_used = set()
-    with exclude_file_path.open('a') as exclude_file:
+    with exclude_file_path.open("a") as exclude_file:
         for pattern in all_exclude_patterns:
             # Create a PathSpec for the current pattern
             spec = PathSpec.from_lines(GitWildMatchPattern, [pattern])
@@ -49,17 +48,18 @@ def add_untracked_to_gitignore(repo_path: Path, untracked_files: list[str]) -> N
             # Check if the pattern matches any untracked file
             for file in untracked_files:
                 if spec.match_file(file) and pattern not in patterns_used:
-                    console.print(f'[yellow]Excluding pattern {pattern} for file {file}[/yellow]')
-                    exclude_file.write(f'{pattern}\n')
+                    console.print(f"[yellow]Excluding pattern {pattern} for file {file}[/yellow]")
+                    exclude_file.write(f"{pattern}\n")
                     patterns_used.add(pattern)
                     break  # Stop checking after the first match for this pattern
 
         # Add any remaining untracked files that did not match any pattern
         for file in untracked_files:
             if not any(
-                    PathSpec.from_lines(GitWildMatchPattern, [pattern]).match_file(file) for pattern in patterns_used):
-                console.print(f'[yellow]Excluding file {file}[/yellow]')
-                exclude_file.write(f'{file}\n')
+                PathSpec.from_lines(GitWildMatchPattern, [pattern]).match_file(file) for pattern in patterns_used
+            ):
+                console.print(f"[yellow]Excluding file {file}[/yellow]")
+                exclude_file.write(f"{file}\n")
 
 
 def is_git_repo(path):
@@ -72,17 +72,15 @@ def is_git_repo(path):
 
 def reset_submodules(repo_path):
     repo = Repo(repo_path)
-    repo.git.submodule('update', '--init', '--recursive')
-    repo.git.submodule('foreach', '--recursive', 'git fetch --all')
-    repo.git.submodule('foreach', '--recursive', 'git reset --hard')
-    repo.git.submodule('foreach', '--recursive', 'git clean -fdx')
+    repo.git.submodule("update", "--init", "--recursive")
+    repo.git.submodule("foreach", "--recursive", "git fetch --all")
+    repo.git.submodule("foreach", "--recursive", "git reset --hard")
+    repo.git.submodule("foreach", "--recursive", "git clean -fdx")
 
 
 def handle_dirty_repo(repo_path):
     repo = Repo(repo_path)
-    console.print(
-        f"\n[yellow]Uncommitted changes in {repo_path}. Here's the status:[/yellow]"
-    )
+    console.print(f"\n[yellow]Uncommitted changes in {repo_path}. Here's the status:[/yellow]")
     console.print(repo.git.status())
 
     choices: list[dict[str, str]] = [
@@ -102,8 +100,8 @@ def handle_dirty_repo(repo_path):
         repo.git.stash("save")
         return True
     elif action == "r":
-        repo.git.reset('--hard')
-        repo.git.clean('-fdx')
+        repo.git.reset("--hard")
+        repo.git.clean("-fdx")
         reset_submodules(repo_path)  # Reset submodules
         console.print(f"[green]Reset to HEAD and cleaned untracked files in {repo_path}.[/green]")
         return True
@@ -165,12 +163,11 @@ def update_git_repo_wrapper(repo_path, queue: multiprocessing.Queue) -> bool:
     return False
 
 
-def progress_listener(queue: multiprocessing.Queue,
-                      idle: multiprocessing.Event) -> None:
+def progress_listener(queue: multiprocessing.Queue, idle: multiprocessing.Event) -> None:
     with rich.progress.Progress(
-            rich.progress.SpinnerColumn(),
-            rich.progress.TextColumn("[bold blue]{task.description}"),
-            transient=True,
+        rich.progress.SpinnerColumn(),
+        rich.progress.TextColumn("[bold blue]{task.description}"),
+        transient=True,
     ) as progress:
         tasks: dict[str, rich.progress.TaskID] = {}
         while True:
@@ -181,9 +178,7 @@ def progress_listener(queue: multiprocessing.Queue,
 
             message: WorkerMessage = queue.get()
             if message.status == WorkerStatus.STARTED:
-                tasks[message.repo_path] = progress.add_task(
-                    message.repo_path, start=True
-                )
+                tasks[message.repo_path] = progress.add_task(message.repo_path, start=True)
             elif message.status == WorkerStatus.SUCCESS:
                 task_id = tasks.pop(message.repo_path)
                 progress.update(task_id, description=f"[green]{message.repo_path}")
@@ -210,23 +205,18 @@ def main() -> None:
         console.print(f"[red]Error: {root_dir} is not a directory.[/red]")
         sys.exit(1)
 
-    subdirs = [
-        os.path.join(root_dir, d)
-        for d in os.listdir(root_dir)
-        if os.path.isdir(os.path.join(root_dir, d))
-    ]
+    subdirs = [os.path.join(root_dir, d) for d in os.listdir(root_dir) if os.path.isdir(os.path.join(root_dir, d))]
     random.shuffle(subdirs)
     git_dirs: set[str] = {d for d in subdirs if is_git_repo(d)}
     future_to_git_dir: dict[concurrent.futures.Future, str] = {}
     concurrent_limit: int = 4
 
-    with multiprocessing.Manager() as manager, \
-            concurrent.futures.ProcessPoolExecutor(max_workers=concurrent_limit) as executor:
+    with multiprocessing.Manager() as manager, concurrent.futures.ProcessPoolExecutor(
+        max_workers=concurrent_limit
+    ) as executor:
         progress_queue = manager.Queue()
         progress_idle = multiprocessing.Event()
-        progress_process = multiprocessing.Process(
-            target=progress_listener, args=(progress_queue, progress_idle)
-        )
+        progress_process = multiprocessing.Process(target=progress_listener, args=(progress_queue, progress_idle))
         progress_process.start()
 
         seen_errors: set[str] = set()
@@ -241,9 +231,7 @@ def main() -> None:
                     continue
 
                 if len(future_to_git_dir) == concurrent_limit:
-                    done, _ = concurrent.futures.wait(
-                        future_to_git_dir, return_when=concurrent.futures.FIRST_COMPLETED
-                    )
+                    done, _ = concurrent.futures.wait(future_to_git_dir, return_when=concurrent.futures.FIRST_COMPLETED)
                     for future in done:
                         git_dir = future_to_git_dir.pop(future)
                         try:

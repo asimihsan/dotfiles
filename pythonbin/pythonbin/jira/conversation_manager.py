@@ -50,25 +50,25 @@ class ConversationManager:
                 current_phase=ConversationPhase.COLLECT_ISSUES,
                 current_method=self.prompt_for_issues,
                 next_phase=ConversationPhase.ANALYZE_ISSUES,
-                terminal=False
+                terminal=False,
             ),
             ConversationPhase.ANALYZE_ISSUES: State(
                 current_phase=ConversationPhase.ANALYZE_ISSUES,
                 current_method=self.analyze_issues,
                 next_phase=ConversationPhase.COLLECT_REQUIREMENTS,
-                terminal=False
+                terminal=False,
             ),
             ConversationPhase.COLLECT_REQUIREMENTS: State(
                 current_phase=ConversationPhase.COLLECT_REQUIREMENTS,
                 current_method=self.collect_requirements,
                 next_phase=ConversationPhase.GENERATE_OUTPUT,
-                terminal=False
+                terminal=False,
             ),
             ConversationPhase.GENERATE_OUTPUT: State(
                 current_phase=ConversationPhase.GENERATE_OUTPUT,
                 current_method=self.generate_output,
                 next_phase=None,
-                terminal=True
+                terminal=True,
             ),
         }
 
@@ -97,10 +97,9 @@ class ConversationManager:
         raise ValueError(f"Invalid state: {state}")
 
     def prompt_for_issues(self):
-        self.messages.extend([
-            {"role": "system", "content": system_message},
-            {"role": "user", "content": initial_user_message}
-        ])
+        self.messages.extend(
+            [{"role": "system", "content": system_message}, {"role": "user", "content": initial_user_message}]
+        )
         initial_messages_length = len(self.messages)
         response = self.llm_client.generate_response(self.messages)
         print(response)
@@ -120,10 +119,7 @@ class ConversationManager:
         Signal using a boolean flag `done` to indicate that you have all the required information and are ready to provide the final output. If you are not done, you should ask for more free-form information about the epics and child issues.
         """
 
-        self.messages.extend([
-            {"role": "user",
-             "content": message}
-        ])
+        self.messages.extend([{"role": "user", "content": message}])
         initial_messages_length = len(self.messages)
         response = self.llm_client.generate_response(self.messages)
         print(response)

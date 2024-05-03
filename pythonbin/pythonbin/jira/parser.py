@@ -13,10 +13,7 @@ class EpicParser:
     def __init__(self, issue: jira.Issue):
         self.issue = issue
 
-    def parse(self,
-              program_manager_field: str,
-              launch_date_field: str,
-              target_date_field: str) -> Epic:
+    def parse(self, program_manager_field: str, launch_date_field: str, target_date_field: str) -> Epic:
         epic = Epic(
             key=self.issue.key,
             summary=self.issue.fields.summary,
@@ -65,7 +62,7 @@ class IssueParser:
             key=self.issue.key,
             summary=self.issue.fields.summary,
             description=self.parse_description_markdown(),
-            issue_type=self.issue.fields.issuetype.name
+            issue_type=self.issue.fields.issuetype.name,
         )
         self.parse_summary(issue)
         return issue
@@ -73,7 +70,7 @@ class IssueParser:
     def parse_summary(self, issue: Issue) -> None:
         # Parse key fields from the summary if present
         # Example format: "Feature: (P0) Resident Automations"
-        match = re.match(r'^(\w+):\s*(\(P\d\))?\s*(.+)$', issue.summary)
+        match = re.match(r"^(\w+):\s*(\(P\d\))?\s*(.+)$", issue.summary)
         if match:
             issue.summary_type = match.group(1)
             issue.priority = match.group(2)

@@ -120,18 +120,13 @@ def get_changelog_contents(config: Config, tag: Tag):
     else:
         raise UnknownEncodingError(response_json["encoding"])
 
-    md = (
-        MarkdownIt('commonmark', {'breaks': True})
-        .use(front_matter_plugin)
-        .use(footnote_plugin)
-        .enable('table')
-    )
+    md = MarkdownIt("commonmark", {"breaks": True}).use(front_matter_plugin).use(footnote_plugin).enable("table")
     tokens = md.parse(content)
 
     section_tokens: list[markdown_it.tree.Token] = []
     section_header_type: str | None = None
     for token, next_token in zip(tokens, tokens[1:]):
-        if token.type == 'heading_open':
+        if token.type == "heading_open":
             child = next_token
             heading_text = child.content
             if heading_text.startswith(tag.name):
@@ -200,7 +195,7 @@ def generate_release_notes(config, latest_release: Release, new_notes):
         messages=messages,
         api_base=config.litellm_api_base,
     )
-    return response['choices'][0]['message']['content']
+    return response["choices"][0]["message"]["content"]
 
 
 # Main function to run the script

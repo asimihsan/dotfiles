@@ -12,7 +12,7 @@ compress-logs = "pythonbin.logs.compress:run_main"
 load = "pythonbin.load.load:run_main"
 updater = "pythonbin.updater.updater:run_main"
 extract = "pythonbin.extract.extract:run_main"
-transcript = "pythonbin.transcript.transcript:run_main"
+transcript = "pythonbin.transcript.main:run_main"
 
 [tool.poe.tasks.scrape]
 script = "pythonbin.scraper.scrape:run_main"
@@ -41,17 +41,20 @@ options = ["--write"]
 type = "boolean"
 
 [tool.poetry.dependencies]
+anthropic = "^0.25.7"
 beautifulsoup4 = "^4.12.2"
 boilerpy3 = "^1.0.7"
 dateparser = "^1.2.0"
 gitpython = "^3.1.43"
 html5lib = "^1.1"
+instructor = "^1.2.4"
 jira = "^3.6.0"
 jupyter = "^1.0.0"
 librosa = "^0.10.1"
 litellm = "^1.35.31"
 markdown = "^3.6"
 markdown-it-py = { extras = ["plugins"], version = "^3.0.0" }
+marvin = "^2.3.3"
 mdformat = "^0.7.17"
 mistletoe = "^1.2.1"
 numpy = "^1.26.4"
@@ -70,11 +73,12 @@ questionary = "^2.0.1"
 rich = "^13.7.0"
 scipy = "^1.13.0"
 semver = "^3.0.2"
+tiktoken = "^0.6.0"
+transformers = "^4.40.1"
 tree-sitter = "^0.21.3"
 unstructured = { extras = ["all-docs"], version = "^0.13.4" }
 watchdog = "^4.0.0"
 zstandard = "^0.22.0"
-instructor = "^1.2.4"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12.0"
@@ -91,6 +95,12 @@ filterwarnings = [
     "error",
     "ignore::UserWarning",
 ]
+
+[tool.black]
+line-length = 120
+target-version = ['py311', 'py312']
+include = '\.pyi?$'  # Regex pattern to include files
+exclude = '/(build|buck-out|dist|_build|\.eggs|\.git|\.hg|\.mypy_cache|\.nox|\.tox|\.venv|venv|\.svn|_build|buck-out|build|dist)/'
 
 [build-system]
 requires = ["poetry-core"]

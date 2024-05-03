@@ -27,7 +27,7 @@ class LLMClient:
             {
                 "type": "function",
                 "function": function_to_dict(get_user_input),
-            }
+            },
         ]
         print(self.tools)
 
@@ -79,10 +79,12 @@ class LLMClient:
                         )
             elif finish_reason == "stop":
                 print("LLM has finished")
-                messages.append({
-                    "role": "assistant",
-                    "content": response.choices[0].message.content,
-                })
+                messages.append(
+                    {
+                        "role": "assistant",
+                        "content": response.choices[0].message.content,
+                    }
+                )
                 return Response(messages=messages, response=response.choices[0].message.content)
             else:
                 raise ValueError(f"Unexpected finish_reason: {finish_reason}")
