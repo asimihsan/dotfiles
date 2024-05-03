@@ -34,7 +34,7 @@ def parse_line(line: str) -> TranscriptEntry | None:
         seconds=float(timestamp[6:8]),
         microseconds=int(timestamp[9:]) * 1000,
     )
-    return TranscriptEntry(time, speaker, text)
+    return TranscriptEntry(time=time, speaker=speaker, text=text)
 
 
 class TranscriptParser:

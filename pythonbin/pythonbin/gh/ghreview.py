@@ -18,30 +18,30 @@ class CommandFailedException(Exception):
 def run_command(command):
     result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     if result.returncode != 0:
-        raise CommandFailedException(command, result.stderr.decode('utf-8'))
-    return result.stdout.decode('utf-8')
+        raise CommandFailedException(command, result.stderr.decode("utf-8"))
+    return result.stdout.decode("utf-8")
 
 
 def get_pr_description(pr_url):
-    return run_command(f"/opt/homebrew/bin/gh pr view {pr_url} --json \"body,comments\" -q .body")
+    return run_command(f'/opt/homebrew/bin/gh pr view {pr_url} --json "body,comments" -q .body')
 
 
 def get_pr_diff(pr_url, exclude_files=None):
     if exclude_files is None:
-        exclude_files = ['poetry.lock', 'pyproject.toml']  # Default files to ignore
+        exclude_files = ["poetry.lock", "pyproject.toml"]  # Default files to ignore
     diff_text = run_command(f"/opt/homebrew/bin/gh pr diff {pr_url}")
     filtered_diff = []
-    diff_lines = diff_text.split('\n')
+    diff_lines = diff_text.split("\n")
     skip = False
     for line in diff_lines:
-        if line.startswith('diff --git'):
+        if line.startswith("diff --git"):
             skip = any(file_name in line for file_name in exclude_files)
         if not skip:
             filtered_diff.append(line)
-    return '\n'.join(filtered_diff)
+    return "\n".join(filtered_diff)
 
 
-def get_pr_comments(pr_url: 'PullRequestURL') -> str:
+def get_pr_comments(pr_url: "PullRequestURL") -> str:
     # Construct the GitHub API endpoint for PR comments
     endpoint = f"/repos/{pr_url.owner}/{pr_url.repo}/pulls/{pr_url.number}/comments"
 
@@ -50,12 +50,14 @@ def get_pr_comments(pr_url: 'PullRequestURL') -> str:
         [
             "/opt/homebrew/bin/gh",
             "api",
-            "-H", "Accept: application/vnd.github+json",
-            "-H", "X-GitHub-Api-Version: 2022-11-28",
+            "-H",
+            "Accept: application/vnd.github+json",
+            "-H",
+            "X-GitHub-Api-Version: 2022-11-28",
             endpoint,
         ],
         capture_output=True,
-        text=True
+        text=True,
     )
 
     # Check if the call was successful
@@ -69,27 +71,28 @@ def get_pr_comments(pr_url: 'PullRequestURL') -> str:
     # Format the comments as Markdown
     markdown_output: list[str] = []
     for comment in comments:
-        user_login = comment['user']['login']
-        diff_hunk = comment['diff_hunk']
-        body = comment['body']
+        user_login = comment["user"]["login"]
+        diff_hunk = comment["diff_hunk"]
+        body = comment["body"]
 
         # Truncate the diff_hunk if it's too long
-        diff_hunk_lines = diff_hunk.split('\n')
+        diff_hunk_lines = diff_hunk.split("\n")
         if len(diff_hunk_lines) > 6:
-            diff_hunk = '\n'.join(diff_hunk_lines[:3] + ['[...elided for brevity...]'] + diff_hunk_lines[-3:])
+            diff_hunk = "\n".join(diff_hunk_lines[:3] + ["[...elided for brevity...]"] + diff_hunk_lines[-3:])
         elif len(diff_hunk_lines) > 1:
-            diff_hunk = '\n'.join(diff_hunk_lines)
+            diff_hunk = "\n".join(diff_hunk_lines)
         else:
             diff_hunk = diff_hunk_lines[0]
 
         markdown_output.append(
-            f"**{user_login}'s comment on:**\n\n{diff_hunk}\n\n**{user_login}'s comment is:**\n{body}\n\n---\n\n")
+            f"**{user_login}'s comment on:**\n\n{diff_hunk}\n\n**{user_login}'s comment is:**\n{body}\n\n---\n\n"
+        )
 
-    return '\n'.join(markdown_output)
+    return "\n".join(markdown_output)
 
 
 def find_jira_tickets(description):
-    return re.findall(r'\b[A-Z]{2,}-\d+\b', description)
+    return re.findall(r"\b[A-Z]{2,}-\d+\b", description)
 
 
 def get_jira_details(ticket):
@@ -97,9 +100,14 @@ def get_jira_details(ticket):
 
 
 def create_prompt(pr_description, pr_diff, pr_comments: str, jira_details=None):
-    jira_section = "- The related Jira ticket details are as follows:\n$jira_details" if jira_details else "- There are no related Jira ticket details provided."
+    jira_section = (
+        "- The related Jira ticket details are as follows:\n$jira_details"
+        if jira_details
+        else "- There are no related Jira ticket details provided."
+    )
 
-    template = Template("""
+    template = Template(
+        """
     Act like a Senior Software Engineer. I need your assistance in reviewing a GitHub Pull Request.
 
     Here's what you need to know:
@@ -117,18 +125,16 @@ def create_prompt(pr_description, pr_diff, pr_comments: str, jira_details=None):
     Please prioritize any issues you find and propose comments. You can comment generally about the whole PR or specifically about files and line numbers. If you have any questions, let me know before starting.
                         
     Your goal is the give a high-level impression first, but then dive into the details for specific files and lines. If you need to see other files in the project ask me.
-    """)
+    """
+    )
     return template.substitute(
-        pr_description=pr_description,
-        pr_diff=pr_diff,
-        pr_comments=pr_comments,
-        jira_section=jira_section
+        pr_description=pr_description, pr_diff=pr_diff, pr_comments=pr_comments, jira_section=jira_section
     )
 
 
 def copy_to_clipboard(text):
-    process = subprocess.Popen('pbcopy', env={'LANG': 'en_US.UTF-8'}, stdin=subprocess.PIPE)
-    process.communicate(text.encode('utf-8'))
+    process = subprocess.Popen("pbcopy", env={"LANG": "en_US.UTF-8"}, stdin=subprocess.PIPE)
+    process.communicate(text.encode("utf-8"))
 
 
 class PullRequestURL(BaseModel):
@@ -138,7 +144,7 @@ class PullRequestURL(BaseModel):
     number: int
 
     @classmethod
-    def from_url(cls, url: str) -> 'PullRequestURL':
+    def from_url(cls, url: str) -> "PullRequestURL":
         """
         :param url: GitHub PR URL, e.g. https://github.com/LevelHome/LevelServer/pull/3940
         :return: PullRequestURL instance
@@ -146,29 +152,24 @@ class PullRequestURL(BaseModel):
 
         elems = urlparse(url)
 
-        if elems.hostname != 'github.com':
-            raise ValueError(f'Invalid hostname: {elems.hostname}')
+        if elems.hostname != "github.com":
+            raise ValueError(f"Invalid hostname: {elems.hostname}")
 
         path = elems.path
-        path_elems = path.split('/')
+        path_elems = path.split("/")
 
         # if it ends with "files", we can ignore it
         if path_elems[-1] == "files":
             path_elems = path_elems[:-1]
 
         if len(path_elems) != 5:
-            raise ValueError(f'Invalid path: {path}')
+            raise ValueError(f"Invalid path: {path}")
 
         owner = path_elems[1]
         repo = path_elems[2]
         number = path_elems[4]
 
-        return cls(
-            original_url=url,
-            owner=owner,
-            repo=repo,
-            number=number
-        )
+        return cls(original_url=url, owner=owner, repo=repo, number=number)
 
 
 def main(pr_url: str):

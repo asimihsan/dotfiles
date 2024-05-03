@@ -6,7 +6,7 @@ from typing import Generator
 import pytest
 
 from pythonbin.transcript.config import Config
-from pythonbin.transcript.transcript import (
+from pythonbin.transcript.main import (
     PrintObserver,
     TranscriptFileWatcher,
 )

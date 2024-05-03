@@ -40,9 +40,9 @@ def is_file_open(file_path: pathlib.Path) -> bool:
     :param file_path: Path to the file.
     :return: True if any process has an open file handle to the file, False otherwise.
     """
-    for proc in psutil.process_iter(['open_files']):
+    for proc in psutil.process_iter(["open_files"]):
         try:
-            for proc_open_file_path in proc.info['open_files'] or []:
+            for proc_open_file_path in proc.info["open_files"] or []:
                 if file_path == pathlib.Path(proc_open_file_path.path):
                     return True
         except (psutil.NoSuchProcess, psutil.AccessDenied):
@@ -66,7 +66,7 @@ def compress_file(file_path: pathlib.Path, compression_level: int) -> None:
     with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
         # Initialize zstandard compressor
         cctx = zstd.ZstdCompressor(level=compression_level, write_content_size=True, write_checksum=True, threads=-1)
-        with file_path.open('rb') as source:
+        with file_path.open("rb") as source:
             source_size = file_path.stat().st_size
             with cctx.stream_writer(tmp_file, size=source_size) as compressor:
                 shutil.copyfileobj(source, compressor)
@@ -96,7 +96,7 @@ def verify_compressed_file(file_path: pathlib.Path) -> bool:
 
     try:
         dctx = zstd.ZstdDecompressor()
-        with file_path.open('rb') as compressed_file:
+        with file_path.open("rb") as compressed_file:
             dctx.stream_reader(compressed_file)
         return True
     except zstd.ZstdError:
@@ -111,21 +111,23 @@ def parse_arguments() -> argparse.Namespace:
     """
 
     parser = argparse.ArgumentParser(description="Compress log files.")
-    parser.add_argument("--logs-dir",
-                        type=str,
-                        default="~/logs",
-                        required=False,
-                        help="Directory where log files are stored.")
-    parser.add_argument("--compression-level",
-                        type=int,
-                        default=zstd.MAX_COMPRESSION_LEVEL,
-                        required=False,
-                        help="Zstandard compression level.")
-    parser.add_argument("--modification-time-limit",
-                        type=int,
-                        default=5,
-                        required=False,
-                        help="Time limit in minutes for last modification.")
+    parser.add_argument(
+        "--logs-dir", type=str, default="~/logs", required=False, help="Directory where log files are stored."
+    )
+    parser.add_argument(
+        "--compression-level",
+        type=int,
+        default=zstd.MAX_COMPRESSION_LEVEL,
+        required=False,
+        help="Zstandard compression level.",
+    )
+    parser.add_argument(
+        "--modification-time-limit",
+        type=int,
+        default=5,
+        required=False,
+        help="Time limit in minutes for last modification.",
+    )
     return parser.parse_args()
 
 

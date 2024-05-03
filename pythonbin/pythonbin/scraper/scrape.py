@@ -19,7 +19,7 @@ class Extractor:
         soup = BeautifulSoup(self.doc, "html5lib")
 
         # remove cookies div 'awsccc-sb-ux-c'
-        cookie_div = soup.find('div', {'id': 'awsccc-sb-ux-c'})
+        cookie_div = soup.find("div", {"id": "awsccc-sb-ux-c"})
         if cookie_div:
             cookie_div.decompose()
 
@@ -36,6 +36,13 @@ class PageContent(BaseModel):
     extracted_content: str
     links: list[str]
     downward_links: list[str]
+
+
+def get_content_sync(url: str) -> PageContent:
+    """
+    Fetch the content of a URL.
+    """
+    return asyncio.run(get_content(url))
 
 
 async def get_content(url) -> PageContent:
@@ -69,8 +76,14 @@ async def get_content(url) -> PageContent:
                 if parsed_url.path.startswith(base_url.path):
                     downward_hrefs.append(full_url)
 
-            return PageContent(url=url, title=title, original_content=doc, extracted_content=content, links=hrefs,
-                               downward_links=downward_hrefs)
+            return PageContent(
+                url=url,
+                title=title,
+                original_content=doc,
+                extracted_content=content,
+                links=hrefs,
+                downward_links=downward_hrefs,
+            )
         finally:
             await page.close()
             await browser.close()

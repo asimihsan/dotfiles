@@ -18,11 +18,11 @@ class JiraClient:
         )
 
     def get_epics(self, project_key: str, program_manager: Optional[str] = None) -> Generator[Epic, None, None]:
-        jql_parts = [f'project = {project_key}', 'issuetype = Epic']
+        jql_parts = [f"project = {project_key}", "issuetype = Epic"]
         if program_manager:
             jql_parts.append(f'"Program Manager" = "{program_manager}"')
 
-        jql = ' AND '.join(jql_parts)
+        jql = " AND ".join(jql_parts)
 
         start_at = 0
         max_results = 50

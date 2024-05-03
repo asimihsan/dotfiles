@@ -13,9 +13,10 @@ def main() -> None:
 
     # pyautogui.screenshot('/tmp/screenshot.png')
 
-    location = pyautogui.locateOnScreen('img_1.png', grayscale=True, confidence=0.3)
+    location = pyautogui.locateOnScreen("img_1.png", grayscale=True, confidence=0.3)
     print(location)
     pyautogui.moveTo(location, duration=1.0)
+
 
 if __name__ == "__main__":
     main()

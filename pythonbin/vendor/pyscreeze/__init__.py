@@ -1,7 +1,7 @@
 # PyScreeze - PyScreeze is a simple, cross-platform screenshot module for Python 2 and 3.
 # By Al Sweigart al@inventwithpython.com
 
-__version__ = '0.1.30'
+__version__ = "0.1.30"
 
 import collections
 import datetime
@@ -20,7 +20,7 @@ from PIL import ImageDraw
 from PIL import __version__ as PIL__version__
 from PIL import ImageGrab
 
-PILLOW_VERSION = tuple([int(x) for x in PIL__version__.split('.')])
+PILLOW_VERSION = tuple([int(x) for x in PIL__version__.split(".")])
 
 _useOpenCV: bool = False
 try:
@@ -34,7 +34,7 @@ except ImportError:
 RUNNING_PYTHON_2 = sys.version_info[0] == 2
 
 _PYGETWINDOW_UNAVAILABLE = True
-if sys.platform == 'win32':
+if sys.platform == "win32":
     # On Windows, the monitor scaling can be set to something besides normal 100%.
     # PyScreeze and Pillow needs to account for this to make accurate screenshots.
     # TODO - How does macOS and Linux handle monitor scaling?
@@ -64,8 +64,8 @@ USE_IMAGE_NOT_FOUND_EXCEPTION = True
 
 GNOMESCREENSHOT_EXISTS = False
 try:
-    if sys.platform.startswith('linux'):
-        whichProc = subprocess.Popen(['which', 'gnome-screenshot'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if sys.platform.startswith("linux"):
+        whichProc = subprocess.Popen(["which", "gnome-screenshot"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         GNOMESCREENSHOT_EXISTS = whichProc.wait() == 0
 except OSError as ex:
     if ex.errno == errno.ENOENT:
@@ -77,8 +77,8 @@ except OSError as ex:
 
 SCROT_EXISTS = False
 try:
-    if sys.platform.startswith('linux'):
-        whichProc = subprocess.Popen(['which', 'scrot'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if sys.platform.startswith("linux"):
+        whichProc = subprocess.Popen(["which", "scrot"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         SCROT_EXISTS = whichProc.wait() == 0
 except OSError as ex:
     if ex.errno == errno.ENOENT:
@@ -89,21 +89,21 @@ except OSError as ex:
         raise
 
 # On Linux, figure out which window system is being used.
-if sys.platform.startswith('linux'):
+if sys.platform.startswith("linux"):
     RUNNING_X11 = False
     RUNNING_WAYLAND = False
-    if os.environ.get('XDG_SESSION_TYPE') == 'x11':
+    if os.environ.get("XDG_SESSION_TYPE") == "x11":
         RUNNING_X11 = True
         RUNNING_WAYLAND = False
-    elif os.environ.get('XDG_SESSION_TYPE') == 'wayland':
+    elif os.environ.get("XDG_SESSION_TYPE") == "wayland":
         RUNNING_WAYLAND = True
         RUNNING_X11 = False
-    elif 'WAYLAND_DISPLAY' in os.environ:
+    elif "WAYLAND_DISPLAY" in os.environ:
         RUNNING_WAYLAND = True
         RUNNING_X11 = False
 
 
-if sys.platform == 'win32':
+if sys.platform == "win32":
     from ctypes import windll
 
     # win32 DC(DeviceContext) Manager
@@ -130,9 +130,9 @@ if sys.platform == 'win32':
                 raise WindowsError("windll.user32.ReleaseDC failed : return 0")
 
 
-Box = collections.namedtuple('Box', 'left top width height')
-Point = collections.namedtuple('Point', 'x y')
-RGB = collections.namedtuple('RGB', 'red green blue')
+Box = collections.namedtuple("Box", "left top width height")
+Point = collections.namedtuple("Point", "x y")
+RGB = collections.namedtuple("RGB", "red green blue")
 
 
 class PyScreezeException(Exception):
@@ -162,7 +162,7 @@ def requiresPyGetWindow(wrappedFunction):
     @functools.wraps(wrappedFunction)
     def wrapper(*args, **kwargs):
         if _PYGETWINDOW_UNAVAILABLE:
-            raise PyScreezeException('The PyGetWindow package is required to use this function.')
+            raise PyScreezeException("The PyGetWindow package is required to use this function.")
         return wrappedFunction(*args, **kwargs)
 
     return wrapper
@@ -201,14 +201,14 @@ def _load_cv2(img, grayscale=None):
             img_cv = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         else:
             img_cv = img
-    elif hasattr(img, 'convert'):
+    elif hasattr(img, "convert"):
         # assume its a PIL.Image, convert to cv format
-        img_array = numpy.array(img.convert('RGB'))
+        img_array = numpy.array(img.convert("RGB"))
         img_cv = img_array[:, :, ::-1].copy()  # -1 does RGB -> BGR
         if grayscale:
             img_cv = cv2.cvtColor(img_cv, cv2.COLOR_BGR2GRAY)
     else:
-        raise TypeError('expected an image filename, OpenCV numpy array, or PIL image')
+        raise TypeError("expected an image filename, OpenCV numpy array, or PIL image")
     return img_cv
 
 
@@ -238,7 +238,7 @@ def _locateAll_opencv(needleImage, haystackImage, grayscale=None, limit=10000, r
         region = (0, 0)  # full image; these values used in the yield statement
     if haystackImage.shape[0] < needleImage.shape[0] or haystackImage.shape[1] < needleImage.shape[1]:
         # avoid semi-cryptic OpenCV error below if bad size
-        raise ValueError('needle dimension(s) exceed the haystack image or region dimensions')
+        raise ValueError("needle dimension(s) exceed the haystack image or region dimensions")
 
     if step == 2:
         confidence *= 0.95
@@ -254,7 +254,7 @@ def _locateAll_opencv(needleImage, haystackImage, grayscale=None, limit=10000, r
 
     if len(matches[0]) == 0:
         if USE_IMAGE_NOT_FOUND_EXCEPTION:
-            raise ImageNotFoundException('Could not locate the image (highest confidence = %.3f)' % result.max())
+            raise ImageNotFoundException("Could not locate the image (highest confidence = %.3f)" % result.max())
         else:
             return
 
@@ -270,7 +270,7 @@ def _locateAll_pillow(needleImage, haystackImage, grayscale=None, limit=None, re
     TODO
     """
     if confidence is not None:
-        raise NotImplementedError('The confidence keyword argument is only available if OpenCV is installed.')
+        raise NotImplementedError("The confidence keyword argument is only available if OpenCV is installed.")
 
     # setup all the arguments
     if grayscale is None:
@@ -279,13 +279,13 @@ def _locateAll_pillow(needleImage, haystackImage, grayscale=None, limit=None, re
     needleFileObj = None
     if isinstance(needleImage, str):
         # 'image' is a filename, load the Image object
-        needleFileObj = open(needleImage, 'rb')
+        needleFileObj = open(needleImage, "rb")
         needleImage = Image.open(needleFileObj)
 
     haystackFileObj = None
     if isinstance(haystackImage, str):
         # 'image' is a filename, load the Image object
-        haystackFileObj = open(haystackImage, 'rb')
+        haystackFileObj = open(haystackImage, "rb")
         haystackImage = Image.open(haystackFileObj)
 
     if region is not None:
@@ -298,10 +298,10 @@ def _locateAll_pillow(needleImage, haystackImage, grayscale=None, limit=None, re
         haystackImage = ImageOps.grayscale(haystackImage)
     else:
         # if not using grayscale, make sure we are comparing RGB images, not RGBA images.
-        if needleImage.mode == 'RGBA':
-            needleImage = needleImage.convert('RGB')
-        if haystackImage.mode == 'RGBA':
-            haystackImage = haystackImage.convert('RGB')
+        if needleImage.mode == "RGBA":
+            needleImage = needleImage.convert("RGB")
+        if haystackImage.mode == "RGBA":
+            haystackImage = haystackImage.convert("RGB")
 
     # setup some constants we'll be using in this function
     needleWidth, needleHeight = needleImage.size
@@ -317,10 +317,10 @@ def _locateAll_pillow(needleImage, haystackImage, grayscale=None, limit=None, re
 
     assert (
         len(needleImageFirstRow) == needleWidth
-    ), 'The calculated width of first row of the needle image is not the same as the width of the image.'
+    ), "The calculated width of first row of the needle image is not the same as the width of the image."
     assert [len(row) for row in needleImageRows] == [
         needleWidth
-    ] * needleHeight, 'The needleImageRows aren\'t the same size as the original image.'
+    ] * needleHeight, "The needleImageRows aren't the same size as the original image."
 
     numMatchesFound = 0
 
@@ -368,7 +368,7 @@ def _locateAll_pillow(needleImage, haystackImage, grayscale=None, limit=None, re
 
     if numMatchesFound == 0:
         if USE_IMAGE_NOT_FOUND_EXCEPTION:
-            raise ImageNotFoundException('Could not locate the image.')
+            raise ImageNotFoundException("Could not locate the image.")
         else:
             return
 
@@ -379,13 +379,13 @@ def locate(needleImage, haystackImage, **kwargs):
     """
     # Note: The gymnastics in this function is because we want to make sure to exhaust the iterator so that
     # the needle and haystack files are closed in locateAll.
-    kwargs['limit'] = 1
+    kwargs["limit"] = 1
     points = tuple(locateAll(needleImage, haystackImage, **kwargs))
     if len(points) > 0:
         return points[0]
     else:
         if USE_IMAGE_NOT_FOUND_EXCEPTION:
-            raise ImageNotFoundException('Could not locate the image.')
+            raise ImageNotFoundException("Could not locate the image.")
         else:
             return None
 
@@ -493,10 +493,10 @@ def locateOnWindow(image, title, **kwargs):
     """
     matchingWindows = pygetwindow.getWindowsWithTitle(title)
     if len(matchingWindows) == 0:
-        raise PyScreezeException('Could not find a window with %s in the title' % (title))
+        raise PyScreezeException("Could not find a window with %s in the title" % (title))
     elif len(matchingWindows) > 1:
         raise PyScreezeException(
-            'Found multiple windows with %s in the title: %s' % (title, [str(win) for win in matchingWindows])
+            "Found multiple windows with %s in the title: %s" % (title, [str(win) for win in matchingWindows])
         )
 
     win = matchingWindows[0]
@@ -512,7 +512,7 @@ def screenshotWindow(title):
     pass  # Not implemented yet.
 
 
-def showRegionOnScreen(region, outlineColor='red', filename='_showRegionOnScreen.png'):
+def showRegionOnScreen(region, outlineColor="red", filename="_showRegionOnScreen.png"):
     """
     TODO
     """
@@ -537,8 +537,13 @@ def _screenshot_win32(imageFilename=None, region=None, allScreens=False):
     # https://stackoverflow.com/a/3586280/1893164
     im = ImageGrab.grab(all_screens=allScreens)
     if region is not None:
-        assert len(region) == 4, 'region argument must be a tuple of four ints'
-        assert isinstance(region[0], int) and isinstance(region[1], int) and isinstance(region[2], int) and isinstance(region[3], int), 'region argument must be a tuple of four ints'
+        assert len(region) == 4, "region argument must be a tuple of four ints"
+        assert (
+            isinstance(region[0], int)
+            and isinstance(region[1], int)
+            and isinstance(region[2], int)
+            and isinstance(region[3], int)
+        ), "region argument must be a tuple of four ints"
         im = im.crop((region[0], region[1], region[2] + region[0], region[3] + region[1]))
     if imageFilename is not None:
         im.save(imageFilename)
@@ -555,15 +560,20 @@ def _screenshot_osx(imageFilename=None, region=None):
         # is when Pillow supported ImageGrab.grab() on macOS. (It may have
         # supported it earlier than 6.2.1, but I haven't tested it.)
         if imageFilename is None:
-            tmpFilename = 'screenshot%s.png' % (datetime.datetime.now().strftime('%Y-%m%d_%H-%M-%S-%f'))
+            tmpFilename = "screenshot%s.png" % (datetime.datetime.now().strftime("%Y-%m%d_%H-%M-%S-%f"))
         else:
             tmpFilename = imageFilename
-        subprocess.call(['screencapture', '-x', tmpFilename])
+        subprocess.call(["screencapture", "-x", tmpFilename])
         im = Image.open(tmpFilename)
 
         if region is not None:
-            assert len(region) == 4, 'region argument must be a tuple of four ints'
-            assert isinstance(region[0], int) and isinstance(region[1], int) and isinstance(region[2], int) and isinstance(region[3], int), 'region argument must be a tuple of four ints'
+            assert len(region) == 4, "region argument must be a tuple of four ints"
+            assert (
+                isinstance(region[0], int)
+                and isinstance(region[1], int)
+                and isinstance(region[2], int)
+                and isinstance(region[3], int)
+            ), "region argument must be a tuple of four ints"
             im = im.crop((region[0], region[1], region[2] + region[0], region[3] + region[1]))
             os.unlink(tmpFilename)  # delete image of entire screen to save cropped version
             im.save(tmpFilename)
@@ -593,7 +603,7 @@ def _screenshot_linux(imageFilename=None, region=None):
     """
 
     if imageFilename is None:
-        tmpFilename = '.screenshot%s.png' % (datetime.datetime.now().strftime('%Y-%m%d_%H-%M-%S-%f'))
+        tmpFilename = ".screenshot%s.png" % (datetime.datetime.now().strftime("%Y-%m%d_%H-%M-%S-%f"))
     else:
         tmpFilename = imageFilename
 
@@ -614,30 +624,40 @@ def _screenshot_linux(imageFilename=None, region=None):
             return im
         else:
             # Return just a region of the screenshot.
-            assert len(region) == 4, 'region argument must be a tuple of four ints'  # TODO fix this
-            assert isinstance(region[0], int) and isinstance(region[1], int) and isinstance(region[2], int) and isinstance(region[3], int), 'region argument must be a tuple of four ints'
+            assert len(region) == 4, "region argument must be a tuple of four ints"  # TODO fix this
+            assert (
+                isinstance(region[0], int)
+                and isinstance(region[1], int)
+                and isinstance(region[2], int)
+                and isinstance(region[3], int)
+            ), "region argument must be a tuple of four ints"
             im = im.crop((region[0], region[1], region[2] + region[0], region[3] + region[1]))
             return im
     elif RUNNING_X11 and SCROT_EXISTS:  # scrot only runs on X11, not on Wayland.
         # Even if gnome-screenshot exists, use scrot on X11 because gnome-screenshot
         # has this annoying screen flash effect that you can't disable, but scrot does not.
-        subprocess.call(['scrot', '-z', tmpFilename])
+        subprocess.call(["scrot", "-z", tmpFilename])
     elif GNOMESCREENSHOT_EXISTS:  # gnome-screenshot runs on Wayland and X11.
-        subprocess.call(['gnome-screenshot', '-f', tmpFilename])
+        subprocess.call(["gnome-screenshot", "-f", tmpFilename])
     elif RUNNING_WAYLAND and SCROT_EXISTS and not GNOMESCREENSHOT_EXISTS:
         raise PyScreezeException(
-            'Your computer uses the Wayland window system. Scrot works on the X11 window system but not Wayland. You must install gnome-screenshot by running `sudo apt install gnome-screenshot`'  # noqa
+            "Your computer uses the Wayland window system. Scrot works on the X11 window system but not Wayland. You must install gnome-screenshot by running `sudo apt install gnome-screenshot`"  # noqa
         )
     else:
         raise Exception(
-            'To take screenshots, you must install Pillow version 9.2.0 or greater and gnome-screenshot by running `sudo apt install gnome-screenshot`'  # noqa
+            "To take screenshots, you must install Pillow version 9.2.0 or greater and gnome-screenshot by running `sudo apt install gnome-screenshot`"  # noqa
         )
 
     im = Image.open(tmpFilename)
 
     if region is not None:
-        assert len(region) == 4, 'region argument must be a tuple of four ints'
-        assert isinstance(region[0], int) and isinstance(region[1], int) and isinstance(region[2], int) and isinstance(region[3], int), 'region argument must be a tuple of four ints'
+        assert len(region) == 4, "region argument must be a tuple of four ints"
+        assert (
+            isinstance(region[0], int)
+            and isinstance(region[1], int)
+            and isinstance(region[2], int)
+            and isinstance(region[3], int)
+        ), "region argument must be a tuple of four ints"
         im = im.crop((region[0], region[1], region[2] + region[0], region[3] + region[1]))
         os.unlink(tmpFilename)  # delete image of entire screen to save cropped version
         im.save(tmpFilename)
@@ -720,7 +740,9 @@ def pixelMatchesColor(x, y, expectedRGBColor, tolerance=0):
     # pixelMatchesColor((x, y), rgb) instead of pixelMatchesColor(x, y, rgb).
     # Lets correct that for the 1.0 release.
     if isinstance(x, collections.abc.Sequence) and len(x) == 2:
-        raise TypeError('pixelMatchesColor() has updated and no longer accepts a tuple of (x, y) values for the first argument. Pass these arguments as two separate arguments instead: pixelMatchesColor(x, y, rgb) instead of pixelMatchesColor((x, y), rgb)')
+        raise TypeError(
+            "pixelMatchesColor() has updated and no longer accepts a tuple of (x, y) values for the first argument. Pass these arguments as two separate arguments instead: pixelMatchesColor(x, y, rgb) instead of pixelMatchesColor((x, y), rgb)"
+        )
 
     pix = pixel(x, y)
     if len(pix) == 3 or len(expectedRGBColor) == 3:  # RGB mode
@@ -738,7 +760,7 @@ def pixelMatchesColor(x, y, expectedRGBColor, tolerance=0):
         )
     else:
         assert False, (
-            'Color mode was expected to be length 3 (RGB) or 4 (RGBA), but pixel is length %s and expectedRGBColor is length %s'  # noqa
+            "Color mode was expected to be length 3 (RGB) or 4 (RGBA), but pixel is length %s and expectedRGBColor is length %s"  # noqa
             % (len(pix), len(expectedRGBColor))
         )
 
@@ -752,10 +774,11 @@ def pixel(x, y):
     # pixel((x, y), rgb) instead of pixel(x, y, rgb).
     # Lets correct that for the 1.0 release.
     if isinstance(x, collections.abc.Sequence) and len(x) == 2:
-        raise TypeError('pixel() has updated and no longer accepts a tuple of (x, y) values for the first argument. Pass these arguments as two separate arguments instead: pixel(x, y) instead of pixel((x, y))')
+        raise TypeError(
+            "pixel() has updated and no longer accepts a tuple of (x, y) values for the first argument. Pass these arguments as two separate arguments instead: pixel(x, y) instead of pixel((x, y))"
+        )
 
-
-    if sys.platform == 'win32':
+    if sys.platform == "win32":
         # On Windows, calling GetDC() and GetPixel() is twice as fast as using our screenshot() function.
         with __win32_openDC() as hdc:  # handle will be released automatically
             color = windll.gdi32.GetPixel(hdc, x, y)
@@ -772,15 +795,15 @@ def pixel(x, y):
 
 
 # set the screenshot() function based on the platform running this module
-if sys.platform == 'darwin':
+if sys.platform == "darwin":
     screenshot = _screenshot_osx
-elif sys.platform == 'win32':
+elif sys.platform == "win32":
     screenshot = _screenshot_win32
-elif sys.platform.startswith('linux'):
+elif sys.platform.startswith("linux"):
     # Everything else is considered to be Linux.
     screenshot = _screenshot_linux
 else:
-    raise NotImplementedError('PyScreeze is not supported on platform ' + sys.platform)
+    raise NotImplementedError("PyScreeze is not supported on platform " + sys.platform)
 
 
 # set the locateAll function to use opencv if possible; python 3 needs opencv 3.0+
@@ -789,5 +812,5 @@ else:
 locateAll = _locateAll_pillow
 if _useOpenCV:
     locateAll = _locateAll_opencv
-    if not RUNNING_PYTHON_2 and cv2.__version__ < '3':
+    if not RUNNING_PYTHON_2 and cv2.__version__ < "3":
         locateAll = _locateAll_pillow

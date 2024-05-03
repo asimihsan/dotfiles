@@ -9,7 +9,7 @@ from pythonbin.transcript.observer.llm_observer import LLMObserver
 from pythonbin.transcript.observer.observer import Observer
 from pythonbin.transcript.parser import TranscriptParser
 from pythonbin.transcript.model import Transcript
-from .config import Config
+from pythonbin.transcript.config import Config
 
 
 class PrintObserver(Observer):
@@ -47,9 +47,7 @@ class TranscriptFileWatcher:
         """Set up watchdog observer."""
         event_handler = FileChangeHandler(self.handle_file_change, self.filepath)
         self.watchdog_observer = WatchdogObserver()
-        self.watchdog_observer.schedule(
-            event_handler, os.path.dirname(self.filepath), recursive=False
-        )
+        self.watchdog_observer.schedule(event_handler, os.path.dirname(self.filepath), recursive=False)
         self.watchdog_observer.start()
 
         # always trigger once at the beginning
@@ -58,7 +56,7 @@ class TranscriptFileWatcher:
     def handle_file_change(self):
         """Handle the file change event."""
         print(f"File {self.filepath} has changed.")
-        transcript = Transcript(list(self.transcript_parser.parse()))
+        transcript = Transcript(entries=list(self.transcript_parser.parse()))
         self.observer.update(transcript)
 
     def stop(self):
@@ -95,18 +93,16 @@ def get_newest_file(directory, file_extension=".txt"):
 
 
 def run_main():
-    default_dir = "~/Music/Audio Hijack/Transcript"
-    newest_file = get_newest_file(default_dir)
+    # default_dir = "~/Music/Audio Hijack/Transcript"
+    # newest_file = get_newest_file(default_dir)
 
-    if newest_file is None:
-        print("No transcript file available to monitor.")
-        return
+    transcript_file = "/Users/asimi/Downloads/20240418 1602 Transcription.txt"
 
     prompt_path = pathlib.Path("~/Obsidian/Level/Chats/Prompt.md").expanduser()
-    observer = LLMObserver(prompt_path)
+    observer = LLMObserver(prompt_path, model_name="gpt-4-turbo", max_tokens=4096)
 
     config = Config()
-    watcher = TranscriptFileWatcher(newest_file, config, observer)
+    watcher = TranscriptFileWatcher(transcript_file, config, observer)
     time.sleep(20)
     watcher.stop()
 
