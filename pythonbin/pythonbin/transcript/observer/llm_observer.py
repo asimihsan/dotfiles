@@ -1,14 +1,18 @@
 import pathlib
 import time
+from dataclasses import dataclass, fields, is_dataclass
 from pathlib import Path
-from typing import Union
+from typing import Union, get_type_hints
+import inspect
 
 import openai
 import tiktoken
+from openai.types.beta.threads.runs import RunStep
 from typing_extensions import override
 from openai import AssistantEventHandler
 
 from pythonbin.transcript.model import Transcript
+from pythonbin.transcript.observer.llm_tools import Analysis, describe_callable_taking_pydantic_model
 from pythonbin.transcript.observer.observer import Observer
 
 
@@ -27,7 +31,7 @@ class LLMObserver(Observer):
         self,
         prompt: str | pathlib.Path,
         model_name: str = "gpt-4-turbo",
-        max_tokens: int = 4096,
+        max_tokens: int = 2048,
     ):
         self.model_name = model_name
         self.prompt = self._load_prompt(prompt)
@@ -35,16 +39,32 @@ class LLMObserver(Observer):
 
         self.client = openai.Client()
         self.instructions = f"{self.prompt}\n\n{self._generate_instructions()}"
+
+        tools = [
+            {
+                "type": "code_interpreter",
+            },
+            {
+                "type": "function",
+                "function": describe_callable_taking_pydantic_model(Analysis),
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "end_run",
+                    "description": "End the current run.",
+                },
+            },
+        ]
+
+        self.analysis_fn = Analysis()
+
         self.assistant = self.client.beta.assistants.create(
             model=self.model_name,
             temperature=0.0,
             name="LLM Observer",
             instructions=self.instructions,
-            tools=[
-                {
-                    "type": "code_interpreter",
-                },
-            ],
+            tools=tools,
         )
 
     def _load_prompt(self, prompt: Union[str, Path]) -> str:
@@ -81,7 +101,7 @@ class LLMObserver(Observer):
 
         chunks[
             len(chunks) - 1
-        ] = f"{chunks[len(chunks) - 1]}\n\nEnd of meeting transcript, but note that the meeting may not be finished."
+        ] = f"{chunks[len(chunks) - 1]}\n\nEnd of meeting transcript, but note that the meeting may not be finished.\n\nRemember to first discuss next steps, be clear and concrete and specific and decisive."
         return chunks
 
     def _generate_instructions(self) -> str:
@@ -105,10 +125,15 @@ prioritize evidence gathering and decision making in the current session.
 Remember in the transcript below, "Me" is me talking and "Other(s)" are one or other people talking. Do not be confused
 and directly try to participate in the meeting. You are a helpful assistant observer and must analyze the meeting
 transcript.
+
+Remember to first discuss next steps, be clear and concrete and specific and decisive. For each, act as if you were me
+and using my language and style, propose example statement or question to be made in the meeting.
+
+Remember you must call the function "Analysis" to return your result. Then call "end_run" to end the run. 
 """
 
 
-def chunk_text_by_tokens(lines: list[str], k=4096) -> list[str]:
+def chunk_text_by_tokens(lines: list[str], k=2048) -> list[str]:
     # Join lines with two line feeds
     text = "\n\n".join(lines)
 
@@ -151,9 +176,11 @@ class EventHandler(AssistantEventHandler):
     def on_text_delta(self, delta, snapshot):
         print(delta.value, end="", flush=True)
 
+    @override
     def on_tool_call_created(self, tool_call):
         print(f"\nassistant > {tool_call.type}\n", flush=True)
 
+    @override
     def on_tool_call_delta(self, delta, snapshot):
         if delta.type == "code_interpreter":
             if delta.code_interpreter.input:
@@ -163,3 +190,22 @@ class EventHandler(AssistantEventHandler):
                 for output in delta.code_interpreter.outputs:
                     if output.type == "logs":
                         print(f"\n{output.logs}", flush=True)
+
+    @override
+    def on_end(self) -> None:
+        print("\nassistant > Ending run.", flush=True)
+
+    @override
+    def on_run_step_created(self, run_step: RunStep) -> None:
+        print(f"\nassistant > {run_step.type}\n", flush=True)
+
+    @override
+    def on_exception(self, exception: Exception) -> None:
+        """Fired whenever an exception happens during streaming"""
+        print(f"\nassistant > Exception: {exception}", flush=True)
+
+    @override
+    def on_timeout(self) -> None:
+        """Fires if the request times out"""
+        print("\nassistant > Timeout", flush=True)
+        raise TimeoutError("Request timed out.")

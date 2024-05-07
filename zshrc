@@ -144,4 +144,5 @@ alias ll='exa -lh --git'
 alias ls="gls --color"
 alias pmc='coyote test'
 alias zstd=$(brew --prefix zstd)/bin/zstd
+eval "$(gh copilot alias -- zsh)"
 
