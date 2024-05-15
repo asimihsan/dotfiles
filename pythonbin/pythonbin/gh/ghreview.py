@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import argparse
 import json
 import re
 import subprocess
@@ -172,7 +173,13 @@ class PullRequestURL(BaseModel):
         return cls(original_url=url, owner=owner, repo=repo, number=number)
 
 
-def main(pr_url: str):
+def main():
+    parser = argparse.ArgumentParser(description='Review Helper Script')
+    parser.add_argument('pr_url', type=str, help='The URL of the Pull Request to review')
+
+    args = parser.parse_args()
+    pr_url = args.pr_url
+
     pull_request_url = PullRequestURL.from_url(pr_url)
 
     pr_comments = get_pr_comments(pull_request_url)
@@ -191,9 +198,4 @@ def main(pr_url: str):
 
 
 if __name__ == "__main__":
-    import sys
-
-    if len(sys.argv) != 2:
-        print("Usage: python review_helper.py <PR_URL>")
-    else:
-        main(sys.argv[1])
+    main()

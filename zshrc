@@ -9,10 +9,6 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 
 . "$HOME/.cargo/env"
 
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
@@ -58,13 +54,11 @@ source /Users/asimi/.hishtory/config.zsh
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-if which pyenv-virtualenv-init >/dev/null; then eval "$(pyenv virtualenv-init -)"; fi
-
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 [[ -s "/Users/asimi/.gvm/scripts/gvm" ]] && source "/Users/asimi/.gvm/scripts/gvm"
 
-GO_VERSION=1.21
+GO_VERSION=1.22
 export PATH="/opt/homebrew/opt/go@$GO_VERSION/bin:$PATH"
 
 
@@ -76,7 +70,7 @@ export LOCALSTACK_API_KEY=6xxZjUgHLg
 export NDK_HOME=$HOME/Library/Android/sdk/ndk/25.1.8937393
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-17.jdk/Contents/Home
 export PATH=$HOME/flutter/bin:$PATH
-export PATH=$PATH:/Users/asimi/.local/bin
+export PATH=$PATH:/Users/asimi/.local/bin:/Users/asimi/bin
 
 # -----------------------------------------------------------------------------
 #   Homebrew paths.
@@ -120,7 +114,7 @@ alias node=${brew_prefix}/opt/node@20/bin/node
 load_secret() {
     local secret_path=$1
     local var_name=$2
-    export "$var_name"="$(op read "op://$secret_path")"
+    export "$var_name"="$(op read --account my.1password.com "op://$secret_path")"
 }
 
 # Define a function to load all secrets
@@ -130,6 +124,8 @@ load_all_secrets() {
     load_secret "pvsttlycpwhbo6vjsedtjbgyc4/mdu_pypi_readonly/username" "POETRY_HTTP_BASIC_DEFAULT_USERNAME"
     load_secret "pvsttlycpwhbo6vjsedtjbgyc4/mdu_pypi_readonly/password" "POETRY_HTTP_BASIC_DEFAULT_PASSWORD"
     load_secret "Private/Level Jira API token/password" "JIRA_API_TOKEN"
+    load_secret "Private/Level Jira API token/server" "JIRA_API_SERVER"
+    load_secret "Private/Level Jira API token/email" "JIRA_API_EMAIL"
     load_secret "Private/LocalStack Auth Token/password" "LOCALSTACK_AUTH_TOKEN"
     load_secret "Private/OpenAPI API key work/password" "OPENAI_API_KEY"
     load_secret "Private/Notion API key for Level workspace/credential" "NOTION_KEY"
@@ -146,3 +142,8 @@ alias pmc='coyote test'
 alias zstd=$(brew --prefix zstd)/bin/zstd
 eval "$(gh copilot alias -- zsh)"
 
+eval "$(gh copilot alias -- zsh)"
+
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"

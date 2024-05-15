@@ -40,6 +40,12 @@ help = "Write to TXT file"
 options = ["--write"]
 type = "boolean"
 
+[tool.poe.tasks.jira_info]
+script = "pythonbin.jira_info.main:run_main"
+args = [
+    {name = "epic_key", help = "Jira epic key", options = ["--epic_key"], type = "string"},
+]
+
 [tool.poetry.dependencies]
 anthropic = "^0.25.7"
 beautifulsoup4 = "^4.12.2"

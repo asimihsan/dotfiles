@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import datetime
 import os
 import subprocess
@@ -10,12 +11,13 @@ from git.exc import GitCommandError
 
 
 def is_go_repo(repo_path):
-    return os.path.isfile(os.path.join(repo_path, "go.mod")) and os.path.isfile(os.path.join(repo_path, "go.sum"))
+    return all([os.path.isfile(os.path.join(repo_path, f)) for f in ["go.mod", "go.sum"]])
 
 
 def update_go_dependencies(repo_path):
     try:
         subprocess.run(["go", "get", "-u", "./..."], cwd=repo_path, check=True)
+        subprocess.run(["go", "mod", "tidy"], cwd=repo_path, check=True)
     except subprocess.CalledProcessError as e:
         print(f"Failed to update Go dependencies in {repo_path}: {e}", file=sys.stderr)
         raise
@@ -25,7 +27,7 @@ def commit_and_push(repo, branch_name):
     try:
         repo.git.add(all=True)
         repo.index.commit("Update dependencies")
-        repo.git.push("--set-upstream", "origin", branch_name)
+        repo.git.push("--set-upstream", "origin", branch_name, "--force-with-lease")
     except GitCommandError as e:
         print(f"Failed to commit and push changes: {e}", file=sys.stderr)
         raise
@@ -83,37 +85,44 @@ def wait_for_checks(repo_path, pr_branch):
 
 
 def run_main():
-    if len(sys.argv) != 2:
-        print("Usage: python updater.py <local_repo_path>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description="Update dependencies in a Git repository and create a pull request.")
+    parser.add_argument("local_repo_path", help="Path to the local Git repository")
+    parser.add_argument("-b", "--branch", help="Name of the branch to create (default: update-deps-<timestamp>)",
+                        default=None)
+    args = parser.parse_args()
 
-    local_repo_path = sys.argv[1]
+    local_repo_path = args.local_repo_path
 
     if not os.path.isdir(local_repo_path):
         print(f"Local repository path '{local_repo_path}' does not exist or is not a directory.")
         sys.exit(1)
 
-    # Ensure repo is clean and up to date
     repo = Repo(local_repo_path)
     if repo.is_dirty() or repo.untracked_files:
         print("Repository has uncommitted changes. Please commit or stash them before running this script.")
         sys.exit(1)
 
+    repo.git.checkout("main")
+
     repo.remote().fetch()
-    branch_name = f"update-deps-{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}"
+    repo.git.rebase("origin/main")
+
+    base_branch = repo.active_branch.tracking_branch().name.split("/")[-1]
+    branch_name = args.branch or f"update-deps-{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}"
+
+    # if branch already exists, delete it
+    if branch_name in [b.name for b in repo.branches]:
+        repo.git.branch("-D", branch_name)
+
     repo.git.checkout("-b", branch_name)
 
-    # Update dependencies
     if is_go_repo(local_repo_path):
         update_go_dependencies(local_repo_path)
 
-    # Commit and push
     commit_and_push(repo, branch_name)
 
-    # Create PR
-    create_pull_request(local_repo_path, repo.active_branch.tracking_branch().name, branch_name)
+    create_pull_request(local_repo_path, base_branch, branch_name)
 
-    # Wait for checks
     wait_for_checks(local_repo_path, branch_name)
 
 

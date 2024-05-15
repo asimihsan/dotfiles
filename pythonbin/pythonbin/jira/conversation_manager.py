@@ -130,8 +130,15 @@ class ConversationManager:
     def generate_output(self):
         # Generate new epics and child issues based on the collected requirements
         # This step may involve calling another method of the llm_client that deals with generating issues in Jira
-        # For demonstration, simply moving to wrap-up phase
-        pass
+        self.messages.extend([
+            {"role": "user",
+             "content": """Generate a structured proposal for Jira epics and their associated child issues based on the details given.
+Include idiomatic descriptions for each epic and issue, outline clear acceptance criteria, and insert placeholders.
+where specific details or user decisions are required""",
+             }
+        ])
+        response = self.llm_client.generate_response(self.messages)
+        print(response)
 
     def wrap_up_conversation(self):
         # Conclude the conversation, summarize actions
