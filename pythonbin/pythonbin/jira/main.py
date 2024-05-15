@@ -11,11 +11,11 @@ def main(server: str, user_email: str, token_auth: str, project_key: str, llm_mo
     conversation_manager = ConversationManager(llm_client=llm_client)
     conversation_manager.start_conversation()
 
-    epics = client.get_epics(project_key=project_key)
-    for epic in epics:
-        print(f"{epic.key}")
-        print(epic)
-        print("---")
+    # epics = client.get_epics(project_key=project_key)
+    # for epic in epics:
+    #     print(f"{epic.key}")
+    #     print(epic)
+    #     print("---")
 
 
 if __name__ == "__main__":
