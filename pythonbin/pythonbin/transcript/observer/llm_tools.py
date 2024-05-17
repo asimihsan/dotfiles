@@ -1,185 +1,117 @@
-import inspect
-from dataclasses import dataclass, is_dataclass
-from typing import Any, Type, get_type_hints
+from dataclasses import dataclass
 
-from deepdiff import DeepDiff
-
-
-def openai_callable(cls: Type) -> Type:
-    """Decorator to create an OpenAI function schema for a callable class.
-
-    The class must have a __call__ method that takes two arguments, self and a dataclass instance.
-
-    The OpenAI function schema is stored in the openai_function attribute of the class."""
-    if not hasattr(cls, "__call__"):
-        raise ValueError(f"{cls} does not have a __call__ method.")
-
-    call_signature = inspect.signature(cls.__call__)
-    if len(call_signature.parameters) != 2:
-        raise ValueError(f"{cls}.__call__ must take two arguments, self and response.")
-
-    response_type = list(call_signature.parameters.values())[1].annotation
-    if not is_dataclass(response_type):
-        raise ValueError(f"{cls}.__call__ must take a dataclass as the second argument.")
-
-    cls.openai_function = {
-        "type": "function",
-        "function": {
-            "name": cls.__name__,
-            "description": inspect.getdoc(cls),
-            "parameters": {"type": "object", "properties": describe_dataclass(response_type)},
-        },
-    }
-    return cls
-
-
-def describe_dataclass(cls: Type) -> dict[str, Any]:
-    """Describe a dataclass class's fields, which may be nested dataclasses."""
-    fields_ = get_type_hints(cls)
-    properties = {}
-    required = []
-    for field_name, field_type in fields_.items():
-        if is_dataclass(field_type):
-            properties[field_name] = describe_dataclass(field_type)["properties"]
-        else:
-            properties[field_name] = describe_field(field_type)
-        if field_name not in cls.__annotations__:
-            required.append(field_name)
-    return {
-        "type": "object",
-        "properties": properties,
-        "required": required,
-    }
-
-
-def describe_field(field_type: Type) -> dict[str, Any]:
-    """Describe a field type."""
-    result = {
-        "description": inspect.getdoc(field_type) or "",
-    }
-
-    if field_type == str:
-        result["type"] = "string"
-    elif field_type == int:
-        result["type"] = "integer"
-    elif field_type == float:
-        result["type"] = "number"
-    elif field_type == bool:
-        result["type"] = "boolean"
-    elif is_dataclass(field_type):
-        result["type"] = "object"
-        result["properties"] = describe_dataclass(field_type)
-    else:
-        raise ValueError(f"Unsupported field type: {field_type}")
-
-    return result
+from pythonbin.transcript.observer.openai_callable import openai_callable
 
 
 @dataclass
 class Item:
-    """Represents an item in the context of a discussion, like a meeting or interview."""
+    """For each item to what extent are you ready to make a decision? What are the next steps for each item?
+    If there are items that need more evidence, or do not have any evidence and need some, estimate how much time will
+    be needed and if there is enough time in the meeting to do so.
 
+    Determine the quality of coverage, how much evidence or consensus has been given for each item, which can be
+    considered concluded and which are remaining?
+    """
+
+    name: str
     """The name of the item."""
-    name_of_item: str
 
+    discussed: bool
     """Whether the item has been discussed yet."""
-    has_been_discussed_yet: bool
 
+    done: bool
     """Whether you are ready to make a decision on the item."""
-    are_you_ready_to_make_a_decision: bool
 
-    """The next steps for the item."""
-    next_steps: str
+    quality_depth: str
+    """How good of a job have they done in discussing the item?"""
+
+    next: str
+    """The next steps for me the item. Are we done discussing it? If not, how should I proceed? What questions should I ask? What aspects should I consider?"""
+
+    question1: str
+    """If needed, acting as me, what first question should I ask to gather more evidence and increase confidence? If done then ignore. Remember to act like me and use my language."""
+
+    confidence: float
+    """Are you sure? This is very important for my career."""
 
 
 @dataclass
 class Response:
-    """Holds the a collecton of analyses, each an analysis of a specific item."""
+    """Holds the collection of analyses, each an analysis of a specific item."""
 
-    """The items in the response."""
-    items: list[Item]
+    time_left: float
+    """The time left in the meeting."""
+
+    stage_of_meeting: str
+    """The stage of the meeting."""
+
+    overall_impression: str
+    """
+- **Overall Impression:** [Quick summary emphasizing major strengths and areas for improvement, for example, "Candidate demonstrated comprehensive API design skills and an understanding of scalable systems but needs to enhance their approach to system reliability."]
+- **Solution summary:** [A concise overview of the candidate’s proposed system architecture, key components, and their integration to fulfill the requirements of the auction platform.]
+- **Depth of solution:** [Assessment of the candidate’s exploration of the problem space and the completeness of their proposed solution.]
+    """
+
+    requirements_identification: Item
+    """
+- **Requirements identification:** [Evaluation of the candidate's effective identification and clarification of both functional and non-functional requirements, reflecting their broad understanding of system design fundamentals.]
+    """
+
+    assumptions_made: Item
+    """
+- **Assumptions made:** [Critique of the assumptions the candidate declared, with emphasis on their suitability and impact on the design, demonstrating the candidate’s ability to engage in a back-and-forth discussion about problem constraints.]
+    """
+
+    api_design_and_data_management: Item
+    """
+- **API design and data management:** [Insight into the proposed API structure, endpoint functionality, error handling, and the candidate’s handling of data entities, schemas, and storage solutions, assessing their ability to break down complex problems and prioritize features based on system needs.]
+    """
+
+    architecture: Item
+    """
+- **Architecture:** [Evaluation of the candidate’s system architecture design, including the choice of components, their interactions, and the rationale behind their selection, reflecting their understanding of system scalability and maintainability.]
+    """
+
+    scalability: Item
+    """
+- **Scalability:** [Assessment of the candidate’s approach to system scalability, including their choice of scaling mechanisms, data partitioning strategies, and load balancing techniques, reflecting their understanding of system performance and growth requirements.]
+    """
+
+    observability: Item
+    """
+- **Observability:** [Evaluation of the candidate’s observability strategy, including logging, monitoring, and alerting mechanisms, assessing their ability to design systems that are easy to debug and maintain.]
+    """
+
+    communication_and_cultural_fit: Item
+    """
+- **Presentation and articulation:** [Feedback on how clearly the candidate communicated their ideas, the rationale behind their design decisions, and their responsiveness to complex scenarios, highlighting their communication skills and ability to adjust communication style.]
+- **Engagement and user-centric considerations:** [Assessment of the candidate's interaction with the interviewer, their approach to clarifying user needs, and consideration of user experience in their design, reflecting a balanced, user-centric design philosophy.]
+    """
+
+    highest_priority_item: str
+    """The highest priority item, and why is it the highest priority?"""
+
+    confidence: float
+    """Are you sure? This is very important for my career."""
 
 
-# @openai_callable
-class Analysis:
-    """Use this method to perform an analysis of a transcript."""
+@openai_callable
+class GiveTranscriptAnalysis:
+    """Given the prompt, your goal is to analyze the actual meeting transcript below. The meeting may not be finished.
+    You are not participating in this meeting. Instead, me and others are participating in the meeting.
+
+    If there are existing numerical estimates or you think using your judgment to make reasonable assumptions and propose
+    numerical estimates is useful, use Python code to do so.
+
+    Remember that it is not possible to schedule a further meeting or extend the current session. We must triage and
+    prioritize evidence gathering and decision making in the current session.
+
+    Remember in the transcript above, "Me" is me talking and "Other(s)" are one or other people talking. Do not be confused
+    and directly try to participate in the meeting.
+    """
 
     def __init__(self):
         self.result: Response | None = None
 
     def __call__(self, response: Response) -> None:
         self.result = Response
-
-
-def test_describe_get_current_temperature():
-    """
-    {
-      "type": "function",
-      "function": {
-        "name": "get_current_temperature",
-        "description": "Get the current temperature for a specific location",
-        "parameters": {
-          "type": "object",
-          "properties": {
-            "location": {
-              "type": "string",
-              "description": "The city and state, e.g., San Francisco, CA"
-            },
-            "unit": {
-              "type": "string",
-              "enum": ["Celsius", "Fahrenheit"],
-              "description": "The temperature unit to use. Infer this from the user's location."
-            }
-          },
-          "required": ["location", "unit"]
-        }
-      }
-    }
-    :return:
-    """
-
-    # === given ===
-    @dataclass
-    class GetTemperatureRequest:
-        """Get the current temperature for a specific location"""
-
-        """The city and state, e.g., San Francisco, CA"""
-        location: str
-
-        """The temperature unit to use. Infer this from the user's location."""
-        unit: str
-
-    @openai_callable
-    class GetTemperature:
-        """Get the current temperature for a specific location"""
-
-        def __init__(self):
-            self.request: GetTemperatureRequest | None = None
-
-        def __call__(self, request: GetTemperatureRequest) -> None:
-            self.request = request
-
-    # === when ===
-    result = GetTemperature.openai_function
-
-    # === then ===
-    expected = {
-        "type": "function",
-        "function": {
-            "name": "GetTemperature",
-            "description": "Get the current temperature for a specific location",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "location": {"type": "string", "description": "The city and state, e.g., San Francisco, CA"},
-                    "unit": {
-                        "type": "string",
-                        "description": "The temperature unit to use. Infer this from the user's location",
-                    },
-                },
-                "required": ["location", "unit"],
-            },
-        },
-    }
-    diff = DeepDiff(result, expected)
-    assert not diff, f"result != expected: {diff}"
