@@ -99,7 +99,7 @@ def run_main():
     transcript_file = "/Users/asimi/Downloads/20240418 1602 Transcription.txt"
 
     prompt_path = pathlib.Path("~/Obsidian/Level/Chats/Prompt.md").expanduser()
-    observer = LLMObserver(prompt_path, model_name="gpt-4-turbo", max_tokens=4096)
+    observer = LLMObserver(prompt_path)
 
     config = Config()
     watcher = TranscriptFileWatcher(transcript_file, config, observer)
