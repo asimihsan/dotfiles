@@ -58,7 +58,7 @@ jira = "^3.6.0"
 jupyter = "^1.0.0"
 librosa = "^0.10.1"
 litellm = "^1.35.31"
-markdown = "^3.6"
+git 
 markdown-it-py = { extras = ["plugins"], version = "^3.0.0" }
 marvin = "^2.3.3"
 mdformat = "^0.7.17"
