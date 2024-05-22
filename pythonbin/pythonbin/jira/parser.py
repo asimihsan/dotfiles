@@ -6,7 +6,12 @@ import dateparser
 import jira
 import markdown
 
-from pythonbin.jira.model import Epic, Issue
+from pythonbin.jira.adf_parser import jira_resource_to_markdown
+from pythonbin.jira.model import Epic, Issue, Comment
+
+
+def parse_date_field(content: str) -> Optional[datetime.datetime]:
+    return dateparser.parse(content) if content else None
 
 
 class EpicParser:
@@ -43,19 +48,20 @@ class EpicParser:
     def parse_launch_date(self, launch_date_field: str) -> Optional[datetime.datetime]:
         if hasattr(self.issue.fields, launch_date_field):
             date_str = getattr(self.issue.fields, launch_date_field)
-            return dateparser.parse(date_str) if date_str else None
+            return parse_date_field(date_str)
         return None
 
     def parse_target_date(self, target_date_field: str) -> Optional[datetime.datetime]:
         if hasattr(self.issue.fields, target_date_field):
             date_str = getattr(self.issue.fields, target_date_field)
-            return dateparser.parse(date_str) if date_str else None
+            return parse_date_field(date_str)
         return None
 
 
 class IssueParser:
     def __init__(self, issue: jira.Issue):
         self.issue = issue
+        # self.adf_parser = ADFParser()
 
     def parse(self) -> Issue:
         issue = Issue(
@@ -63,6 +69,7 @@ class IssueParser:
             summary=self.issue.fields.summary,
             description=self.parse_description_markdown(),
             issue_type=self.issue.fields.issuetype.name,
+            comments=self.parse_comments(),
         )
         self.parse_summary(issue)
         return issue
@@ -78,5 +85,13 @@ class IssueParser:
 
     def parse_description_markdown(self) -> str:
         if self.issue.fields.description:
-            return markdown.markdown(self.issue.fields.description)
+            parsed = jira_resource_to_markdown(self.issue.fields.description)
+            return parsed
         return ""
+
+    def parse_comments(self) -> list[Comment]:
+        comments = self.issue.fields.comment.comments
+        return [Comment(author=comment.author.displayName,
+                        body=jira_resource_to_markdown(comment.body),
+                        updated=parse_date_field(comment.updated))
+                for comment in comments] if comments else []

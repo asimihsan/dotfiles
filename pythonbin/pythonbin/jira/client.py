@@ -1,6 +1,6 @@
 from typing import Optional, Generator
 
-from jira import JIRA
+from jira import JIRA, JIRAError
 
 from pythonbin.jira.model import Epic, Issue
 from pythonbin.jira.parser import EpicParser, IssueParser
@@ -16,6 +16,7 @@ class JiraClient:
             server=server,
             basic_auth=(user_email, token_auth),
         )
+        self.jira._options.update({"rest_api_version": 3})
 
     def get_epics(self, project_key: str, program_manager: Optional[str] = None) -> Generator[Epic, None, None]:
         jql_parts = [f"project = {project_key}", "issuetype = Epic"]
@@ -53,7 +54,7 @@ class JiraClient:
         total = 1
 
         while start_at < total:
-            issues = self.jira.search_issues(jql, startAt=start_at, maxResults=max_results)
+            issues = self.jira.search_issues(jql, startAt=start_at, maxResults=max_results, expand="renderedFields")
             total = issues.total
             start_at += max_results
 
@@ -79,3 +80,21 @@ class JiraClient:
         except Exception as e:
             print(f"Error fetching epic {epic_key}: {e}")
             return None
+
+    def get_issue_by_key(self, issue_key: str) -> Optional[Issue]:
+        """
+        Fetches a Jira issue by its key.
+
+        :param issue_key: The key of the Jira issue to fetch.
+        :return: The Jira issue if found, otherwise None.
+        """
+        try:
+            issue = self.jira.issue(issue_key)
+            issue_parser = IssueParser(issue)
+            return issue_parser.parse()
+        except JIRAError as e:
+            if e.status_code == 404:
+                print(f"Issue with key {issue_key} not found.")
+                return None
+            else:
+                raise
