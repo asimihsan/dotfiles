@@ -1,22 +1,34 @@
 import datetime
 from dataclasses import dataclass, field
-from typing import List, Optional
+
+@dataclass
+class Mention:
+    id: str
+    text: str
+
+
+@dataclass
+class Comment:
+    author: str | None
+    body: str | None
+    updated: datetime.datetime | None = None
 
 
 @dataclass
 class Issue:
     key: str
     summary: str
-    description: Optional[str] = None
-    issue_type: Optional[str] = None
+    description: str | None = None
+    issue_type: str | None = None
+    comments: list[Comment] = field(default_factory=list)
 
 
 @dataclass
 class Epic:
     key: str
     summary: str
-    description: Optional[str] = None
-    program_manager: Optional[str] = None
-    launch_date: Optional[datetime.datetime] = None
-    target_release_date: Optional[datetime.datetime] = None
-    child_issues: List[Issue] = field(default_factory=list)
+    description: str | None = None
+    program_manager: str | None = None
+    launch_date: datetime.datetime | None = None
+    target_release_date: datetime.datetime | None = None
+    child_issues: list[Issue] = field(default_factory=list)
