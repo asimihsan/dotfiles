@@ -1019,6 +1019,20 @@ files = [
 ]
 
 [[package]]
+name = "ebooklib"
+version = "0.18"
+description = "Ebook library which can handle EPUB2/EPUB3 and Kindle format"
+optional = false
+python-versions = "*"
+files = [
+    {file = "EbookLib-0.18.tar.gz", hash = "sha256:38562643a7bc94d9bf56e9930b4927e4e93b5d1d0917f697a6454db5a1c1a533"},
+]
+
+[package.dependencies]
+lxml = "*"
+six = "*"
+
+[[package]]
 name = "effdet"
 version = "0.4.1"
 description = "EfficientDet for PyTorch"
@@ -8276,4 +8290,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11,<3.12"
-content-hash = "0d0a17a76802e26862ee6791d9b1d7dd0e028193fa5f2ac02594700acf8a5a61"
+content-hash = "aca209062d7fd3b9184f13759bacba3f09532d4ffee9a2324504b2c2d7c40975"
