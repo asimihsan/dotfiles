@@ -63,7 +63,7 @@ class Response:
     """
 
     api_design_and_data_management: Item
-    """
+    """ 
 - **API design and data management:** [Insight into the proposed API structure, endpoint functionality, error handling, and the candidate’s handling of data entities, schemas, and storage solutions, assessing their ability to break down complex problems and prioritize features based on system needs.]
     """
 

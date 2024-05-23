@@ -86,6 +86,7 @@ zstandard = "^0.22.0"
 unstructured-inference = "^0.7.31"
 torch = "^2.3.0"
 torchvision = "^0.18.0"
+ebooklib = "^0.18"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12.0"
