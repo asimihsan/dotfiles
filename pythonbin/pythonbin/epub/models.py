@@ -10,9 +10,9 @@ class Page:
 
 @dataclass
 class Chapter:
-    number: int
     title: str
-    pages: List[Page] = field(default_factory=list)
+    raw_content: str
+    sentences: List[str] = field(default_factory=list)
 
 
 @dataclass
