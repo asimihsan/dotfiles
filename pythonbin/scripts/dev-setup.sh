@@ -20,3 +20,4 @@ brew install poppler
 poetry run python -c "import nltk; nltk.download('punkt')"
 poetry run python -c "import nltk; nltk.download('averaged_perceptron_tagger')"
 poetry run python -c "from unstructured.partition.model_init import initialize; initialize()"
+poetry run python -m spacy download en_core_web_trf

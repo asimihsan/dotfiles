@@ -1,9 +1,14 @@
-import pythonbin.epub.vebooklib as vebooklib
-import ebooklib
+import pathlib
 
-book = vebooklib.read_epub(
-    "/Users/asimi/Library/CloudStorage/Dropbox-TeamChasima/Asim Ihsan/Private/Ebooks/InformIT/Understanding Software Dynamics.epub"
+import pythonbin.epub.vebooklib as vebooklib
+from pythonbin.epub.parser import read_epub
+
+book = read_epub(
+    pathlib.Path(
+        "/Users/asimi/Library/CloudStorage/Dropbox-TeamChasima/Asim Ihsan/Private/Ebooks/InformIT/Understanding Software Dynamics.epub"
+    )
 )
+
 
 cnt = 0
 for item in book.get_items():
