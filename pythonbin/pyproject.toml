@@ -29,10 +29,11 @@ script = "pythonbin.extract.extract:run_main"
 help = "Extract text from file"
 
 [[tool.poe.tasks.extract.args]]
-name = "path"
-help = "Path to file"
+name = "paths"
+help = "Paths to files"
 type = "string"
 positional = true
+multiple = true
 
 [[tool.poe.tasks.extract.args]]
 name = "write"
@@ -79,9 +80,12 @@ semver = "^3.0.2"
 tiktoken = "^0.6.0"
 transformers = "^4.40.1"
 tree-sitter = "^0.21.3"
-unstructured = { extras = ["all-docs"], version = "^0.13.4" }
+unstructured = { extras = ["all-docs"], version = "^0.13.7" }
 watchdog = "^4.0.0"
 zstandard = "^0.22.0"
+unstructured-inference = "^0.7.31"
+torch = "^2.3.0"
+torchvision = "^0.18.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12.0"
