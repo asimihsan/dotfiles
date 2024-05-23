@@ -130,6 +130,7 @@ load_all_secrets() {
     load_secret "Private/OpenAPI API key work/password" "OPENAI_API_KEY"
     load_secret "Private/Notion API key for Level workspace/credential" "NOTION_KEY"
     load_secret "Private/Anthropic API key/credential" "ANTHROPIC_API_KEY"
+    load_secret "Private/Huggingface Token/credential" "HUGGINGFACE_TOKEN"
     echo "All secrets have been loaded."
 }
 
