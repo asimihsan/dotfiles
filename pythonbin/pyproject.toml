@@ -88,6 +88,8 @@ torch = "^2.3.0"
 torchvision = "^0.18.0"
 ebooklib = "^0.18"
 spacy = "^3.7.4"
+inscriptis = "^2.5.0"
+intervaltree = "^3.1.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12.0"
