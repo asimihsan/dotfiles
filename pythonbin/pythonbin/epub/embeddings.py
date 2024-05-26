@@ -28,17 +28,21 @@ class SentenceProcessor:
         self.counter_lock = threading.Lock()
         self.processed_sentences = 0
         self.stop_event = threading.Event()
+        self.local = threading.local()
 
     def __enter__(self):
-        self.conn = get_db_connection(self.db_path).__enter__()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.conn.__exit__(exc_type, exc_val, exc_tb)
+        if hasattr(self.local, "conn"):
+            self.local.conn.__exit__(exc_type, exc_val, exc_tb)
 
     def process_sentence(self, sentence) -> None:
+        if not hasattr(self.local, "conn"):
+            self.local.conn = get_db_connection(self.db_path).__enter__()
+
         embedding = calculate_embeddings(sentence.sentence)
-        execute_sql(self.conn, "UPDATE sentences SET embedding = ? WHERE id = ?", embedding, sentence.id)
+        execute_sql(self.local.conn, "UPDATE sentences SET embedding = ? WHERE id = ?", embedding, sentence.id)
         with self.counter_lock:
             self.processed_sentences += 1
 
