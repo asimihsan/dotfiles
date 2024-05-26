@@ -3,12 +3,6 @@ from typing import List
 
 
 @dataclass
-class Page:
-    number: int
-    content: str
-
-
-@dataclass
 class Chapter:
     title: str
     raw_content: str
