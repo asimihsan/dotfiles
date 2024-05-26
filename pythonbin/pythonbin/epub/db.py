@@ -17,10 +17,42 @@ def dict_factory(cursor: sqlite3.Cursor, row: sqlite3.Row) -> dict[str, Any]:
 @contextmanager
 def get_db_connection(db_path: Path) -> Generator[sqlite3.Connection, None, None]:
     conn = sqlite3.connect(db_path)
+
+    # Increase cache size to 32MB to keep more pages in memory.
+    # Default is -2000, 2000 pages of 1KB each, which is 2MB.
+    conn.execute("PRAGMA cache_size = -32000;")
+
+    # Increase mmap size to 30GB to allow more memory mapping and reduce system calls.
+    conn.execute("PRAGMA mmap_size = 30000000000;")
+
+    # Use memory for temp store to reduce disk I/O.
+    conn.execute("PRAGMA temp_store = MEMORY;")
+
+    # Use Write-Ahead Logging (WAL) mode for better concurrency when reading and writing.
+    conn.execute("PRAGMA journal_mode = WAL;")
+
+    # Relax the synchronous setting to improve write performance.
+    # WAL mode is always consistent with NORMAL, but may lose durability across power loss, i.e. may
+    # rollback following a power loss. FULL is the most durable but also the slowest.
+    conn.execute("PRAGMA synchronous = NORMAL;")
+
+    # Limit the journal size to 6MB, default is unlimited. This can help reduce disk space usage.
+    conn.execute("PRAGMA journal_size_limit = 6144000;")
+
+    # Enable incremental auto-vacuum mode to avoid long pauses during vacuuming.
+    conn.execute("PRAGMA auto_vacuum = INCREMENTAL;")
+
     try:
         yield conn
     finally:
+        # Collect statistics to help the query planner.
+        conn.execute("PRAGMA optimize;")
+
         conn.close()
+
+
+def incremental_vacuum(conn: sqlite3.Connection, n_pages: int = 100) -> None:
+    conn.execute(f"PRAGMA incremental_vacuum({n_pages});")
 
 
 def execute_sql(conn: sqlite3.Connection, sql: str, *args) -> int | None:

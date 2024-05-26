@@ -47,9 +47,24 @@ def sentence_factory(cursor: sqlite3.Cursor, row: tuple) -> Sentence:
     return Sentence(**row_dict)
 
 
-def get_all_sentences(conn) -> Generator[Sentence, None, None]:
+def get_total_sentences(conn: sqlite3.Connection, embedding_missing: bool = False) -> int:
+    cursor = conn.cursor()
+    if embedding_missing:
+        cursor.execute("SELECT COUNT(*) FROM sentences WHERE embedding IS NULL")
+    else:
+        cursor.execute("SELECT COUNT(*) FROM sentences")
+    total_sentences = cursor.fetchone()[0]
+    return total_sentences
+
+
+def get_all_sentences(conn, embedding_missing: bool = False) -> Generator[Sentence, None, None]:
     cursor = conn.cursor()
     cursor.row_factory = sentence_factory
-    cursor.execute("SELECT * FROM sentences")
+
+    if embedding_missing:
+        cursor.execute("SELECT * FROM sentences WHERE embedding IS NULL")
+    else:
+        cursor.execute("SELECT * FROM sentences")
+
     for row in cursor:
         yield row
