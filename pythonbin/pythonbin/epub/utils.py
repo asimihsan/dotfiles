@@ -1,6 +1,11 @@
 from inscriptis import get_annotated_text, ParserConfig
 import spacy
 from intervaltree import IntervalTree
+import numpy as np
+
+
+def bytes_to_numpy_array(blob: bytes) -> np.ndarray:
+    return np.frombuffer(blob, dtype=np.float32)
 
 
 class HTMLToText:
@@ -31,16 +36,23 @@ class HTMLToText:
     def merge_sentences_with_pre(self, doc, pre_intervals) -> list[str]:
         sentences = []
         current_sentence = []
-        for sent in doc.sents:
-            if pre_intervals.overlaps(sent.start_char, sent.end_char):
+
+        sents = (sent for sent in doc.sents if len(sent.text.strip()) > 0)
+
+        for sent in sents:
+            if not pre_intervals.overlaps(sent.start_char, sent.end_char):
                 if current_sentence:
                     sentences.append(" ".join(current_sentence))
                     current_sentence = []
+
                 sentences.append(sent.text.strip())
-            else:
-                current_sentence.append(sent.text.strip())
+                continue
+
+            current_sentence.append(sent.text.strip())
+
         if current_sentence:
             sentences.append(" ".join(current_sentence))
+
         return sentences
 
 
