@@ -91,6 +91,7 @@ spacy = "^3.7.4"
 inscriptis = "^2.5.0"
 intervaltree = "^3.1.0"
 chromadb = "^0.5.0"
+ollama = "^0.2.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12.0"

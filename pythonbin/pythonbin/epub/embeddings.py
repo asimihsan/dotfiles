@@ -1,6 +1,7 @@
 import concurrent.futures
 import json
 import threading
+import queue
 import time
 import os
 
@@ -23,40 +24,49 @@ def calculate_embeddings(sentence: str, model: str = EMBEDDING_MODEL) -> bytes:
 
 
 class SentenceProcessor:
-    def __init__(self, db_path: Path):
+    def __init__(self, db_path: Path, context_window: int = 2):
         self.db_path = db_path
+        self.queue = queue.Queue(maxsize=100)  # Adjust the maxsize as needed
         self.counter_lock = threading.Lock()
+        self.db_thread = threading.Thread(target=self.write_to_db, daemon=True)
         self.processed_sentences = 0
         self.stop_event = threading.Event()
-        self.local = threading.local()
+        self.context_window = context_window
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if hasattr(self.local, "conn"):
-            self.local.conn.__exit__(exc_type, exc_val, exc_tb)
+        self.stop_event.set()
+        self.db_thread.join()
 
     def process_sentence(self, sentence) -> None:
-        if not hasattr(self.local, "conn"):
-            self.local.conn = get_db_connection(self.db_path).__enter__()
-
-        embedding = calculate_embeddings(sentence.sentence)
-        execute_sql(self.local.conn, "UPDATE sentences SET embedding = ? WHERE id = ?", embedding, sentence.id)
-        with self.counter_lock:
-            self.processed_sentences += 1
+        embedding = calculate_embeddings(sentence.sentence_context)
+        self.queue.put((embedding, sentence.id))
 
     def print_status(self, total_sentences: int) -> None:
         while not self.stop_event.is_set():
             with self.counter_lock:
                 print(f"Processed {self.processed_sentences}/{total_sentences} sentences.")
-            time.sleep(1)
+            time.sleep(5)
+
+    def write_to_db(self) -> None:
+        with get_db_connection(self.db_path) as conn:
+            while (not self.stop_event.is_set()) or (not self.queue.empty()):
+                try:
+                    embedding, sentence_id = self.queue.get(timeout=1)
+                    execute_sql(conn, "UPDATE sentences SET embedding = ? WHERE id = ?", embedding, sentence_id)
+                    with self.counter_lock:
+                        self.processed_sentences += 1
+                except queue.Empty:
+                    continue
 
     def start_processing(self) -> None:
+        self.db_thread.start()
         with get_db_connection(self.db_path) as conn:
             total_sentences = get_total_sentences(conn, embedding_missing=True)
-            sentences = get_all_sentences(conn, embedding_missing=True)
-            workers = 1
+            sentences = get_all_sentences(conn, embedding_missing=True, context_window=self.context_window)
+            workers = max(os.cpu_count() // 2, 1)  # type: ignore
             with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
                 # Start a separate thread for printing the status
                 status_thread = threading.Thread(target=self.print_status, args=(total_sentences,), daemon=True)
@@ -78,6 +88,6 @@ def bytes_to_numpy_array(blob: bytes) -> np.ndarray:
     return np.frombuffer(blob, dtype=np.float32)
 
 
-def store_embeddings(db_path: Path) -> None:
-    with SentenceProcessor(db_path) as processor:
+def store_embeddings(db_path: Path, context_window: int = 2) -> None:
+    with SentenceProcessor(db_path, context_window=context_window) as processor:
         processor.start_processing()

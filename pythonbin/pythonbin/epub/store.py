@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Generator
 
+import numpy as np
+
 from .models import Ebook, Chapter
 from .db import get_db_connection, execute_sql
 
@@ -39,6 +41,11 @@ class Sentence:
     sentence_index: int
     sentence: str
     embedding: bytes
+    sentence_context: str = ""
+
+    @property
+    def embedding_list(self) -> list[float]:
+        return np.frombuffer(self.embedding, dtype=np.float32).tolist()
 
 
 def sentence_factory(cursor: sqlite3.Cursor, row: tuple) -> Sentence:
@@ -57,7 +64,23 @@ def get_total_sentences(conn: sqlite3.Connection, embedding_missing: bool = Fals
     return total_sentences
 
 
-def get_all_sentences(conn, embedding_missing: bool = False) -> Generator[Sentence, None, None]:
+def get_sentence_context(conn: sqlite3.Connection, chapter_id: int, sentence_index: int, window_size: int) -> str:
+    cursor = conn.cursor()
+    cursor.execute(
+        """
+        SELECT sentence FROM sentences
+        WHERE chapter_id = ? AND sentence_index BETWEEN ? AND ?
+        ORDER BY sentence_index
+        """,
+        (chapter_id, sentence_index - window_size, sentence_index + window_size),
+    )
+    context_sentences = [row[0] for row in cursor.fetchall()]
+    return " ".join(context_sentences)
+
+
+def get_all_sentences(
+    conn, embedding_missing: bool = False, context_window: int = 2
+) -> Generator[Sentence, None, None]:
     cursor = conn.cursor()
     cursor.row_factory = sentence_factory
 
@@ -67,4 +90,8 @@ def get_all_sentences(conn, embedding_missing: bool = False) -> Generator[Senten
         cursor.execute("SELECT * FROM sentences")
 
     for row in cursor:
-        yield row
+        sentence = row
+        sentence.sentence_context = get_sentence_context(
+            conn, sentence.chapter_id, sentence.sentence_index, context_window
+        )
+        yield sentence

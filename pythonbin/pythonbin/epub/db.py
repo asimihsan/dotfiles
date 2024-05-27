@@ -72,6 +72,9 @@ def execute_sql_get_all(conn: sqlite3.Connection, sql: str, *args) -> Generator[
 
 
 def initialize_db(db_path: Path) -> None:
+    if db_path.exists():
+        db_path.unlink()
+
     with get_db_connection(db_path) as conn:
         execute_sql(
             conn,
