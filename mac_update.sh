@@ -13,7 +13,6 @@ brew upgrade
 if command -v flutter; then
     flutter upgrade --force
 fi
-conda update --all --yes
 
 rustup update stable
 cargo install cargo-prefetch
