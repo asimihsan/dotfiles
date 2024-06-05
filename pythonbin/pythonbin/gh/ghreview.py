@@ -168,18 +168,12 @@ class PullRequestURL(BaseModel):
 
         owner = path_elems[1]
         repo = path_elems[2]
-        number = path_elems[4]
+        number = int(path_elems[4])
 
         return cls(original_url=url, owner=owner, repo=repo, number=number)
 
 
-def main():
-    parser = argparse.ArgumentParser(description='Review Helper Script')
-    parser.add_argument('pr_url', type=str, help='The URL of the Pull Request to review')
-
-    args = parser.parse_args()
-    pr_url = args.pr_url
-
+def main(pr_url: str):
     pull_request_url = PullRequestURL.from_url(pr_url)
 
     pr_comments = get_pr_comments(pull_request_url)
@@ -198,4 +192,10 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description='Review Helper Script')
+    parser.add_argument('pr_url', type=str, help='The URL of the Pull Request to review')
+
+    args = parser.parse_args()
+    pr_url = args.pr_url
+
+    main(pr_url=pr_url)
