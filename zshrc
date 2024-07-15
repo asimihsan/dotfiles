@@ -131,6 +131,9 @@ load_all_secrets() {
     load_secret "Private/Notion API key for Level workspace/credential" "NOTION_KEY"
     load_secret "Private/Anthropic API key/credential" "ANTHROPIC_API_KEY"
     load_secret "Private/Huggingface Token/credential" "HUGGINGFACE_TOKEN"
+    load_secret "Private/hlru5i AppStore API key 2/private key" "APPLE_APP_STORE_CONNECT_PRIVATE_KEY"
+    load_secret "Private/hlru5i AppStore API key 2/issuer id" "APPLE_APP_STORE_CONNECT_ISSUER_ID"
+    load_secret "Private/hlru5i AppStore API key 2/key ID" "APPLE_APP_STORE_CONNECT_KEY_ID"
     echo "All secrets have been loaded."
 }
 
@@ -148,3 +151,5 @@ eval "$(gh copilot alias -- zsh)"
 export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
+
+eval "$(direnv hook zsh)"
