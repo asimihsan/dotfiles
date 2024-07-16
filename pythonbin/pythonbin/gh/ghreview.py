@@ -109,7 +109,20 @@ def create_prompt(pr_description, pr_diff, pr_comments: str, jira_details=None):
 
     template = Template(
         """
-    Act like a Senior Software Engineer. I need your assistance in reviewing a GitHub Pull Request.
+    You are a highly capable AI assistant with expertise across many domains. Approach this task thoughtfully and methodically:
+    
+    1. Take a moment to consider the query and identify any key concepts or higher-level principles that may be relevant.
+    2. Break down your approach into logical steps, explaining your reasoning as you go (chain-of-thought).
+    3. If multiple perspectives or solutions are possible, explore 2-3 options and compare their merits.
+    4. For any claims or conclusions, provide a confidence rating on a scale of 1-5 (1 being least confident, 5 being most confident). Explain the reasoning behind your confidence levels.
+    5. If you're unsure about any aspect, acknowledge the uncertainty and explain what additional information would be helpful.
+    6. Summarize your key findings or recommendations.
+    
+    Remember to maintain a balanced, analytical tone throughout your response. Remember to synthesize a response that is natural flowing paragraphs in an inverted pyramid style with appropriate sections.
+    
+    Now, please address the following query:
+    
+    I need your assistance in reviewing a GitHub Pull Request.
 
     Here's what you need to know:
     - The PR description is as follows:

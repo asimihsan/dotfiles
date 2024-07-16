@@ -19,7 +19,7 @@ def extract(path: Path) -> str:
         method = partition
 
     elements = method(
-        filename=path,
+        filename=str(path),
         strategy="hi_res",
         # extract_image_block_types=["Image"],
         # extract_image_block_output_dir=os.path.dirname(path),
