@@ -146,8 +146,6 @@ alias pmc='coyote test'
 alias zstd=$(brew --prefix zstd)/bin/zstd
 eval "$(gh copilot alias -- zsh)"
 
-eval "$(gh copilot alias -- zsh)"
-
 export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"

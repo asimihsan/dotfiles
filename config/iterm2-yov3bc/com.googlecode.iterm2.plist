@@ -726,6 +726,8 @@ The script should do this: \(ai.prompt)</string>
 	</dict>
 	<key>PromptOnQuit</key>
 	<false/>
+	<key>Selection Respects Soft Boundaries</key>
+	<true/>
 	<key>SoundForEsc</key>
 	<false/>
 	<key>TabTransform</key>
