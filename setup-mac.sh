@@ -222,6 +222,7 @@ install_homebrew_packages() {
         spotify
         tor-browser
         vorta
+        zoom
     )
 
     for package in "${packages[@]}"; do
