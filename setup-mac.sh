@@ -31,7 +31,8 @@ trap 'echo "Error occurred. Check the log file: $LOG_FILE" >&2' ERR
 
 # Fancy echo function
 fancy_echo() {
-    local fmt="$1"; shift
+    local fmt="$1"
+    shift
     printf "\\n$fmt\\n" "$@"
 }
 
@@ -140,7 +141,7 @@ setup_ssh_and_github() {
                 fancy_echo "Please authenticate with GitHub CLI..."
                 gh auth login -s admin:public_key -s admin:ssh_signing_key
             fi
-            
+
             gh ssh-key add "$ssh_key_pub" --title "$(hostname)"
             if is_key_on_github; then
                 fancy_echo "SSH key successfully added to GitHub."
@@ -196,6 +197,7 @@ install_homebrew_packages() {
 
     packages=(
         borgbackup/tap/borgbackup-fuse
+        fontconfig
         libyaml
         pyenv
         pyenv-virtualenv
@@ -286,25 +288,42 @@ configure_mac_settings() {
 }
 
 setup_fonts() {
+    # Function to check if a font is already installed
+    is_font_installed() {
+        local font_name="$1"
+        fc-list | grep -i "$font_name" >/dev/null
+        return $?
+    }
+
+    if is_font_installed "Iosevka Custom"; then
+        echo "Font 'Iosevka Custom' is already installed. Skipping."
+        return
+    fi
+
     (cd "$HOME"/.dotfiles/config && make iosevka-docker-build)
     (cd "$HOME"/.dotfiles/config && make iosevka-font-build)
+
+    rsync -av "$HOME/Fonts" "$HOME/Library/Fonts"
+    fc-cache -f -v
+
+    echo "Font installation process completed."
 }
 
 # Main function
 main() {
     fancy_echo "Starting Mac setup..."
-    
+
     install_xcode_clt
     install_homebrew
     install_nix_and_devbox
     setup_devbox_global
     setup_ssh_and_github
     install_homebrew_packages
+    setup_fonts
     setup_node
     setup_dotfiles
     configure_mac_settings
-    setup_fonts
-    
+
     fancy_echo "Setup complete! Check the log file for details: $LOG_FILE"
 }
 
