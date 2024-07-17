@@ -3,18 +3,22 @@
   "packages": [
     "atuin@latest",
     "bash-preexec@latest",
+    "bash@latest",
     "bat@latest",
     "btop@latest",
     "cheat@latest",
     "coreutils@latest",
+    "ctags@latest",
     "difftastic@latest",
     "direnv@latest",
     "eza@latest",
     "fd@latest",
     "fzf@latest",
+    "gcc@latest",
     "gh@latest",
     "git@latest",
     "glab@latest",
+    "gnumake@latest",
     "go@latest",
     "htop@latest",
     "imagemagick@latest",
@@ -26,7 +30,9 @@
     "openssl@latest",
     "poetry@latest",
     "pv@latest",
+    "rclone@latest",
     "ripgrep@latest",
+    "rsync@latest",
     "rustup@latest",
     "starship@latest",
     "tmux@latest",
@@ -36,19 +42,15 @@
     "vim@latest",
     "vivid@latest",
     "vscode@latest",
+    "wget@latest",
     "yq@latest",
     "zoxide@latest",
     "zsh@latest",
-    "zstd@latest",
-    "gnumake@latest",
-    "rsync@latest",
-    "wget@latest",
-    "ctags@latest",
-    "rclone@latest"
+    "zstd@latest"
   ],
   "env": {
     "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",
-    "DEVBOX_GLOBAL_ROOT":   "$HOME/.local/share/devbox/global/current"
+    "DEVBOX_GLOBAL_ROOT": "$HOME/.local/share/devbox/global/current"
   },
   "shell": {
     "init_hook": [
@@ -77,12 +79,6 @@
       ],
       "latest-hash": [
         "curl -fsSL https://nixos.org/channels/nixos-unstable/git-revision"
-      ],
-      "npm-global": [
-        "grep -qF '.npm-packages' ~/.npmrc || echo 'prefix=~/.npm-packages' >> ~/.npmrc",
-        "grep -qF '.npm-packages' ~/.zshrc || echo 'export PATH=$PATH:~/.npm-packages/bin' >> ~/.zshrc",
-        "grep -qF '.npm-packages' ~/.bashrc || echo 'export PATH=$PATH:~/.npm-packages/bin' >> ~/.bashrc",
-        "mkdir -p ~/.npm-packages"
       ]
     }
   },
