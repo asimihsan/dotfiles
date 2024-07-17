@@ -118,6 +118,8 @@ load_all_secrets() {
 # You can now call `load_all_secrets` manually whenever you need to populate the environment variables
 # -----------------------------------------------------------------------------
 
+export PATH="$HOME/flutter:$PATH"
+
 alias ll='exa -lh --git'
 alias ls="gls --color"
 alias pmc='coyote test'
