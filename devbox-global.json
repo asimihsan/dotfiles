@@ -31,6 +31,8 @@
         "rustup@latest",
         "starship@latest",
         "tmux@latest",
+        "tmuxPlugins.better-mouse-mode@latest",
+        "tmuxPlugins.resurrect@latest",
         "tree-sitter@latest",
         "vim@latest",
         "vivid@latest",

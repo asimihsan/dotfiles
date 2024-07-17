@@ -41,7 +41,7 @@
 - shell:
     - [devbox global run -- rustup default stable]
     - [devbox global run -- rustup component add clippy rustfmt]
-    - [
-        test ~/.tmux || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm,
-      ]
-    - [npm install -g critical netlify-cli aws-cdk svgo]
+    # - [
+    #     test ~/.tmux || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm,
+    #   ]
+    # - [npm install -g critical netlify-cli aws-cdk svgo]
