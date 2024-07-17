@@ -54,9 +54,6 @@ program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 [commit]
 gpgsign = true
 
-[credential "https://dev.azure.com"]
-useHttpPath = true
-
 [core]
 autocrlf = false
 editor = vim

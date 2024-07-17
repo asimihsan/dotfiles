@@ -208,6 +208,7 @@ install_homebrew_packages() {
         1password
         docker
         firefox
+        git-credential-manager
         google-chrome
         gpg-suite
         hammerspoon
