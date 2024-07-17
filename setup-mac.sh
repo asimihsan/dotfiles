@@ -214,6 +214,7 @@ install_homebrew_packages() {
         iterm2
         jetbrains-toolbox
         karabiner-elements
+        loopback
         menumeters
         moom
         omnigraffle
@@ -250,6 +251,21 @@ setup_node() {
     source "$HOME/.nvm/nvm.sh"
     nvm install --lts
     nvm use --lts
+}
+
+# Setup Python with pyenv
+setup_python() {
+    # PYTHON_CFLAGS="-march=native" \
+    #     CONFIGURE_OPTS="--enable-optimizations --with-lto" \
+    pyenv install 3.11
+
+    pyenv global 3.11
+    pip install --upgrade pip
+    pip install pipx
+    pipx ensurepath
+    pipx install aider-chat
+    pipx install poetry
+    pipx install pre-commit
 }
 
 # Function to configure Mac settings
@@ -322,6 +338,7 @@ main() {
     install_homebrew_packages
     setup_fonts
     setup_node
+    setup_python
     setup_dotfiles
     configure_mac_settings
 
