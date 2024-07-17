@@ -213,6 +213,7 @@ install_homebrew_packages() {
         hammerspoon
         iterm2
         jetbrains-toolbox
+        jordanbaird-ice
         karabiner-elements
         loopback
         menumeters
@@ -336,10 +337,15 @@ setup_fonts() {
     echo "Font installation process completed."
 }
 
+install_rosetta() {
+    sudo softwareupdate --install-rosetta --agree-to-license
+}
+
 # Main function
 main() {
     fancy_echo "Starting Mac setup..."
 
+    install_rosetta
     install_xcode_clt
     install_homebrew
     install_nix_and_devbox
