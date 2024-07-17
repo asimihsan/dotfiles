@@ -150,4 +150,7 @@ export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
+eval "$(devbox global shellenv)"
+eval "$(starship init zsh)"
+eval "$(devbox global shellenv --init-hook)"
 eval "$(direnv hook zsh)"

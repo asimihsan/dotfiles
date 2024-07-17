@@ -1,58 +1,67 @@
 [user]
-        name = Asim Ihsan
-        email = ssh@sshemail.ihsan.io
+name = Asim Ihsan
+email = ssh@sshemail.ihsan.io
 
 [alias]
-        lol = log --graph --decorate --pretty=oneline --abbrev-commit
-        lola = log --graph --decorate --pretty=oneline --abbrev-commit --all --date=local
+co = checkout
+br = branch
+ci = commit
+st = status
+unstage = reset HEAD --
+last = log -1 HEAD
+lol = log --graph --decorate --pretty=oneline --abbrev-commit
+lola = log --graph --decorate --pretty=oneline --abbrev-commit --all --date=local
 
 [color]
-        branch = auto
-        diff = auto
-        interactive = auto
-        status = auto
+branch = auto
+diff = auto
+interactive = auto
+status = auto
 
 [pull]
-        ff = only
-        rebase = true
+ff = only
+rebase = true
 
 [filter "lfs"]
-        clean = git-lfs clean -- %f
-        smudge = git-lfs smudge -- %f
-        process = git-lfs filter-process
-        required = true
+clean = git-lfs clean -- %f
+smudge = git-lfs smudge -- %f
+process = git-lfs filter-process
+required = true
 
 [credential]
-        helper = cache --timeout=3600
-	helper = 
-	helper = /usr/local/share/gcm-core/git-credential-manager
+helper = cache --timeout=3600
+helper =
+helper = /usr/local/share/gcm-core/git-credential-manager
 
 [init]
-        defaultBranch = main
+defaultBranch = main
 
 [remote "origin"]
-        tagopt = --tags
+tagopt = --tags
 
 [diff]
-        external = difft
+external = difft
 
 [push]
-        autoSetupRemote = true
+autoSetupRemote = true
 [oh-my-zsh]
-	hide-status = 1
+hide-status = 1
 
 [user]
-  signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+6ch0i+pdf+48pQ/S180rtxe9yELTC9w/GYBZoRl89
+signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+6ch0i+pdf+48pQ/S180rtxe9yELTC9w/GYBZoRl89
 
 [gpg]
-  format = ssh
+format = ssh
 
 [gpg "ssh"]
-  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 
 [commit]
-  gpgsign = true
+gpgsign = false
+
 [credential "https://dev.azure.com"]
-	useHttpPath = true
+useHttpPath = true
+
 [core]
-	autocrlf = false
+autocrlf = false
+editor = vim
