@@ -12,7 +12,7 @@ source "$HOME/.nvm/nvm.sh"
 
 export PATH="$PATH":$HOME/flutter/bin
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source <(fzf --zsh)
 
 # Add .NET Core SDK tools
 export PATH="$PATH:/Users/asimi/.dotnet/tools"

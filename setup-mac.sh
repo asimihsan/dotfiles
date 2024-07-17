@@ -223,6 +223,7 @@ install_homebrew_packages() {
         raycast
         slack
         spotify
+        todoist
         tor-browser
         vorta
         zoom
@@ -248,11 +249,17 @@ install_homebrew_packages() {
 setup_node() {
     if [ ! -d "$HOME/.nvm" ]; then
         fancy_echo "Installing NVM..."
-        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
     else
         fancy_echo "NVM already installed."
     fi
-    source "$HOME/.nvm/nvm.sh"
+
+    # try to do source "$HOME/.nvm/nvm.sh", if it fails then error and skip
+    if ! source "$HOME/.nvm/nvm.sh"; then
+        fancy_echo "Failed to load NVM. Skipping Node.js setup." >&2
+        return
+    fi
+
     nvm install --lts
     nvm use --lts
 }
