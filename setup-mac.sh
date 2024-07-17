@@ -217,7 +217,9 @@ install_homebrew_packages() {
         loopback
         menumeters
         moom
+        obsidian
         omnigraffle
+        raycast
         slack
         spotify
         tor-browser
