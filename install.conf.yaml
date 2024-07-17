@@ -23,6 +23,7 @@
 - create:
     - ~/bin
     - ~/workplace
+    - ~/logs
 
 - link:
     ~/bin/backup-docker-images: backup-docker-images
@@ -42,6 +43,8 @@
 - shell:
     - [devbox global run -- rustup default stable]
     - [devbox global run -- rustup component add clippy rustfmt]
+    - [defaults write com.googlecode.iterm2 PrefsCustomFolder -string "~/.dotfiles/config/iterm2"]
+    - [defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true]
     # - [
     #     test ~/.tmux || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm,
     #   ]
