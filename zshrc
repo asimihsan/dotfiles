@@ -1,8 +1,3 @@
-export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME="robbyrussell"
-plugins=(git)
-source $ZSH/oh-my-zsh.sh
-
 export PATH="$HOME/.bin:$HOME/bin:$PATH"
 export PATH="/usr/local/bin:$HOME/bin:$PATH"
 eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -150,7 +145,14 @@ export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
-eval "$(devbox global shellenv)"
-eval "$(starship init zsh)"
+# add devbox bits to zsh
+fpath+=($DEVBOX_GLOBAL_PREFIX/share/zsh/site-functions $DEVBOX_GLOBAL_PREFIX/share/zsh/$ZSH_VERSION/functions $DEVBOX_GLOBAL_PREFIX/share/zsh/vendor-completions)
+autoload -U compinit && compinit
+
 eval "$(devbox global shellenv --init-hook)"
+eval "$(starship init zsh)"
+eval "$(zoxide init zsh)"
 eval "$(direnv hook zsh)"
+if [[ $options[zle] = on ]]; then
+  eval "$(atuin init zsh)"
+fi

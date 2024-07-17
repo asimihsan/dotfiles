@@ -39,10 +39,8 @@
     ~/bin/zshrc-setup: zshrc-setup
 
 - shell:
-    - [brew update]
-    - [brew list tmux || brew install tmux]
-    - [brew list hammerspoon || brew install hammerspoon]
-    - [brew list pv || brew install pv]
+    - [devbox global run -- rustup default stable]
+    - [devbox global run -- rustup component add clippy rustfmt]
     - [
         test ~/.tmux || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm,
       ]
