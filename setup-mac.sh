@@ -177,9 +177,58 @@ setup_dotfiles() {
         fancy_echo "Dotfiles already cloned."
     fi
 
+    rm -f "$(devbox global path)"/devbox.json
+
     cd "$HOME/.dotfiles"
     git pull
     ./install
+}
+
+install_homebrew_packages() {
+    fancy_echo "Installing Homebrew packages ..."
+
+    brew tap borgbackup/tap
+    brew update
+    brew install --cask macfuse
+
+    packages=(
+        borgbackup/tap/borgbackup-fuse
+        libyaml
+    )
+
+    casks=(
+        1password
+        docker
+        firefox
+        google-chrome
+        gpg-suite
+        hammerspoon
+        iterm2
+        jetbrains-toolbox
+        menumeters
+        moom
+        omnigraffle
+        slack
+        spotify
+        tor-browser
+        vorta
+    )
+
+    for package in "${packages[@]}"; do
+        if ! brew list "$package" &>/dev/null; then
+            brew install "$package"
+        else
+            echo "$package is already installed."
+        fi
+    done
+
+    for cask in "${casks[@]}"; do
+        if ! brew list --cask "$cask" &>/dev/null; then
+            brew install --cask "$cask"
+        else
+            echo "$cask is already installed."
+        fi
+    done
 }
 
 # Function to configure Mac settings
@@ -228,6 +277,7 @@ main() {
     setup_devbox_global
     setup_ssh_and_github
     setup_dotfiles
+    install_homebrew_packages
     configure_mac_settings
     
     fancy_echo "Setup complete! Check the log file for details: $LOG_FILE"
