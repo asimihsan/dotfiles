@@ -197,7 +197,6 @@ install_homebrew_packages() {
 
     packages=(
         borgbackup/tap/borgbackup-fuse
-        chrony
         fontconfig
         libyaml
         pyenv
@@ -207,6 +206,7 @@ install_homebrew_packages() {
 
     casks=(
         1password
+        chrony-control
         docker
         firefox
         git-credential-manager

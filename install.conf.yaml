@@ -21,6 +21,21 @@
 - shell:
       - devbox global update
 
+- shell:
+      - command: sudo -v
+        stdin: true
+        description: Caching sudo credentials
+      - command: while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+        description: Keeping sudo alive
+      - command: sudo ln -sf "${PWD}/chrony.conf" /etc/chrony.conf
+        stdin: true
+        stdout: true
+        description: Linking chrony.conf to /etc
+      - command: sudo ln -sf "${PWD}/chrony.plist" /Library/LaunchDaemons/org.chrony.chronyd.plist
+        stdin: true
+        stdout: true
+        description: Linking chrony.plist to /Library/LaunchDaemons
+
 - link:
       /etc/chrony.conf: chrony.conf
       /Library/LaunchDaemons/org.chrony.chronyd.plist: chrony.plist
