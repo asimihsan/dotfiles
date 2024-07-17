@@ -1,52 +1,66 @@
 - defaults:
-    link:
-      relink: true
+      link:
+          relink: true
 
 - clean: ["~"]
 
 - link:
-    ~/config: config
-    ~/.local/share/devbox/global/default/devbox.json: devbox-global.json
-    # ~/.doom.d: doom.d
-    ~/.gitconfig: gitconfig
-    ~/.hammerspoon:
-      if: "[ `uname` = Darwin ]"
-      path: hammerspoon
-    ~/setup-mac.sh: setup-mac.sh
-    # ~/.spacemacs: spacemacs
-    ~/.tmux.conf: tmux.conf
-    ~/.zshrc: zshrc
-    ~/.ssh/config: sshconfig
+      ~/config: config
+      ~/.local/share/devbox/global/default/devbox.json: devbox-global.json
+      # ~/.doom.d: doom.d
+      ~/.gitconfig: gitconfig
+      ~/.hammerspoon:
+          if: "[ `uname` = Darwin ]"
+          path: hammerspoon
+      ~/setup-mac.sh: setup-mac.sh
+      # ~/.spacemacs: spacemacs
+      ~/.tmux.conf: tmux.conf
+      ~/.zshrc: zshrc
+      ~/.ssh/config: sshconfig
 
 - shell:
-    - devbox global update
-
-- create:
-    - ~/bin
-    - ~/workplace
-    - ~/logs
+      - devbox global update
 
 - link:
-    ~/bin/backup-docker-images: backup-docker-images
-    ~/bin/bib2filename.py: bib2filename.py
-    ~/bin/curltime: curltime
-    ~/bin/download-youtube: download-youtube
-    # ~/bin/emacs-setup: emacs-setup
-    # ~/bin/e: e
-    ~/bin/mac_update.sh: mac_update.sh
-    ~/bin/merge-zsh-history: merge-zsh-history
-    ~/bin/mount.sh: mount.sh
-    ~/bin/pikchr: pikchr
-    ~/bin/sync-to-dropbox: sync-to-dropbox
-    ~/bin/tag-cache-dirs: tag-cache-dirs
-    ~/bin/zshrc-setup: zshrc-setup
+      /etc/chrony.conf: chrony.conf
+      /Library/LaunchDaemons/org.chrony.chronyd.plist: chrony.plist
 
 - shell:
-    - [devbox global run -- rustup default stable]
-    - [devbox global run -- rustup component add clippy rustfmt]
-    - [defaults write com.googlecode.iterm2 PrefsCustomFolder -string "~/.dotfiles/config/iterm2"]
-    - [defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true]
-    # - [
-    #     test ~/.tmux || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm,
-    #   ]
-    # - [npm install -g critical netlify-cli aws-cdk svgo]
+      - [sudo mkdir -p /var/lib/chrony /var/log/chrony]
+      - [sudo chown -R _chrony:_chrony /var/lib/chrony /var/log/chrony]
+      - [sudo launchctl load /Library/LaunchDaemons/org.chrony.chronyd.plist]
+      - [chronyc tracking]
+
+- create:
+      - ~/bin
+      - ~/workplace
+      - ~/logs
+
+- link:
+      ~/bin/backup-docker-images: backup-docker-images
+      ~/bin/bib2filename.py: bib2filename.py
+      ~/bin/curltime: curltime
+      ~/bin/download-youtube: download-youtube
+      # ~/bin/emacs-setup: emacs-setup
+      # ~/bin/e: e
+      ~/bin/mac_update.sh: mac_update.sh
+      ~/bin/merge-zsh-history: merge-zsh-history
+      ~/bin/mount.sh: mount.sh
+      ~/bin/pikchr: pikchr
+      ~/bin/sync-to-dropbox: sync-to-dropbox
+      ~/bin/tag-cache-dirs: tag-cache-dirs
+      ~/bin/zshrc-setup: zshrc-setup
+
+- shell:
+      - [devbox global run -- rustup default stable]
+      - [devbox global run -- rustup component add clippy rustfmt]
+      - [
+            defaults write com.googlecode.iterm2 PrefsCustomFolder -string "~/.dotfiles/config/iterm2",
+        ]
+      - [
+            defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true,
+        ]
+      # - [
+      #     test ~/.tmux || git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm,
+      #   ]
+      # - [npm install -g critical netlify-cli aws-cdk svgo]
