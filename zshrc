@@ -1,7 +1,7 @@
 # add devbox bits to zsh
 fpath+=($DEVBOX_GLOBAL_PREFIX/share/zsh/site-functions $DEVBOX_GLOBAL_PREFIX/share/zsh/$ZSH_VERSION/functions $DEVBOX_GLOBAL_PREFIX/share/zsh/vendor-completions)
 autoload -U compinit && compinit
-eval "$(devbox global shellenv --init-hook)"
+eval "$(devbox global shellenv)"
 
 export PATH="$HOME/.bin:$HOME/bin:$PATH"
 export PATH="/usr/local/bin:$HOME/bin:$PATH"
@@ -96,7 +96,7 @@ export PATH="${brew_prefix}/opt/protobuf/bin:$PATH"
 export PLANTUML_JAR="${brew_prefix}/opt/plantuml/libexec/plantuml.jar"
 
 # Initialize rbenv
-# eval "$(${brew_prefix}/opt/rbenv/bin/rbenv init - zsh)"
+eval "$(${brew_prefix}/opt/rbenv/bin/rbenv init - zsh)"
 
 alias make=${brew_prefix}/opt/make/bin/gmake
 alias rsync=${brew_prefix}/opt/rsync/bin/rsync
