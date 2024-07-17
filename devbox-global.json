@@ -23,7 +23,6 @@
     "moreutils@latest",
     "neofetch@latest",
     "neovim@latest",
-    "nodejs@20",
     "openssl@latest",
     "poetry@latest",
     "pv@latest",
