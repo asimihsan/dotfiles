@@ -197,6 +197,7 @@ install_homebrew_packages() {
 
     packages=(
         borgbackup/tap/borgbackup-fuse
+        chrony
         fontconfig
         libyaml
         pyenv
