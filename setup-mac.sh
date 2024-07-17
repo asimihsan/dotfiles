@@ -86,6 +86,7 @@ install_nix_and_devbox() {
 # Function to set up Devbox global
 setup_devbox_global() {
     fancy_echo "Setting up Devbox global..."
+    devbox global add gh
     eval "$(devbox global shellenv --recompute)"
 }
 
@@ -154,6 +155,8 @@ setup_ssh_and_github() {
     else
         fancy_echo "SSH key is already added to GitHub."
     fi
+
+    gh extension install github/gh-copilot
 }
 
 # Function to clone and set up dotfiles
@@ -194,6 +197,8 @@ install_homebrew_packages() {
     packages=(
         borgbackup/tap/borgbackup-fuse
         libyaml
+        pyenv
+        rbenv
     )
 
     casks=(
