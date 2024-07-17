@@ -213,6 +213,7 @@ install_homebrew_packages() {
         hammerspoon
         iterm2
         jetbrains-toolbox
+        karabiner-elements
         menumeters
         moom
         omnigraffle
