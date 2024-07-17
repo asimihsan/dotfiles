@@ -244,6 +244,9 @@ setup_node() {
     else
         fancy_echo "NVM already installed."
     fi
+    source "$HOME/.nvm/nvm.sh"
+    nvm install --lts
+    nvm use --lts
 }
 
 # Function to configure Mac settings
