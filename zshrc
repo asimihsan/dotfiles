@@ -44,8 +44,8 @@ autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /opt/homebrew/bin/terraform terraform
 
 # Hishtory Config:
-export PATH="$PATH:/Users/asimi/.hishtory"
-source /Users/asimi/.hishtory/config.zsh
+# export PATH="$PATH:/Users/asimi/.hishtory"
+# source /Users/asimi/.hishtory/config.zsh
 
 # Better history
 # bindkey -s '^e' "hishtory export | tac | awk '!a[\$0]++' | tac | fzf --scheme=history --tac --no-sort --preview 'echo {}' --preview-window down:5:wrap --bind '?:toggle-preview'^M"
@@ -96,7 +96,7 @@ export PATH="${brew_prefix}/opt/protobuf/bin:$PATH"
 export PLANTUML_JAR="${brew_prefix}/opt/plantuml/libexec/plantuml.jar"
 
 # Initialize rbenv
-eval "$(${brew_prefix}/opt/rbenv/bin/rbenv init - zsh)"
+# eval "$(${brew_prefix}/opt/rbenv/bin/rbenv init - zsh)"
 
 alias make=${brew_prefix}/opt/make/bin/gmake
 alias rsync=${brew_prefix}/opt/rsync/bin/rsync
