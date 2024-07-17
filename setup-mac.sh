@@ -255,18 +255,16 @@ setup_node() {
         fancy_echo "NVM already installed."
     fi
 
-    # try to do source "$HOME/.nvm/nvm.sh", if it fails then error and skip
-    if ! source "$HOME/.nvm/nvm.sh"; then
-        fancy_echo "Failed to load NVM. Skipping Node.js setup." >&2
-        return
-    fi
+    export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
     nvm install --lts
-    nvm use --lts
+    fancy_echo "Node $(node --version) and NPM $(npm --version) installed."
 }
 
 # Setup Python with pyenv
 setup_python() {
+    fancy_echo "Setting up Python..."
     # PYTHON_CFLAGS="-march=native" \
     #     CONFIGURE_OPTS="--enable-optimizations --with-lto" \
 
