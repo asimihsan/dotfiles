@@ -257,9 +257,16 @@ setup_node() {
 setup_python() {
     # PYTHON_CFLAGS="-march=native" \
     #     CONFIGURE_OPTS="--enable-optimizations --with-lto" \
-    pyenv install 3.11
 
-    pyenv global 3.11
+    # use pyenv to check if 3.11 is installed, if not install and global it
+    if ! pyenv versions | grep -q 3.11; then
+        fancy_echo "Installing Python 3.11..."
+        pyenv install 3.11
+        pyenv global 3.11
+    else
+        fancy_echo "Python 3.11 already installed."
+    fi
+
     pip install --upgrade pip
     pip install pipx
     pipx ensurepath
