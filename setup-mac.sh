@@ -198,6 +198,7 @@ install_homebrew_packages() {
         borgbackup/tap/borgbackup-fuse
         libyaml
         pyenv
+        pyenv-virtualenv
         rbenv
     )
 
