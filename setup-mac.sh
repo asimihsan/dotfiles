@@ -282,6 +282,11 @@ configure_mac_settings() {
     fancy_echo "Mac settings configured. Some changes may require a logout/restart to take effect."
 }
 
+setup_fonts() {
+    (cd "$HOME"/.dotfiles/config && make iosevka-docker-build)
+    (cd "$HOME"/.dotfiles/config && make iosevka-font-build)
+}
+
 # Main function
 main() {
     fancy_echo "Starting Mac setup..."
@@ -295,6 +300,7 @@ main() {
     setup_node
     setup_dotfiles
     configure_mac_settings
+    setup_fonts
     
     fancy_echo "Setup complete! Check the log file for details: $LOG_FILE"
 }

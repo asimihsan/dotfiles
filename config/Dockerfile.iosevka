@@ -6,18 +6,20 @@
 #     -v ./build:/build \
 #     iosevka_build
 
-FROM debian:stable-20221004
+FROM ubuntu:24.04
 
-ARG NODE_VER=14
+ARG NODE_VER=20
 
 # Version from https://github.com/be5invis/Iosevka/releases/.
-ARG FONT_VERSION=16.3.4
-ARG FONT_SHA256SUM=c09f9fd4f8ec07816796a258ef52f4ffffc0fe3698c4bea4e014be87c60bdd0d
+ARG FONT_VERSION=30.3.2
+ARG FONT_SHA256SUM=0add730597a747893274f1719b59002ea779fa4ce6a87bf313b1a9c2efb88bd8
 
 ARG NERD_FONTS_BASE_URL="https://github.com/ryanoasis/nerd-fonts/raw/master/src/glyphs/"
 
-COPY iosevka-run.sh /root/
-COPY download-glyphs.sh /root/
+ENV NVM_DIR=/root/.nvm
+
+COPY --link iosevka-run.sh /root/
+COPY --link download-glyphs.sh /root/
 
 RUN rm -f /etc/apt/apt.conf.d/docker-clean; \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
@@ -27,19 +29,26 @@ RUN --mount=type=cache,target=/var/cache,sharing=locked \
     set -ex && \
     apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -y \
-        build-essential \
-        ca-certificates \
-        curl \
-        file \
-        fontforge \
-        python3-fontforge \
-        jq \
-        ttfautohint \
-    && curl -sSL https://deb.nodesource.com/setup_${NODE_VER}.x | bash - \
-    && apt-get install -y nodejs \
-    && curl -sSL --proto '=https' --tlsv1.2 \
-        https://github.com/be5invis/Iosevka/archive/v${FONT_VERSION}.tar.gz \
-        -o $HOME/iosevka.tar.gz \
+    build-essential \
+    ca-certificates \
+    curl \
+    file \
+    fontforge \
+    python3-fontforge \
+    jq \
+    ttfautohint
+
+RUN --mount=type=cache,target=${NVM_DIR},sharing=locked \
+    mkdir -p ${NVM_DIR} && \
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash && \
+    . ${NVM_DIR}/nvm.sh && \
+    nvm install ${NODE_VER} && \
+    nvm use ${NODE_VER} && \
+    nvm alias default ${NODE_VER}
+
+RUN curl -sSL --proto '=https' --tlsv1.2 \
+    https://github.com/be5invis/Iosevka/archive/v${FONT_VERSION}.tar.gz \
+    -o $HOME/iosevka.tar.gz \
     && [ $(sha256sum $HOME/iosevka.tar.gz | cut -f1 -d ' ') = ${FONT_SHA256SUM} ] \
     && (cd /root && ./download-glyphs.sh) \
     && rm -rf /var/lib/apt/lists/*

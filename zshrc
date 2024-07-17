@@ -84,9 +84,6 @@ else
     export GOROOT="${brew_prefix}/opt/go/libexec"
 fi
 
-# Set alias for make to use gmake
-alias make="${brew_prefix}/opt/make/bin/gmake"
-
 # Update PATH for sqlite, tidy-html5, poetry, and protobuf
 export PATH="${brew_prefix}/opt/sqlite/bin:$PATH"
 export PATH="$PATH:${brew_prefix}/opt/tidy-html5/bin"
@@ -98,10 +95,6 @@ export PLANTUML_JAR="${brew_prefix}/opt/plantuml/libexec/plantuml.jar"
 # Initialize rbenv
 eval "$(${brew_prefix}/opt/rbenv/bin/rbenv init - zsh)"
 
-alias make=${brew_prefix}/opt/make/bin/gmake
-alias rsync=${brew_prefix}/opt/rsync/bin/rsync
-alias wget=${brew_prefix}/opt/wget/bin/wget
-alias ctags=${brew_prefix}/opt/universal-ctags/bin/ctags
 alias node=${brew_prefix}/opt/node@20/bin/node
 # -----------------------------------------------------------------------------
 
