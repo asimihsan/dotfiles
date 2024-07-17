@@ -12,6 +12,7 @@
     ~/.hammerspoon:
       if: "[ `uname` = Darwin ]"
       path: hammerspoon
+    ~/setup-mac.sh: setup-mac.sh
     # ~/.spacemacs: spacemacs
     ~/.tmux.conf: tmux.conf
     ~/.zshrc: zshrc

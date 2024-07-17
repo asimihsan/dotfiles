@@ -236,6 +236,15 @@ install_homebrew_packages() {
     done
 }
 
+setup_node() {
+    if [ ! -d "$HOME/.nvm" ]; then
+        fancy_echo "Installing NVM..."
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+    else
+        fancy_echo "NVM already installed."
+    fi
+}
+
 # Function to configure Mac settings
 configure_mac_settings() {
     if [ "${CONFIGURE_MAC:-false}" != "true" ]; then
@@ -247,7 +256,7 @@ configure_mac_settings() {
 
     # Dock
     defaults write com.apple.dock autohide -bool false
-    defaults write com.apple.dock tilesize -int 36
+    defaults write com.apple.dock tilesize -int 64
 
     # Finder
     defaults write com.apple.finder ShowPathbar -bool true
@@ -282,6 +291,7 @@ main() {
     setup_devbox_global
     setup_ssh_and_github
     install_homebrew_packages
+    setup_node
     setup_dotfiles
     configure_mac_settings
     
