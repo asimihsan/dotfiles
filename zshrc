@@ -154,3 +154,4 @@ eval "$(direnv hook zsh)"
 if [[ $options[zle] = on ]]; then
   eval "$(atuin init zsh)"
 fi
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
