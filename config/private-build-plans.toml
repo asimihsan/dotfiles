@@ -2,14 +2,17 @@
 family = "Iosevka Custom"
 spacing = "fixed"
 serifs = "sans"
+noLigation = true
 
 # Disables cv## and ss## OpenType features, default false.
-no-cv-ss = true
+# deprecated by noCvSs.
+# no-cv-ss = true
 
 ## Disable ligations, default false.
-no-ligation = true
+# deprecated by noLigation.
+# no-ligation = true
 
-[buildPlans.iosevka-custom.metric-override]
+[buildPlans.iosevka-custom.metricOverride]
 # Built-in line height, default 1250.
 # 1000 looks identical to Pragmata Pro.
 leading = 1000
@@ -17,6 +20,7 @@ leading = 1000
 [buildPlans.iosevka-custom.variants]
 # Pragmata Pro variant.
 # inherits = "ss08"
+noCvSs = ['ss01', 'ss02', 'cv01', 'cv02']
 
 [buildPlans.iosevka-custom.weights.regular]
 shape = 400

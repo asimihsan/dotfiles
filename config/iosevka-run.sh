@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Based on https://github.com/avivace/iosevka-docker/blob/master/run.sh
 
-set -e
+set -euo pipefail
 
 # Create temporary build directory
 mkdir -p /tmp/build
@@ -10,6 +10,7 @@ cd /tmp/build
 BUILD_FILE="private-build-plans.toml"
 BUILD_PARAM="ttf::iosevka-custom"
 CUSTOM_BUILD_FILE=true
+FONT_VERSION="30.3.2"
 
 # Check the input
 if [[ ! -f "/build/$BUILD_FILE" ]]; then
