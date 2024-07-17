@@ -195,7 +195,7 @@ install_homebrew_packages() {
     brew update
     brew install --cask macfuse
 
-    packages=(
+    packages=(n
         borgbackup/tap/borgbackup-fuse
         fontconfig
         libyaml
@@ -206,7 +206,7 @@ install_homebrew_packages() {
 
     casks=(
         1password
-        chrony-control
+        chronycontrol
         docker
         firefox
         git-credential-manager
