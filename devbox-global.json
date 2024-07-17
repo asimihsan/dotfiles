@@ -1,78 +1,85 @@
 {
     "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.12.0/.schema/devbox.schema.json",
     "packages": [
-      "atuin@latest",
-      "bash-preexec@latest",
-      "bat@latest",
-      "btop@latest",
-      "cheat@latest",
-      "coreutils@latest",
-      "difftastic@latest",
-      "direnv@latest",
-      "eza@latest",
-      "fd@latest",
-      "fzf@latest",
-      "gh@latest",
-      "git@latest",
-      "glab@latest",
-      "go@latest",
-      "htop@latest",
-      "imagemagick@latest",
-      "jq@latest",
-      "libiconv@latest",
-      "moreutils@latest",
-      "neofetch@latest",
-      "neovim@latest",
-      "nodejs@20",
-      "openssl@latest",
-      "poetry@latest",
-      "python311Full@latest",
-      "python311Packages.pip@latest",
-      "ripgrep@latest",
-      "rustup@latest",
-      "starship@latest",
-      "tmux@latest",
-      "tree-sitter@latest",
-      "vim@latest",
-      "vscode@latest",
-      "yq@latest",
-      "zoxide@latest",
-      "zsh@latest",
-      "zstd@latest"
+        "atuin@latest",
+        "bash-preexec@latest",
+        "bat@latest",
+        "btop@latest",
+        "cheat@latest",
+        "coreutils@latest",
+        "difftastic@latest",
+        "direnv@latest",
+        "eza@latest",
+        "fd@latest",
+        "fzf@latest",
+        "gh@latest",
+        "git@latest",
+        "glab@latest",
+        "go@latest",
+        "htop@latest",
+        "imagemagick@latest",
+        "jq@latest",
+        "libiconv@latest",
+        "moreutils@latest",
+        "neofetch@latest",
+        "neovim@latest",
+        "nodejs@20",
+        "openssl@latest",
+        "poetry@latest",
+        "pv@latest",
+        "python311Full@latest",
+        "python311Packages.pip@latest",
+        "ripgrep@latest",
+        "rustup@latest",
+        "starship@latest",
+        "tmux@latest",
+        "tree-sitter@latest",
+        "vim@latest",
+        "vscode@latest",
+        "yq@latest",
+        "zoxide@latest",
+        "zsh@latest",
+        "zstd@latest"
     ],
     "env": {
-      "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",
-      "DEVBOX_GLOBAL_ROOT":   "$HOME/.local/share/devbox/global/current"
+        "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",
+        "DEVBOX_GLOBAL_ROOT": "$HOME/.local/share/devbox/global/current"
     },
-    "shell": {"init_hook": [". ${DEVBOX_GLOBAL_ROOT}/init.sh"], "scripts": {
-      "install-astro": [
-        "echo cloning astronvim repo to ~/.config/nvim",
-        "git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim"
-      ],
-      "install-hook-bash": [
-        "echo adding 'devbox global shellenv' to ~/.bashrc",
-        "grep -qF 'devbox global shellenv' ~/.bashrc || echo 'eval \"$(devbox global shellenv --init-hook)\"' >> ~/.bashrc",
-        "tail -n 1 ~/.bashrc"
-      ],
-      "install-hook-zsh": [
-        "echo adding 'devbox global shellenv' to ~/.zshrc",
-        "grep -qF 'devbox global shellenv' ~/.zshrc || echo 'eval \"$(devbox global shellenv --init-hook)\"' >> ~/.zshrc",
-        "tail -n 1 ~/.zshrc"
-      ],
-      "install-starship-prompt": [
-        "if [ ! -f $HOME/.config/starship.toml ]",
-        "then",
-        "curl -fsSL https://devbox.getfleek.dev/config/starship/starship.toml > $HOME/.config/starship.toml",
-        "fi"
-      ],
-      "latest-hash": ["curl -fsSL https://nixos.org/channels/nixos-unstable/git-revision"],
-      "npm-global": [
-        "grep -qF '.npm-packages' ~/.npmrc || echo 'prefix=~/.npm-packages' >> ~/.npmrc",
-        "grep -qF '.npm-packages' ~/.zshrc || echo 'export PATH=$PATH:~/.npm-packages/bin' >> ~/.zshrc",
-        "grep -qF '.npm-packages' ~/.bashrc || echo 'export PATH=$PATH:~/.npm-packages/bin' >> ~/.bashrc",
-        "mkdir -p ~/.npm-packages"
-      ]
-    }},
+    "shell": {
+        "init_hook": [
+            ". ${DEVBOX_GLOBAL_ROOT}/init.sh"
+        ],
+        "scripts": {
+            "install-astro": [
+                "echo cloning astronvim repo to ~/.config/nvim",
+                "git clone --depth 1 https://github.com/AstroNvim/AstroNvim ~/.config/nvim"
+            ],
+            "install-hook-bash": [
+                "echo adding 'devbox global shellenv' to ~/.bashrc",
+                "grep -qF 'devbox global shellenv' ~/.bashrc || echo 'eval \"$(devbox global shellenv --init-hook)\"' >> ~/.bashrc",
+                "tail -n 1 ~/.bashrc"
+            ],
+            "install-hook-zsh": [
+                "echo adding 'devbox global shellenv' to ~/.zshrc",
+                "grep -qF 'devbox global shellenv' ~/.zshrc || echo 'eval \"$(devbox global shellenv --init-hook)\"' >> ~/.zshrc",
+                "tail -n 1 ~/.zshrc"
+            ],
+            "install-starship-prompt": [
+                "if [ ! -f $HOME/.config/starship.toml ]",
+                "then",
+                "curl -fsSL https://devbox.getfleek.dev/config/starship/starship.toml > $HOME/.config/starship.toml",
+                "fi"
+            ],
+            "latest-hash": [
+                "curl -fsSL https://nixos.org/channels/nixos-unstable/git-revision"
+            ],
+            "npm-global": [
+                "grep -qF '.npm-packages' ~/.npmrc || echo 'prefix=~/.npm-packages' >> ~/.npmrc",
+                "grep -qF '.npm-packages' ~/.zshrc || echo 'export PATH=$PATH:~/.npm-packages/bin' >> ~/.zshrc",
+                "grep -qF '.npm-packages' ~/.bashrc || echo 'export PATH=$PATH:~/.npm-packages/bin' >> ~/.bashrc",
+                "mkdir -p ~/.npm-packages"
+            ]
+        }
+    },
     "nixpkgs": {}
-  }
-  
+}

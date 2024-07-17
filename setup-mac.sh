@@ -276,8 +276,8 @@ main() {
     install_nix_and_devbox
     setup_devbox_global
     setup_ssh_and_github
-    setup_dotfiles
     install_homebrew_packages
+    setup_dotfiles
     configure_mac_settings
     
     fancy_echo "Setup complete! Check the log file for details: $LOG_FILE"
