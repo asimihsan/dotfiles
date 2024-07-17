@@ -6,7 +6,7 @@
 
 - link:
     ~/config: config
-    ~/.local/share/devbox/global/default: devbox-global.json
+    ~/.local/share/devbox/global/default/devbox.json: devbox-global.json
     # ~/.doom.d: doom.d
     ~/.gitconfig: gitconfig
     ~/.hammerspoon:
@@ -15,6 +15,9 @@
     # ~/.spacemacs: spacemacs
     ~/.tmux.conf: tmux.conf
     ~/.zshrc: zshrc
+
+- shell:
+    - devbox global update
 
 - create:
     - ~/bin
