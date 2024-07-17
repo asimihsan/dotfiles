@@ -55,10 +55,6 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 [[ -s "/Users/asimi/.gvm/scripts/gvm" ]] && source "/Users/asimi/.gvm/scripts/gvm"
 
-GO_VERSION=1.22
-export PATH="/opt/homebrew/opt/go@$GO_VERSION/bin:$PATH"
-
-
 export PATH="${PATH}":/Users/asimi/Library/Application\ Support/JetBrains/Toolbox/scripts/
 export PATH=$PATH:$(go env GOPATH)/bin
 
@@ -74,14 +70,6 @@ export PATH=$PATH:/Users/asimi/.local/bin:/Users/asimi/bin
 # -----------------------------------------------------------------------------
 # Get the Homebrew base installation directory once
 brew_prefix=$(brew --prefix)
-
-# If you have a specific version of Go set in GO_VERSION, use that
-# Otherwise, it will default to the latest version installed by Homebrew
-if [[ -n "$GO_VERSION" ]]; then
-    export GOROOT="${brew_prefix}/opt/go@$GO_VERSION/libexec"
-else
-    export GOROOT="${brew_prefix}/opt/go/libexec"
-fi
 
 # Update PATH for sqlite, tidy-html5, poetry, and protobuf
 export PATH="${brew_prefix}/opt/sqlite/bin:$PATH"
