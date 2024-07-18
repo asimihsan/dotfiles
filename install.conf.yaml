@@ -17,6 +17,7 @@
       ~/.tmux.conf: tmux.conf
       ~/.zshrc: zshrc
       ~/.ssh/config: sshconfig
+      ~/.config/starship.toml: starship.toml
 
 - shell:
       - devbox global update
