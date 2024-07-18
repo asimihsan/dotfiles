@@ -6,3 +6,6 @@ fonts/iosevka-custom/dist/*
 *.swp
 
 .aider*
+node_modules
+fonts/iosevka-custom/.devbox
+fonts/iosevka-custom/build
