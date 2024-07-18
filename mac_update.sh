@@ -4,6 +4,8 @@ set -uo pipefail
 
 sudo echo starting...
 
+devbox global update
+
 sudo softwareupdate --download --all --agree-to-license
 brew update
 brew upgrade
@@ -22,7 +24,6 @@ cargo prefetch --top-downloads=200
 npm install --ugprade npm
 npm install --upgrade aws-cdk
 npm install --upgrade '@githubnext/github-copilot-cli'
-hishtory update
 
 brew doctor
 if command -v flutter; then
