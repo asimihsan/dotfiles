@@ -27,10 +27,30 @@
         description: Caching sudo credentials
       - command: while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
         description: Keeping sudo alive
-      - command: sudo ln -sf "${PWD}/chrony.conf" /etc/chrony.d/chrony.conf
+      - command: sudo mkdir -p /usr/local/etc
         stdin: true
         stdout: true
-        description: Linking chrony.conf to /etc/chrony.d/chrony.conf
+        description: Creating /usr/local/etc
+      - command: sudo ln -sf "${PWD}/chrony.conf" /usr/local/etc/chrony.conf
+        stdin: true
+        stdout: true
+        description: Linking chrony.conf to /usr/local/etc/chrony.conf
+      - command: sudo ln -sf "${PWD}/chrony.plist" /Library/LaunchDaemons/com.chrony.chronyd.plist
+        stdin: true
+        stdout: true
+        description: Linking chrony.plist to /Library/LaunchDaemons/com.chrony.chronyd.plist
+      - command: sudo chown root:wheel /Library/LaunchDaemons/com.chrony.chronyd.plist
+        stdin: true
+        stdout: true
+        description: Changing owner of /Library/LaunchDaemons/com.chrony.chronyd.plist to root:wheel
+      - command: sudo chmod 644 /Library/LaunchDaemons/com.chrony.chronyd.plist
+        stdin: true
+        stdout: true
+        description: Changing permissions of /Library/LaunchDaemons/com.chrony.chronyd.plist to 644
+      - command: sudo launchctl load /Library/LaunchDaemons/com.chrony.chronyd.plist
+        stdin: true
+        stdout: true
+        description: Loading chronyd service
 
 - create:
       - ~/bin
