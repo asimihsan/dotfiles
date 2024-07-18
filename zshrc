@@ -132,7 +132,14 @@ eval "$(zoxide init zsh)"
 alias cd='z'
 
 eval "$(direnv hook zsh)"
+
+# -----------------------------------------------------------------------------
+#  atuin configuration.
+# -----------------------------------------------------------------------------
 if [[ $options[zle] = on ]]; then
   eval "$(atuin init zsh)"
 fi
+# -----------------------------------------------------------------------------
+
+
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

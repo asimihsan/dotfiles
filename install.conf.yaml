@@ -4,6 +4,10 @@
 
 - clean: ["~"]
 
+- create:
+  - ~/.config
+  - ~/.config/atuin
+
 - link:
       ~/config: config
       ~/.local/share/devbox/global/default/devbox.json: devbox-global.json
@@ -19,6 +23,7 @@
       ~/.zshrc: zshrc
       ~/.ssh/config: sshconfig
       ~/.config/starship.toml: starship.toml
+      ~/.config/atuin/config.toml: atuin.toml
 
 - shell:
       - devbox global update
