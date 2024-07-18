@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>org.chrony.chronyd</string>
+    <string>com.chrony.chronyd</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/usr/local/sbin/chronyd</string>
+        <string>/opt/homebrew/sbin/chronyd</string>
         <string>-n</string>
         <string>-f</string>
         <string>/etc/chrony.conf</string>
@@ -15,9 +15,5 @@
     <true/>
     <key>KeepAlive</key>
     <true/>
-    <key>StandardErrorPath</key>
-    <string>/var/log/chrony/chronyd.err</string>
-    <key>StandardOutPath</key>
-    <string>/var/log/chrony/chronyd.out</string>
 </dict>
 </plist>
