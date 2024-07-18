@@ -47,7 +47,9 @@
     "zoxide@latest",
     "zsh@latest",
     "zstd@latest",
-    "_1password@latest"
+    "_1password@latest",
+    "terraform@latest",
+    "dotnet-sdk@latest"
   ],
   "env": {
     "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",
