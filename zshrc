@@ -40,7 +40,6 @@ export LS_COLORS="$(vivid generate molokai)"
 export PATH="$HOME"/go/bin:"$PATH"
 
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /opt/homebrew/bin/terraform terraform
 
 # Hishtory Config:
 # export PATH="$PATH:/Users/asimi/.hishtory"
