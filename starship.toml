@@ -6,59 +6,165 @@ scan_timeout = 30
 
 # Customize the prompt format
 format = """
-$directory$git_branch$git_status
-$character"""
+[](#BA1861)\
+$username\
+[](bg:#DB4678 fg:#BA1861)\
+$directory\
+[](fg:#DB4678 bg:#E87D8C)\
+$git_branch\
+$git_status\
+[](fg:#E87D8C bg:#89ABCE)\
+$c\
+$elixir\
+$elm\
+$golang\
+$haskell\
+$java\
+$julia\
+$nodejs\
+$nim\
+$nix_shell\
+$rust\
+[](fg:#89ABCE bg:#06969A)\
+$docker_context\
+[](fg:#06969A bg:#33658A)\
+$time\
+[ ](fg:#33658A)\
+"""
 
-right_format = """${cmd_duration}$time
+right_format = """${cmd_duration}
 $memory_usage$battery"""
+
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Disable the blank line at the start of the prompt
+# add_newline = false
+
+# You can also replace your username with a neat symbol like  to save some space
+[username]
+show_always = true
+style_user = "bg:#BA1861"
+style_root = "bg:#BA1861"
+format = '[$user ]($style)'
+
+[directory]
+style = "bg:#DB4678"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+# Here is how you can shorten some long paths by text replacement
+# similar to mapped_locations in Oh My Posh:
+[directory.substitutions]
+"Documents" = "📄 "
+"Downloads" = "⬇️ "
+"Music" = "🎵 "
+"Pictures" = "🖼️ "
+# Keep in mind that the order matters. For example:
+# "Important Documents" = "   "
+# will not be replaced, because "Documents" was already substituted before.
+# So either put "Important Documents" before "Documents" or use the substituted version:
+# "Important   " = "   "
+
+[c]
+symbol = "🅒 "
+style = "bg:#89ABCE"
+format = '[[ $symbol ($version) ](bg:#89ABCE)]($style)'
+
+[docker_context]
+symbol = "🐳 "
+style = "bg:#06969A"
+format = '[[ $symbol $context ](bg:#06969A)]($style) $path'
+
+[elixir]
+symbol = "💧 "
+style = "bg:#89ABCE"
+format = '[[ $symbol ($version) ](bg:#89ABCE)]($style)'
+
+[elm]
+symbol = "🌳 "
+style = "bg:#89ABCE"
+format = '[[ $symbol ($version) ](bg:#89ABCE)]($style)'
+
+[git_branch]
+symbol = "🌿 "
+style = "bg:#E87D8C"
+format = '[[ $symbol $branch ](bg:#E87D8C)]($style)'
+
+[git_status]
+style = "bg:#E87D8C"
+format = '[[($all_status$ahead_behind )](bg:#E87D8C)]($style)'
+
+[golang]
+symbol = "🐹 "
+style = "bg:#89ABCE"
+format = '[[ $symbol ($version) ](bg:#89ABCE)]($style)'
+
+[haskell]
+symbol = "λ "
+style = "bg:#89ABCE"
+format = '[[ $symbol ($version) ](bg:#89ABCE)]($style)'
+
+[java]
+symbol = "☕ "
+style = "bg:#89ABCE"
+format = '[[ $symbol ($version) ](bg:#89ABCE)]($style)'
+
+[julia]
+symbol = "ஃ "
+style = "bg:#89ABCE"
+format = '[[ $symbol ($version) ](bg:#89ABCE)]($style)'
+
+[nodejs]
+symbol = "🟢 "
+style = "bg:#89ABCE"
+format = '[[ $symbol ($version) ](bg:#89ABCE)]($style)'
+
+[nim]
+symbol = "👑 "
+style = "bg:#89ABCE"
+format = '[[ $symbol ($version) ](bg:#89ABCE)]($style)'
+
+[nix_shell]
+symbol = "❄️ "
+style = "bg:#89ABCE"
+format = '[[ $symbol $state ](bg:#89ABCE)]($style)'
+
+[rust]
+symbol = "🦀 "
+style = "bg:#89ABCE"
+format = '[[ $symbol ($version) ](bg:#89ABCE)]($style)'
+
+[time]
+disabled = false
+time_format = "%R" # Hour:Minute Format
+style = "bg:#33658A"
+format = '[[  $time ](bg:#33658A)]($style)'
 
 [cmd_duration]
 min_time = 100  # Show duration for commands that take 100ms or longer
 format = "took [$duration](bold yellow)"
 
-[time]
-disabled = false
-style = "bold white"
-format = "🕰️ [$time]($style)"
-
-[directory]
-style = "blue bold"
-truncation_length = 3
-truncate_to_repo = true
-fish_style_pwd_dir_length = 1
-
 [character]
 success_symbol = "[➜](bold green)"
 error_symbol = "[✗](bold red)"
 
-[git_branch]
-symbol = "🌿 "
-truncation_length = 4
-truncation_symbol = ""
-
-[git_status]
-conflicted = "⚔️"
-ahead = "🏎💨×${count}"
-behind = "🐢×${count}"
-diverged = "🔱 🏎💨×${ahead_count} 🐢×${behind_count}"
-untracked = "🛤️×${count}"
-modified = "📝×${count}"
-staged = "🗃️×${count}"
-renamed = "📛×${count}"
-deleted = "🗑️×${count}"
+# [git_status]
+# conflicted = "⚔️"
+# ahead = "🏎💨×${count}"
+# behind = "🐢×${count}"
+# diverged = "🔱 🏎💨×${ahead_count} 🐢×${behind_count}"
+# untracked = "🛤️×${count}"
+# modified = "📝×${count}"
+# staged = "🗃️×${count}"
+# renamed = "📛×${count}"
+# deleted = "🗑️×${count}"
 
 [python]
 symbol = "🐍 "
 pyenv_version_name = true
 format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
-
-[nodejs]
-symbol = "⬢ "
-format = '[${symbol}(${version} )]($style)'
-
-[rust]
-symbol = "🦀 "
-format = '[${symbol}(${version} )]($style)'
 
 [memory_usage]
 disabled = false
