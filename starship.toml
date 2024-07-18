@@ -1,0 +1,76 @@
+# Disable the blank line at the start of the prompt
+add_newline = false
+
+# Set a reasonable timeout for directory scans
+scan_timeout = 30
+
+# Customize the prompt format
+format = """
+$directory$git_branch$git_status
+$character"""
+
+right_format = """${cmd_duration}$time
+$memory_usage$battery"""
+
+[cmd_duration]
+min_time = 100  # Show duration for commands that take 100ms or longer
+format = "took [$duration](bold yellow)"
+
+[time]
+disabled = false
+style = "bold white"
+format = "🕰️ [$time]($style)"
+
+[directory]
+style = "blue bold"
+truncation_length = 3
+truncate_to_repo = true
+fish_style_pwd_dir_length = 1
+
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[✗](bold red)"
+
+[git_branch]
+symbol = "🌿 "
+truncation_length = 4
+truncation_symbol = ""
+
+[git_status]
+conflicted = "⚔️"
+ahead = "🏎💨×${count}"
+behind = "🐢×${count}"
+diverged = "🔱 🏎💨×${ahead_count} 🐢×${behind_count}"
+untracked = "🛤️×${count}"
+modified = "📝×${count}"
+staged = "🗃️×${count}"
+renamed = "📛×${count}"
+deleted = "🗑️×${count}"
+
+[python]
+symbol = "🐍 "
+pyenv_version_name = true
+format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+
+[nodejs]
+symbol = "⬢ "
+format = '[${symbol}(${version} )]($style)'
+
+[rust]
+symbol = "🦀 "
+format = '[${symbol}(${version} )]($style)'
+
+[memory_usage]
+disabled = false
+threshold = 75
+symbol = "🧠 "
+style = "bold dimmed white"
+
+[battery]
+full_symbol = "🔋"
+charging_symbol = "⚡️"
+discharging_symbol = "💀"
+
+[[battery.display]]
+threshold = 10
+style = "bold red"
