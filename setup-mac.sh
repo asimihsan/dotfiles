@@ -336,8 +336,8 @@ setup_fonts() {
         return
     fi
 
-    (cd "$HOME"/.dotfiles/config && make iosevka-docker-build)
-    (cd "$HOME"/.dotfiles/config && make iosevka-font-build)
+    (cd "$HOME"/.dotfiles/fonts/iosevka-custom && make iosevka-docker-build)
+    (cd "$HOME"/.dotfiles/fonts/iosevka-custom && make iosevka-font-build)
 
     rsync -av "$HOME/Fonts" "$HOME/Library/Fonts"
     fc-cache -f -v
