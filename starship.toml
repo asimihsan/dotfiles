@@ -28,11 +28,11 @@ $rust\
 [](fg:#89ABCE bg:#06969A)\
 $docker_context\
 [](fg:#06969A bg:#33658A)\
-$time\
 [ ](fg:#33658A)\
 """
 
-right_format = """${cmd_duration}
+right_format = """${cmd_duration}$time\
+[](bg:#33658A)\
 $memory_usage$battery"""
 
 # Get editor completions based on the config schema
@@ -140,7 +140,7 @@ format = '[[ $symbol ($version) ](bg:#89ABCE)]($style)'
 disabled = false
 time_format = "%R" # Hour:Minute Format
 style = "bg:#33658A"
-format = '[[  $time ](bg:#33658A)]($style)'
+format = '[[$time](bg:#33658A)]($style)'
 
 [cmd_duration]
 min_time = 100  # Show duration for commands that take 100ms or longer
