@@ -14,9 +14,6 @@ export PATH="$PATH":$HOME/flutter/bin
 
 source <(fzf --zsh)
 
-# Add .NET Core SDK tools
-export PATH="$PATH:/Users/asimi/.dotnet/tools"
-
 export ANDROID_HOME=/$HOME/Library/Android/sdk
 export ANDROID_NDK_HOME=$ANDROID_HOME/ndk/25.1.8937393
 export ANDROID_NDK=$ANDROID_NDK_HOME
@@ -28,7 +25,7 @@ export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
 
 export GRAALVM_HOME="/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.3.0/Contents/Home"
 export PATH="${PATH}":"${GRAALVM_HOME}"/bin
-export PATH=$HOME/.emacs.d/bin:"$PATH"
+# export PATH=$HOME/.emacs.d/bin:"$PATH"
 
 # brew install coreutils
 
@@ -58,7 +55,6 @@ export PATH="${PATH}":/Users/asimi/Library/Application\ Support/JetBrains/Toolbo
 export PATH=$PATH:$(go env GOPATH)/bin
 
 export PATH="$PATH":"$HOME/.pub-cache/bin"
-export LOCALSTACK_API_KEY=6xxZjUgHLg
 export NDK_HOME=$HOME/Library/Android/sdk/ndk/25.1.8937393
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-17.jdk/Contents/Home
 export PATH=$HOME/flutter/bin:$PATH
@@ -130,7 +126,11 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
 eval "$(starship init zsh)"
+
+export _ZO_RESOLVE_SYMLINKS=1  # resolve symlinks
 eval "$(zoxide init zsh)"
+alias cd='z'
+
 eval "$(direnv hook zsh)"
 if [[ $options[zle] = on ]]; then
   eval "$(atuin init zsh)"
