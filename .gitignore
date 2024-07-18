@@ -1,5 +1,8 @@
 .DS_Store
-config/dist
+
+fonts/iosevka-custom/dist/*
+!fonts/iosevka-custom/dist/.gitkeep
+
 *.swp
 
 .aider*
