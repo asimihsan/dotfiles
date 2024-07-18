@@ -7,6 +7,7 @@ scan_timeout = 30
 # Customize the prompt format
 format = """
 [](#BA1861)\
+$os\
 $username\
 [](bg:#DB4678 fg:#BA1861)\
 $directory\
@@ -14,16 +15,9 @@ $directory\
 $git_branch\
 $git_status\
 [](fg:#E87D8C bg:#89ABCE)\
-$c\
-$elixir\
-$elm\
+$python\
 $golang\
-$haskell\
 $java\
-$julia\
-$nodejs\
-$nim\
-$nix_shell\
 $rust\
 [](fg:#89ABCE bg:#06969A)\
 $docker_context\
@@ -40,6 +34,15 @@ $memory_usage$battery"""
 
 # Disable the blank line at the start of the prompt
 # add_newline = false
+
+[os]
+disabled = false
+style = "bg:#BA1861"
+format = "[$symbol ]($style)"
+
+[os.symbols]
+Macos = ""
+Linux = ""
 
 # You can also replace your username with a neat symbol like  to save some space
 [username]
@@ -164,6 +167,7 @@ error_symbol = "[✗](bold red)"
 [python]
 symbol = "🐍 "
 pyenv_version_name = true
+style = "bg:#89ABCE"
 format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
 
 [memory_usage]
