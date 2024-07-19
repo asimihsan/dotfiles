@@ -2066,6 +2066,54 @@
         }
       }
     },
+    "restic@latest": {
+      "last_modified": "2024-07-07T07:43:47Z",
+      "resolved": "github:NixOS/nixpkgs/b60793b86201040d9dee019a05089a9150d08b5b#restic",
+      "source": "devbox-search",
+      "version": "0.16.5",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/r7wxf93hrqs5ldy9ii0dgjfcmlzi3qlv-restic-0.16.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/r7wxf93hrqs5ldy9ii0dgjfcmlzi3qlv-restic-0.16.5"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/0gx1w7l6kbzxhnyclc494wxdyyi62fbr-restic-0.16.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/0gx1w7l6kbzxhnyclc494wxdyyi62fbr-restic-0.16.5"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/p9sd85ancydpjwppxb8f8m61n8dsk04s-restic-0.16.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/p9sd85ancydpjwppxb8f8m61n8dsk04s-restic-0.16.5"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/3jwc6w0dbsfwcnl4d91ssq77x8phyihd-restic-0.16.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/3jwc6w0dbsfwcnl4d91ssq77x8phyihd-restic-0.16.5"
+        }
+      }
+    },
     "ripgrep@latest": {
       "last_modified": "2024-07-07T07:43:47Z",
       "resolved": "github:NixOS/nixpkgs/b60793b86201040d9dee019a05089a9150d08b5b#ripgrep",

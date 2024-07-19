@@ -50,7 +50,8 @@
     "yq@latest",
     "zoxide@latest",
     "zsh@latest",
-    "zstd@latest"
+    "zstd@latest",
+    "restic@latest"
   ],
   "env": {
     "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",
