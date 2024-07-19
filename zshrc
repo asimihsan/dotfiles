@@ -120,6 +120,7 @@ alias ls="gls --color"
 alias pmc='coyote test'
 alias zstd=$(brew --prefix zstd)/bin/zstd
 eval "$(gh copilot alias -- zsh)"
+alias vim=nvim
 
 export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
