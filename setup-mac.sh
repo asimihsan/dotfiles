@@ -274,6 +274,13 @@ setup_node() {
 # Setup Python with pyenv
 setup_python() {
     fancy_echo "Setting up Python..."
+
+    brew install openssl readline sqlite3 xz zlib
+
+    export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib"
+    export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include"
+    export SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+
     # PYTHON_CFLAGS="-march=native" \
     #     CONFIGURE_OPTS="--enable-optimizations --with-lto" \
 
@@ -343,10 +350,8 @@ setup_fonts() {
         return
     fi
 
-    (cd "$HOME"/.dotfiles/fonts/iosevka-custom && make iosevka-docker-build)
-    (cd "$HOME"/.dotfiles/fonts/iosevka-custom && make iosevka-font-build)
-
-    rsync -av "$HOME/Fonts" "$HOME/Library/Fonts"
+    (cd "$HOME"/.dotfiles/fonts/iosevka-custom && make build)
+    (cd "$HOME"/.dotfiles/fonts/iosevka-custom && make install)
     fc-cache -f -v
 
     echo "Font installation process completed."

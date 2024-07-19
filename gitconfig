@@ -31,7 +31,6 @@ required = true
 [credential]
 helper = cache --timeout=3600
 helper =
-helper = /usr/local/share/gcm-core/git-credential-manager
 
 [init]
 defaultBranch = main
@@ -63,6 +62,7 @@ gpgsign = true
 autocrlf = false
 editor = vim
 [credential]
+	helper = 
 	helper = 
 	helper = /usr/local/share/gcm-core/git-credential-manager
 [credential "https://dev.azure.com"]
