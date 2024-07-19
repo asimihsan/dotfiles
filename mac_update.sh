@@ -53,9 +53,9 @@ update_dotfiles() {
 update_dotfiles
 
 "$HOME"/.dotfiles/install
-chezmoi --source ~/.dotfiles/chezmoi update
-chezmoi --source ~/.dotfiles/chezmoi upgrade
-chezmoi --source ~/.dotfiles/chezmoi apply
+chezmoi update
+chezmoi upgrade
+chezmoi apply
 
 devbox global update
 
