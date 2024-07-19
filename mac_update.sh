@@ -5,8 +5,9 @@ set -uo pipefail
 # Function: cache_sudo_credentials
 #
 # Description:
-#   This function caches sudo credentials by running 'sudo -v' in the background
-#   and sets up a trap to kill the sudo process when the script exits.
+#   This function caches sudo credentials by running 'sudo -v' and blocks
+#   until authentication succeeds. It also sets up a trap to refresh the
+#   sudo timestamp every 5 minutes to keep the sudo session alive.
 #
 # Usage:
 #   cache_sudo_credentials
@@ -17,24 +18,35 @@ set -uo pipefail
 #   # Sudo commands will now work without prompting for a password
 #
 function cache_sudo_credentials() {
-    local sudo_pid
+    local sudo_refresh_pid
 
-    # Function to kill the sudo -v process
-    kill_sudo_v() {
-        if [ ! -z "$sudo_pid" ]; then
-            echo "Killing sudo -v process (PID: $sudo_pid)"
-            kill $sudo_pid 2>/dev/null
+    # Function to kill the sudo refresh process
+    kill_sudo_refresh() {
+        if [ ! -z "$sudo_refresh_pid" ]; then
+            echo "Killing sudo refresh process (PID: $sudo_refresh_pid)"
+            kill $sudo_refresh_pid 2>/dev/null
         fi
     }
 
     # Set up the trap
-    trap kill_sudo_v EXIT INT TERM
+    trap kill_sudo_refresh EXIT INT TERM
 
-    # Run sudo -v in the background and capture its PID
-    sudo -v &
-    sudo_pid=$!
+    # Check if sudo authentication was successful
+    if ! sudo -v; then
+        echo "Sudo authentication failed"
+        return 1
+    fi
 
-    echo "Sudo credentials cached (PID: $sudo_pid)"
+    # Start a background process to keep sudo credentials alive
+    (
+        while true; do
+            sudo -v
+            sleep 300  # Refresh every 5 minutes
+        done
+    ) &
+    sudo_refresh_pid=$!
+
+    echo "Sudo credentials cached and will be refreshed every 5 minutes (PID: $sudo_refresh_pid)"
 }
 
 cache_sudo_credentials
