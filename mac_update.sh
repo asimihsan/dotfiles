@@ -70,3 +70,5 @@ fi
 
 dotnet tool update --global P
 gh extension upgrade gh-copilot
+
+brew bundle install
