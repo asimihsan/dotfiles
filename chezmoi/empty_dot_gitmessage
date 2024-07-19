@@ -1,5 +1,11 @@
-type(scope): subject
+<type>(<scope>): <subject>
 
-body
+<body>
 
-footer
+<footer>
+
+# Types: feat, fix, docs, style, refactor, perf, test, chore
+# Scope: Optional, e.g. (ui), (api)
+# Subject: Short summary in present tense, no period
+# Body: Explain what and why (not how)
+# Footer: Breaking changes, issue references
