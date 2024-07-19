@@ -43,6 +43,7 @@ external = difft
 
 [push]
 autoSetupRemote = true
+
 [oh-my-zsh]
 hide-status = 1
 
@@ -57,13 +58,16 @@ program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 
 [commit]
 gpgsign = true
+template = /Users/asimi/.gitmessage
 
 [core]
 autocrlf = false
-editor = vim
+editor = nvim
+
 [credential]
-	helper = 
-	helper = 
-	helper = /usr/local/share/gcm-core/git-credential-manager
+helper = 
+helper = 
+helper = /usr/local/share/gcm-core/git-credential-manager
 [credential "https://dev.azure.com"]
-	useHttpPath = true
+useHttpPath = true
+
