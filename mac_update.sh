@@ -18,20 +18,22 @@ set -uo pipefail
 #   # Sudo commands will now work without prompting for a password
 #
 function cache_sudo_credentials() {
-    local sudo_refresh_pid
+    local sudo_refresh_pid=""
 
     # Function to kill the sudo refresh process
     kill_sudo_refresh() {
         if [ ! -z "$sudo_refresh_pid" ]; then
             echo "Killing sudo refresh process (PID: $sudo_refresh_pid)"
-            kill $sudo_refresh_pid 2>/dev/null
+            kill "$sudo_refresh_pid" 2>/dev/null
+        else
+            echo "No sudo refresh process to kill"
         fi
     }
 
     # Set up the trap
     trap kill_sudo_refresh EXIT INT TERM
 
-    # Check if sudo authentication was successful
+    # Run sudo -v and wait for it to complete
     if ! sudo -v; then
         echo "Sudo authentication failed"
         return 1
