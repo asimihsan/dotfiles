@@ -1,0 +1,11 @@
+[sourceVCS]
+command = "git"
+
+[edit]
+command = "code" # or your preferred editor
+
+[cd]
+command = "code" # or your preferred editor
+
+[data]
+sourceDir = "~/.dotfiles/chezmoi"
