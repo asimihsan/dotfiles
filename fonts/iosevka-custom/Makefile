@@ -7,7 +7,10 @@ clean:
 	rm -rf $(MAKEFILE_DIR)/build
 
 build:
-	docker buildx build --target output --output type=local,dest=$(MAKEFILE_DIR)/build -t iosevka -f Dockerfile .
+	docker buildx build --target output -t iosevka -f Dockerfile . --progress plain
+	docker create --name temp_container iosevka /bin/sh
+	docker cp temp_container:/dist/ build/
+	docker rm temp_container
 
 shell:
 	docker run --rm -it -v $(MAKEFILE_DIR):/build iosevka /bin/bash
