@@ -17,6 +17,7 @@ shell:
 
 install:
 	rsync -av $(MAKEFILE_DIR)build/ $(HOME)/Fonts/
+	rsync -av $(MAKEFILE_DIR)build/ $(HOME)/Library/Fonts/
 
 update-version:
 	sed -i '' 's/FONT_VERSION=.*/FONT_VERSION=$(IOSEVKA_VERSION)/' Dockerfile
