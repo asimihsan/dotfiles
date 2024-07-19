@@ -6,7 +6,6 @@
 
 - create:
   - ~/.config
-  - ~/.config/atuin
 
 - link:
       ~/config: config
@@ -23,7 +22,6 @@
       ~/.zshrc: zshrc
       ~/.ssh/config: sshconfig
       ~/.config/starship.toml: starship.toml
-      ~/.config/atuin/config.toml: atuin.toml
 
 - shell:
       - devbox global update

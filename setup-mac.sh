@@ -172,6 +172,8 @@ setup_dotfiles() {
         exit 1
     fi
 
+    (cd "$HOME" && sh -c "$(curl -fsLS get.chezmoi.io)")
+
     local dotfiles_repo="${DOTFILES_REPO:-dotfiles}"
 
     if [ ! -d "$HOME/.dotfiles" ]; then
@@ -185,6 +187,11 @@ setup_dotfiles() {
 
     cd "$HOME/.dotfiles"
     git pull
+
+    # chezmoi
+    ./bin/chezmoi --source ~/.dotfiles/chezmoi apply
+
+    # dotbot
     ./install
 }
 
