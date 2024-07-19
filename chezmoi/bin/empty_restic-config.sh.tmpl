@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Configuration file for restic backup script
+
+# Rclone configuration
+DROPBOX_REMOTE="dropbox"
+
+{{ if eq .chezmoi.hostname "yov3bc" }}
+ALIAS_REMOTE="dropbox-alias-backup-yov3bc"
+DROPBOX_PATH="/Asim Ihsan/Apps/restic-backup-yov3bc-202407"
+PASSWORD_COMMAND='op read "op://Private/restic-backup-yov3bc-202407 backup password/password"'
+{{ else if eq .chezmoi.hostname "hlru5i" }}
+ALIAS_REMOTE="dropbox-alias-backup-hlru5i"
+DROPBOX_PATH="/Asim Ihsan/Apps/restic-backup-hlru5i-202407"
+PASSWORD_COMMAND='op read "op://Private/restic-backup-hlru5i-202407 backup password/password"'
+{{ end }}
+
+# Backup paths
+BACKUP_PATHS=(
+    "$HOME/Documents"
+    "$HOME/Downloads"
+    "$HOME/Music"
+    "$HOME/workplace"
+)
+
+# You can add more host-specific configurations here
+# For example:
+# if [[ "$(hostname)" == "laptop" ]]; then
+#     BACKUP_PATHS+=("$HOME/laptop-specific-folder")
+# elif [[ "$(hostname)" == "desktop" ]]; then
+#     BACKUP_PATHS+=("$HOME/desktop-specific-folder")
+# fi
