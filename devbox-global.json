@@ -35,7 +35,6 @@
     "pv@latest",
     "rclone@latest",
     "ripgrep@latest",
-    "rsync@latest",
     "rustup@latest",
     "starship@latest",
     "terraform@latest",
@@ -51,7 +50,8 @@
     "zoxide@latest",
     "zsh@latest",
     "zstd@latest",
-    "restic@latest"
+    "restic@latest",
+    "age@latest"
   ],
   "env": {
     "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",
