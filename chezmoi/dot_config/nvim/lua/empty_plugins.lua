@@ -71,5 +71,9 @@ return { -- Existing plugins
             }})
         })
     end
-}, -- Add vim-vsnip for snippet support
-{"hrsh7th/vim-vsnip"}}
+},
+-- Add vim-vsnip for snippet support
+{"hrsh7th/vim-vsnip"},
+-- Add vim-fugitive for Git integration
+{"tpope/vim-fugitive"},
+}
