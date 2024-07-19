@@ -28,24 +28,9 @@ update_dotfiles() {
         echo "Failed to fetch updates from remote"
         return 1
     fi
-    
-    if git diff-index --quiet HEAD --; then
-        # Repository is clean, proceed with rebase
-        if git pull --rebase; then
-            echo "Successfully updated dotfiles"
-            return 0
-        else
-            echo "Failed to rebase dotfiles"
-            return 1
-        fi
-    else
-        # Repository is dirty
-        echo "Warning: The dotfiles repository has uncommitted changes"
-        echo "Please commit or stash your changes before updating"
-        
-        # Optionally, we can show the status of the repo
-        git status --short
-        
+
+    if ! git pull --autostash --rebase; then
+        echo "Failed to pull updates from remote"
         return 1
     fi
 }
