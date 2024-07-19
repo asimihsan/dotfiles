@@ -36,6 +36,10 @@
         stdin: true
         stdout: true
         description: Creating /usr/local/etc
+      - command: sudo mkdir -p /var/run/chrony
+        stdin: true
+        stdout: true
+        description: Creating /var/run/chrony
       - command: sudo ln -sf "${PWD}/chrony.conf" /usr/local/etc/chrony.conf
         stdin: true
         stdout: true
