@@ -12,7 +12,6 @@
       ~/.local/share/devbox/global/default/devbox.json: devbox-global.json
       ~/.local/share/devbox/global/default/devbox.lock: devbox-global.lock
       # ~/.doom.d: doom.d
-      ~/.gitconfig: gitconfig
       ~/.hammerspoon:
           if: "[ `uname` = Darwin ]"
           path: hammerspoon
