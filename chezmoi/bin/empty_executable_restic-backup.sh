@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+eval "$(devbox global shellenv)"
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Source the configuration file
@@ -63,7 +65,7 @@ restore_snapshot() {
 # Function to forget old snapshots and prune
 forget_and_prune() {
     local cleanup_cache=""
-    if [ "$1" == "--cleanup-cache" ]; then
+    if [[ "${1-}" == "--cleanup-cache" ]]; then
         cleanup_cache="--cleanup-cache"
     fi
     echo "Forgetting old snapshots and pruning..."
@@ -73,7 +75,7 @@ forget_and_prune() {
         --keep-weekly 4 \
         --keep-monthly 1 \
         --prune \
-        $cleanup_cache
+        ${cleanup_cache}
 }
 
 # Main function
