@@ -2,16 +2,15 @@
 
 set -euo pipefail
 
-# Configuration
-DROPBOX_REMOTE="dropbox"
-ALIAS_REMOTE="dropbox-alias-backup-yov3bc"
-DROPBOX_PATH="/Asim Ihsan/Apps/restic-backup-yov3bc-202407"
-PASSWORD_COMMAND='op read "op://Private/restic-backup-yov3bc-202407 backup password/password"'
-BACKUP_PATHS=(
-    "$HOME/Downloads"
-    "$HOME/Music"
-    "$HOME/workplace"
-)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Source the configuration file
+CONFIG_FILE="${SCRIPT_DIR}/restic-config.sh"
+if [[ ! -f "$CONFIG_FILE" ]]; then
+    echo "Configuration file not found: $CONFIG_FILE"
+    exit 1
+fi
+source "$CONFIG_FILE"
 
 # Function to run restic commands
 run_restic() {
