@@ -277,10 +277,6 @@ setup_python() {
 
     brew install openssl readline sqlite3 xz zlib
 
-    export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib"
-    export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include"
-    export SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
-
     # PYTHON_CFLAGS="-march=native" \
     #     CONFIGURE_OPTS="--enable-optimizations --with-lto" \
 
