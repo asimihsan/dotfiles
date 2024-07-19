@@ -16,8 +16,8 @@ shell:
 	docker run --rm -it -v $(MAKEFILE_DIR):/build iosevka /bin/bash
 
 install:
-	rsync -av $(MAKEFILE_DIR)build/ $(HOME)/Fonts/
 	rsync -av $(MAKEFILE_DIR)build/ $(HOME)/Library/Fonts/
+	fc-cache -f -v
 
 update-version:
 	sed -i '' 's/FONT_VERSION=.*/FONT_VERSION=$(IOSEVKA_VERSION)/' Dockerfile
