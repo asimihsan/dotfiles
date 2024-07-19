@@ -629,51 +629,51 @@
         }
       }
     },
-    "dotnet-sdk@latest": {
+    "dotnet-sdk_8@latest": {
       "last_modified": "2024-07-14T11:03:58Z",
-      "resolved": "github:NixOS/nixpkgs/aa247c0c90ecf4ae7a032c54fdc21b91ca274062#dotnet-sdk",
+      "resolved": "github:NixOS/nixpkgs/aa247c0c90ecf4ae7a032c54fdc21b91ca274062#dotnet-sdk_8",
       "source": "devbox-search",
-      "version": "6.0.424",
+      "version": "8.0.303",
       "systems": {
         "aarch64-darwin": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/kqz195xsy7xpc7mkj2gqbl7fbigba8kr-dotnet-sdk-6.0.424",
+              "path": "/nix/store/3pw6kwfrwm5c6j52mqk28hw7qg51m5rf-dotnet-sdk-8.0.303",
               "default": true
             }
           ],
-          "store_path": "/nix/store/kqz195xsy7xpc7mkj2gqbl7fbigba8kr-dotnet-sdk-6.0.424"
+          "store_path": "/nix/store/3pw6kwfrwm5c6j52mqk28hw7qg51m5rf-dotnet-sdk-8.0.303"
         },
         "aarch64-linux": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/dhs0102daj25z9a0wpyv5gky0jpd6ddh-dotnet-sdk-6.0.424",
+              "path": "/nix/store/jkncigyxffmbbg5s9ifg9irhldjhs245-dotnet-sdk-8.0.303",
               "default": true
             }
           ],
-          "store_path": "/nix/store/dhs0102daj25z9a0wpyv5gky0jpd6ddh-dotnet-sdk-6.0.424"
+          "store_path": "/nix/store/jkncigyxffmbbg5s9ifg9irhldjhs245-dotnet-sdk-8.0.303"
         },
         "x86_64-darwin": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/khkipa1k8n8lra2q4lmj102njqk4k98r-dotnet-sdk-6.0.424",
+              "path": "/nix/store/54hzlkvdsj086q8661ipq6h1xf6jkvm5-dotnet-sdk-8.0.303",
               "default": true
             }
           ],
-          "store_path": "/nix/store/khkipa1k8n8lra2q4lmj102njqk4k98r-dotnet-sdk-6.0.424"
+          "store_path": "/nix/store/54hzlkvdsj086q8661ipq6h1xf6jkvm5-dotnet-sdk-8.0.303"
         },
         "x86_64-linux": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/g6i9n5wjqxhpz96w9spimp3ciigr7zx6-dotnet-sdk-6.0.424",
+              "path": "/nix/store/m9dbas0s0a0lfgha03hb85cnb3r82bf2-dotnet-sdk-8.0.303",
               "default": true
             }
           ],
-          "store_path": "/nix/store/g6i9n5wjqxhpz96w9spimp3ciigr7zx6-dotnet-sdk-6.0.424"
+          "store_path": "/nix/store/m9dbas0s0a0lfgha03hb85cnb3r82bf2-dotnet-sdk-8.0.303"
         }
       }
     },

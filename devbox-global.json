@@ -1,6 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.12.0/.schema/devbox.schema.json",
   "packages": [
+    "_1password@latest",
     "atuin@latest",
     "bash-preexec@latest",
     "bash@latest",
@@ -11,6 +12,7 @@
     "ctags@latest",
     "difftastic@latest",
     "direnv@latest",
+    "dotnet-sdk_8@latest",
     "eza@latest",
     "fd@latest",
     "fzf@latest",
@@ -23,6 +25,7 @@
     "htop@latest",
     "imagemagick@latest",
     "jq@latest",
+    "lazygit@latest",
     "libiconv@latest",
     "moreutils@latest",
     "neofetch@latest",
@@ -35,6 +38,7 @@
     "rsync@latest",
     "rustup@latest",
     "starship@latest",
+    "terraform@latest",
     "tmux@latest",
     "tmuxPlugins.better-mouse-mode@latest",
     "tmuxPlugins.resurrect@latest",
@@ -46,11 +50,7 @@
     "yq@latest",
     "zoxide@latest",
     "zsh@latest",
-    "zstd@latest",
-    "_1password@latest",
-    "terraform@latest",
-    "dotnet-sdk@latest",
-    "lazygit@latest"
+    "zstd@latest"
   ],
   "env": {
     "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",
