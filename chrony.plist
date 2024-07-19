@@ -9,7 +9,7 @@
         <string>/opt/homebrew/sbin/chronyd</string>
         <string>-n</string>
         <string>-f</string>
-        <string>/etc/chrony.conf</string>
+        <string>/usr/local/etc/chrony.conf</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
