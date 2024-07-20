@@ -538,13 +538,13 @@
         }
       },
       "jetbrains-toolbox": {
-        "version": "2.4,2.4.0.32175",
+        "version": "2.4.1,2.4.1.32573",
         "options": {
           "full_name": "jetbrains-toolbox"
         }
       },
       "jordanbaird-ice": {
-        "version": "0.10.2",
+        "version": "0.10.3",
         "options": {
           "full_name": "jordanbaird-ice"
         }
@@ -733,7 +733,7 @@
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.3.10",
+        "HOMEBREW_VERSION": "4.3.9-353-g3914d29",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.3.0.0.1.1708646388",
