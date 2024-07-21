@@ -198,62 +198,7 @@ setup_dotfiles() {
 install_homebrew_packages() {
     fancy_echo "Installing Homebrew packages ..."
 
-    brew tap borgbackup/tap
-    brew update
-    brew install --cask macfuse
-
-    packages=(n
-        borgbackup/tap/borgbackup-fuse
-        chrony
-        fontconfig
-        libyaml
-        pyenv
-        pyenv-virtualenv
-        rbenv
-    )
-
-    casks=(
-        1password
-        chronycontrol
-        docker
-        firefox
-        git-credential-manager
-        google-chrome
-        gpg-suite
-        hammerspoon
-        iterm2
-        jetbrains-toolbox
-        jordanbaird-ice
-        karabiner-elements
-        loopback
-        menumeters
-        moom
-        obsidian
-        omnigraffle
-        raycast
-        slack
-        spotify
-        todoist
-        tor-browser
-        vorta
-        zoom
-    )
-
-    for package in "${packages[@]}"; do
-        if ! brew list "$package" &>/dev/null; then
-            brew install "$package"
-        else
-            echo "$package is already installed."
-        fi
-    done
-
-    for cask in "${casks[@]}"; do
-        if ! brew list --cask "$cask" &>/dev/null; then
-            brew install --cask "$cask"
-        else
-            echo "$cask is already installed."
-        fi
-    done
+    (cd "$HOME"/.dotfiles && brew bundle install)
 }
 
 setup_node() {
@@ -293,7 +238,6 @@ setup_python() {
     pip install pipx
     pipx ensurepath
     pipx install aider-chat
-    pipx install poetry
     pipx install pre-commit
     pipx install llm
 }
@@ -368,11 +312,11 @@ main() {
     install_nix_and_devbox
     setup_devbox_global
     setup_ssh_and_github
-    install_homebrew_packages
     setup_fonts
     setup_node
     setup_python
     setup_dotfiles
+    install_homebrew_packages
     configure_mac_settings
 
     fancy_echo "Setup complete! Check the log file for details: $LOG_FILE"
