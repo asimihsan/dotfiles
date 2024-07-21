@@ -177,6 +177,7 @@ setup_dotfiles() {
     # chezmoi
     "$HOME"/bin/chezmoi --source ~/.dotfiles/chezmoi apply
 
+    devbox global install
     eval "$(devbox global shellenv --recompute)"
 
     # dotbot
@@ -213,14 +214,8 @@ setup_python() {
     # PYTHON_CFLAGS="-march=native" \
     #     CONFIGURE_OPTS="--enable-optimizations --with-lto" \
 
-    # use pyenv to check if 3.11 is installed, if not install and global it
-    if ! pyenv versions | grep -q 3.11; then
-        fancy_echo "Installing Python 3.11..."
-        pyenv install 3.11
-        pyenv global 3.11
-    else
-        fancy_echo "Python 3.11 already installed."
-    fi
+    pyenv install --skip-existing 3.11
+    pyenv global 3.11
 
     pip install --upgrade pip
     pip install pipx
