@@ -19,9 +19,9 @@ export ANDROID_NDK_HOME=$ANDROID_HOME/ndk/25.1.8937393
 export ANDROID_NDK=$ANDROID_NDK_HOME
 export NDK=$ANDROID_HOME/ndk/25.1.8937393
 
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
+# export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+# export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
+# export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
 
 export GRAALVM_HOME="/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.3.0/Contents/Home"
 export PATH="${PATH}":"${GRAALVM_HOME}"/bin
@@ -142,5 +142,6 @@ if [[ $options[zle] = on ]]; then
 fi
 # -----------------------------------------------------------------------------
 
-
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+. "$HOME/.cargo/env"
