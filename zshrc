@@ -130,7 +130,7 @@ eval "$(starship init zsh)"
 
 export _ZO_RESOLVE_SYMLINKS=1  # resolve symlinks
 eval "$(zoxide init zsh)"
-alias cd='z'
+# alias cd='z'
 
 eval "$(direnv hook zsh)"
 
