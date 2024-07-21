@@ -9,8 +9,6 @@
 
 - link:
       ~/config: config
-      ~/.local/share/devbox/global/default/devbox.json: devbox-global.json
-      ~/.local/share/devbox/global/default/devbox.lock: devbox-global.lock
       # ~/.doom.d: doom.d
       ~/.hammerspoon:
           if: "[ `uname` = Darwin ]"
@@ -19,7 +17,10 @@
       # ~/.spacemacs: spacemacs
       ~/.tmux.conf: tmux.conf
       ~/.zshrc: zshrc
-      ~/.ssh/config: sshconfig
+
+      # TODO FIXME
+      # ~/.ssh/config: sshconfig
+
       ~/.config/starship.toml: starship.toml
 
 - shell:
