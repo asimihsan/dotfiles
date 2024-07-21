@@ -19,6 +19,9 @@ run_restic() {
     restic -r "rclone:$ALIAS_REMOTE:" \
         --verbose \
         --password-command "$PASSWORD_COMMAND" \
+        --limit-download 1024 \
+        --limit-upload 1024 \
+        --option rclone.connections=10 \
         "$@"
 }
 
@@ -41,6 +44,7 @@ do_backup() {
     run_restic backup \
         --exclude-caches \
         --pack-size 64 \
+        --read-concurrency 4 \
         "${BACKUP_PATHS[@]}"
 }
 
