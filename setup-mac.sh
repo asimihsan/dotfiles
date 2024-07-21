@@ -84,12 +84,6 @@ install_nix_and_devbox() {
     fi
 }
 
-# Function to set up Devbox global
-setup_devbox_global() {
-    fancy_echo "Setting up Devbox global..."
-    eval "$(devbox global shellenv --recompute)"
-}
-
 # Function to set up SSH key and add to GitHub
 setup_ssh_and_github() {
     if [ "${SETUP_GITHUB:-false}" != "true" ]; then
@@ -185,6 +179,8 @@ setup_dotfiles() {
 
     # dotbot
     ./install
+
+    eval "$(devbox global shellenv --recompute)"
 }
 
 install_homebrew_packages() {
@@ -302,7 +298,6 @@ main() {
     install_xcode_clt
     install_homebrew
     install_nix_and_devbox
-    setup_devbox_global
     setup_dotfiles
     setup_ssh_and_github
     setup_fonts
