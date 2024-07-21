@@ -24,6 +24,10 @@ BACKUP_PATHS=(
     "$HOME/workplace"
 )
 
+{{ if eq .chezmoi.hostname "hlru5i" }}
+BACKUP_PATHS+=("$HOME/Obsidian")
+{{ end }}
+
 # You can add more host-specific configurations here
 # For example:
 # if [[ "$(hostname)" == "laptop" ]]; then
