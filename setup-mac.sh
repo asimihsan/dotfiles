@@ -181,7 +181,7 @@ setup_dotfiles() {
     git pull
 
     # chezmoi
-    ./bin/chezmoi --source ~/.dotfiles/chezmoi apply
+    "$HOME"/bin/chezmoi --source ~/.dotfiles/chezmoi apply
 
     # dotbot
     ./install
