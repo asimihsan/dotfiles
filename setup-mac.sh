@@ -87,13 +87,7 @@ install_nix_and_devbox() {
 # Function to set up Devbox global
 setup_devbox_global() {
     fancy_echo "Setting up Devbox global..."
-    devbox global add gh
     eval "$(devbox global shellenv --recompute)"
-}
-
-# Function to install Python and pipx
-install_python_and_pipx() {
-    devbox global add python311Full python311Packages.pip gh
 }
 
 # Function to set up SSH key and add to GitHub
@@ -182,8 +176,6 @@ setup_dotfiles() {
     else
         fancy_echo "Dotfiles already cloned."
     fi
-
-    rm -f "$(devbox global path)"/devbox.json
 
     cd "$HOME/.dotfiles"
     git pull
@@ -311,11 +303,11 @@ main() {
     install_homebrew
     install_nix_and_devbox
     setup_devbox_global
+    setup_dotfiles
     setup_ssh_and_github
     setup_fonts
     setup_node
     setup_python
-    setup_dotfiles
     install_homebrew_packages
     configure_mac_settings
 

@@ -82,6 +82,11 @@ forget_and_prune() {
         ${cleanup_cache}
 }
 
+unlock() {
+    echo "Unlocking repository..."
+    run_restic unlock
+}
+
 # Main function
 main() {
     case "${1:-}" in
@@ -104,8 +109,11 @@ main() {
         prune-cache)
             forget_and_prune --cleanup-cache
             ;;
+        unlock)
+            unlock
+            ;;
         *)
-            echo "Usage: $0 {setup|backup|list|restore|prune|prune-cache}"
+            echo "Usage: $0 {setup|backup|list|restore|prune|prune-cache|unlock}"
             exit 1
             ;;
     esac
