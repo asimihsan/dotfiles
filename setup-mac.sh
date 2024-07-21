@@ -295,6 +295,7 @@ setup_python() {
     pipx install aider-chat
     pipx install poetry
     pipx install pre-commit
+    pipx install llm
 }
 
 # Function to configure Mac settings
