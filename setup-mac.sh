@@ -177,10 +177,10 @@ setup_dotfiles() {
     # chezmoi
     "$HOME"/bin/chezmoi --source ~/.dotfiles/chezmoi apply
 
+    eval "$(devbox global shellenv --recompute)"
+
     # dotbot
     ./install
-
-    eval "$(devbox global shellenv --recompute)"
 }
 
 install_homebrew_packages() {
