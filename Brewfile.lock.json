@@ -632,6 +632,12 @@
         "options": {
           "full_name": "logitech-camera-settings"
         }
+      },
+      "camo-studio": {
+        "version": "2.1.5,12260",
+        "options": {
+          "full_name": "camo-studio"
+        }
       }
     },
     "vscode": {
