@@ -87,6 +87,18 @@ unlock() {
     run_restic unlock
 }
 
+mount() {
+    if [ $# -ne 1 ]; then
+        echo "Usage: $0 mount <mount-path>"
+        exit 1
+    fi
+    local mount_path="$1"
+    echo "Mounting repository at $mount_path..."
+    restic -r "rclone:$ALIAS_REMOTE:" \
+        --password-command "$PASSWORD_COMMAND" \
+        mount "$mount_path"
+}
+
 # Main function
 main() {
     case "${1:-}" in
@@ -112,8 +124,15 @@ main() {
         unlock)
             unlock
             ;;
+        mount)
+            if [ $# -ne 2 ]; then
+                echo "Usage: $0 mount <mount-path>"
+                exit 1
+            fi
+            mount "${2}"
+            ;;
         *)
-            echo "Usage: $0 {setup|backup|list|restore|prune|prune-cache|unlock}"
+            echo "Usage: $0 {setup|backup|list|restore|prune|prune-cache|unlock|mount}"
             exit 1
             ;;
     esac
