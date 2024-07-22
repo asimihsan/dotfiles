@@ -24,13 +24,13 @@ def run_command(command):
 
 
 def get_pr_description(pr_url):
-    return run_command(f'/opt/homebrew/bin/gh pr view {pr_url} --json "body,comments" -q .body')
+    return run_command(f'gh pr view {pr_url} --json "body,comments" -q .body')
 
 
 def get_pr_diff(pr_url, exclude_files=None):
     if exclude_files is None:
         exclude_files = ["poetry.lock", "pyproject.toml"]  # Default files to ignore
-    diff_text = run_command(f"/opt/homebrew/bin/gh pr diff {pr_url}")
+    diff_text = run_command(f"gh pr diff {pr_url}")
     filtered_diff = []
     diff_lines = diff_text.split("\n")
     skip = False
@@ -49,7 +49,7 @@ def get_pr_comments(pr_url: "PullRequestURL") -> str:
     # Call the GitHub CLI
     result = subprocess.run(
         [
-            "/opt/homebrew/bin/gh",
+            "gh",
             "api",
             "-H",
             "Accept: application/vnd.github+json",
@@ -97,7 +97,7 @@ def find_jira_tickets(description):
 
 
 def get_jira_details(ticket):
-    return run_command(f"/opt/homebrew/bin/jira --comments 100 issue view {ticket} --plain")
+    return run_command(f"jira --comments 100 issue view {ticket} --plain")
 
 
 def create_prompt(pr_description, pr_diff, pr_comments: str, jira_details=None):
@@ -186,7 +186,13 @@ class PullRequestURL(BaseModel):
         return cls(original_url=url, owner=owner, repo=repo, number=number)
 
 
-def main(pr_url: str):
+def main():
+    parser = argparse.ArgumentParser(description='Review Helper Script')
+    parser.add_argument('pr_url', type=str, help='The URL of the Pull Request to review')
+
+    args = parser.parse_args()
+    pr_url = args.pr_url
+
     pull_request_url = PullRequestURL.from_url(pr_url)
 
     pr_comments = get_pr_comments(pull_request_url)
@@ -196,7 +202,8 @@ def main(pr_url: str):
 
     try:
         jira_details = "\n\n".join([get_jira_details(ticket) for ticket in jira_tickets]) if jira_tickets else None
-    except:
+    except Exception as e:
+        print("Error fetching Jira details:", e)
         jira_details = None
 
     prompt = create_prompt(pr_description, pr_diff, pr_comments, jira_details)
@@ -205,10 +212,4 @@ def main(pr_url: str):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Review Helper Script')
-    parser.add_argument('pr_url', type=str, help='The URL of the Pull Request to review')
-
-    args = parser.parse_args()
-    pr_url = args.pr_url
-
-    main(pr_url=pr_url)
+    main()
