@@ -285,6 +285,28 @@ install_rosetta() {
     sudo softwareupdate --install-rosetta --agree-to-license
 }
 
+# Function to set up Rust
+setup_rust() {
+    fancy_echo "Setting up Rust..."
+
+    if ! command_exists rustc; then
+        fancy_echo "Installing Rust..."
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        source "$HOME/.cargo/env"
+    else
+        fancy_echo "Rust is already installed. Updating..."
+        rustup update
+    fi
+
+    # Install default stable toolchain
+    rustup default stable
+
+    # Install common Rust tools
+    cargo install cargo-edit cargo-watch cargo-expand cargo-outdated
+
+    fancy_echo "Rust $(rustc --version) installed with default stable toolchain."
+}
+
 # Main function
 main() {
     fancy_echo "Starting Mac setup..."
@@ -298,6 +320,7 @@ main() {
     setup_fonts
     setup_node
     setup_python
+    setup_rust
     install_homebrew_packages
     configure_mac_settings
 
