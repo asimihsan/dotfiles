@@ -16,7 +16,6 @@
       ~/setup-mac.sh: setup-mac.sh
       # ~/.spacemacs: spacemacs
       ~/.tmux.conf: tmux.conf
-      ~/.zshrc: zshrc
 
       # TODO FIXME
       # ~/.ssh/config: sshconfig
