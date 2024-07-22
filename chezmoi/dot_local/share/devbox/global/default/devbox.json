@@ -51,7 +51,9 @@
     "zstd@latest",
     "restic@latest",
     "age@latest",
-    "golangci-lint@latest"
+    "golangci-lint@latest",
+    "binutils@latest",
+    "zulu@latest"
   ],
   "env": {
     "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",
