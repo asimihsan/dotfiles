@@ -1,11 +1,43 @@
-<type>(<scope>): <subject>
+# <type>(<optional scope>): <subject>
+# |<----  Using a Maximum Of 50 Characters  ---->|
 
-<body>
+# Explain why this change is being made
+# |<----   Try To Limit Each Line to a Maximum Of 72 Characters   ---->|
 
-<footer>
-
-# Types: feat, fix, docs, style, refactor, perf, test, chore
-# Scope: Optional, e.g. (ui), (api)
-# Subject: Short summary in present tense, no period
-# Body: Explain what and why (not how)
-# Footer: Breaking changes, issue references
+# --- COMMIT END ---
+# Type can be 
+#    feat     (new feature)
+#    fix      (bug fix)
+#    refactor (refactoring production code)
+#    style    (formatting, missing semi colons, etc; no code change)
+#    docs     (changes to documentation)
+#    test     (adding or refactoring tests; no production code change)
+#    chore    (updating grunt tasks etc; no production code change)
+# --------------------
+# Remember to
+#    Capitalize the subject line
+#    Use the imperative mood in the subject line
+#    Do not end the subject line with a period
+#    Separate subject from body with a blank line
+#    Use the body to explain what and why vs. how
+#    Can use multiple lines with "-" for bullet points in body
+# --------------------
+# Scope is optional, but if used, should describe the area of the codebase affected:
+#    auth     (authentication-related changes)
+#    api      (API-related changes)
+#    ui       (user interface components)
+#    db       (database-related changes)
+#    config   (configuration files)
+# --------------------
+# For a full example:
+# 
+# feat(auth): implement JWT authentication
+# 
+# - Add JWT token generation in auth service
+# - Implement token validation middleware
+# - Update user model to include token field
+# 
+# This change provides secure authentication for our API endpoints,
+# allowing us to protect sensitive routes and improve overall system security.
+# 
+# Closes #123
