@@ -292,7 +292,7 @@ setup_rust() {
     if ! command_exists rustc; then
         fancy_echo "Installing Rust..."
         curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-        source "$HOME/.cargo/env"
+        # source "$HOME/.cargo/env"
     else
         fancy_echo "Rust is already installed. Updating..."
         rustup update
