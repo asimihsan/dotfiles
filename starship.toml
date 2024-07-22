@@ -23,6 +23,8 @@ $rust\
 $docker_context\
 [](fg:#06969A bg:#33658A)\
 [ ](fg:#33658A)\
+$line_break\
+$custom_status$character
 """
 
 right_format = """${cmd_duration}$time\
@@ -34,6 +36,7 @@ $memory_usage$battery"""
 
 # Disable the blank line at the start of the prompt
 # add_newline = false
+
 
 [os]
 disabled = false
@@ -148,10 +151,6 @@ format = '[[$time](bg:#33658A)]($style)'
 [cmd_duration]
 min_time = 100  # Show duration for commands that take 100ms or longer
 format = "took [$duration](bold yellow)"
-
-[character]
-success_symbol = "[➜](bold green)"
-error_symbol = "[✗](bold red)"
 
 # [git_status]
 # conflicted = "⚔️"
