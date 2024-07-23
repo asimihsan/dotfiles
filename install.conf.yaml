@@ -78,7 +78,6 @@
       ~/bin/pikchr: pikchr
       ~/bin/sync-to-dropbox: sync-to-dropbox
       ~/bin/tag-cache-dirs: tag-cache-dirs
-      ~/bin/zshrc-setup: zshrc-setup
 
 - shell:
       - [devbox global run -- rustup default stable]
