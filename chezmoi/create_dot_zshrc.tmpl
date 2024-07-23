@@ -36,8 +36,6 @@ export PATH="${PATH}":"${GRAALVM_HOME}"/bin
 # brew install vivid
 export LS_COLORS="$(vivid generate molokai)"
 
-# brew install exa
-
 export PATH="$HOME"/go/bin:"$PATH"
 
 autoload -U +X bashcompinit && bashcompinit
@@ -119,7 +117,7 @@ load_all_secrets() {
 
 export PATH="$HOME/flutter:$PATH"
 
-alias ll='exa -lh --git'
+alias ll='eza -lh --git'
 alias ls="gls --color"
 alias pmc='coyote test'
 alias zstd=$(brew --prefix zstd)/bin/zstd
