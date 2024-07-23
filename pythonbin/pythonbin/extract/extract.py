@@ -1,3 +1,4 @@
+import argparse
 import collections
 import os
 import sys
@@ -37,8 +38,28 @@ def extract(path: Path) -> str:
     )
 
 
-def run_main(paths: list[str], write: bool = False):
-    deque = collections.deque((Path(p) for p in paths))
+def do_extract(path: Path, write: bool = False):
+    output = extract(path)
+
+    if not write:
+        print(output)
+        return
+
+    output_dir = path.parent
+    if not output_dir.exists():
+        print(f"Error: Directory {output_dir} does not exist.")
+        sys.exit(1)
+
+    # keep original extension, add .txt on end
+    output_path = output_dir / f"{path}.txt"
+    print(f"Writing to {output_path}...")
+
+    with open(output_path, "w") as f:
+        f.write(output)
+
+
+def run_main(paths: list[Path], write: bool = False):
+    deque = collections.deque(paths)
 
     while deque:
         path = Path(deque.popleft())
@@ -60,21 +81,18 @@ def run_main(paths: list[str], write: bool = False):
         do_extract(path, write=write)
 
 
-def do_extract(path: Path, write: bool = False):
-    output = extract(path)
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="Extract text from files.")
+    parser.add_argument("paths", nargs="+", help="List of file or directory paths to process.")
+    parser.add_argument("--write", action="store_true", help="Write the output to text files.")
+    return parser.parse_args()
 
-    if not write:
-        print(output)
-        return
 
-    output_dir = path.parent
-    if not output_dir.exists():
-        print(f"Error: Directory {output_dir} does not exist.")
-        sys.exit(1)
+def main():
+    args = parse_arguments()
+    paths = [Path(p) for p in args.paths]
+    run_main(paths, write=args.write)
 
-    # keep original extension, add .txt on end
-    output_path = output_dir / f"{path}.txt"
-    print(f"Writing to {output_path}...")
 
-    with open(output_path, "w") as f:
-        f.write(output)
+if __name__ == "__main__":
+    main()
