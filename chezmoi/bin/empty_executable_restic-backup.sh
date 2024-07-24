@@ -43,6 +43,7 @@ do_backup() {
     echo "Performing backup..."
     run_restic backup \
         --exclude-caches \
+        --exclude-file "${SCRIPT_DIR}/restic-excludes" \
         --pack-size 64 \
         --read-concurrency 4 \
         "${BACKUP_PATHS[@]}"
