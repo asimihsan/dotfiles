@@ -44,7 +44,7 @@ do_backup() {
     run_restic backup \
         --exclude-caches \
         --exclude-file "${SCRIPT_DIR}/restic-excludes" \
-        --pack-size 64 \
+        --pack-size 16 \
         --read-concurrency 4 \
         "${BACKUP_PATHS[@]}"
     forget_and_prune --cleanup-cache
@@ -79,8 +79,11 @@ forget_and_prune() {
         --keep-hourly 4 \
         --keep-daily 7 \
         --keep-weekly 4 \
-        --keep-monthly 1 \
-        --prune \
+        --keep-monthly 1
+    run_restic prune \
+        --repack-small \
+        --repack-uncompressed \
+        --max-repack-size 1G \
         ${cleanup_cache}
 }
 
@@ -99,6 +102,11 @@ mount() {
     restic -r "rclone:$ALIAS_REMOTE:" \
         --password-command "$PASSWORD_COMMAND" \
         mount "$mount_path"
+}
+
+stats() {
+    echo "Getting repository stats..."
+    run_restic stats --mode blobs-per-file
 }
 
 # Main function
@@ -132,6 +140,9 @@ main() {
                 exit 1
             fi
             mount "${2}"
+            ;;
+        stats)
+            stats
             ;;
         *)
             echo "Usage: $0 {setup|backup|list|restore|prune|prune-cache|unlock|mount}"
