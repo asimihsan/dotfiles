@@ -524,6 +524,50 @@
             }
           }
         }
+      },
+      "ruby-build": {
+        "version": "20240722",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_sonoma": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/ruby-build/blobs/sha256:364cb83f4e14a82d27f8acef907c7409c6e25c40d13fc5ac753e2279d4e7ea6b",
+              "sha256": "364cb83f4e14a82d27f8acef907c7409c6e25c40d13fc5ac753e2279d4e7ea6b"
+            },
+            "arm64_ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/ruby-build/blobs/sha256:364cb83f4e14a82d27f8acef907c7409c6e25c40d13fc5ac753e2279d4e7ea6b",
+              "sha256": "364cb83f4e14a82d27f8acef907c7409c6e25c40d13fc5ac753e2279d4e7ea6b"
+            },
+            "arm64_monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/ruby-build/blobs/sha256:364cb83f4e14a82d27f8acef907c7409c6e25c40d13fc5ac753e2279d4e7ea6b",
+              "sha256": "364cb83f4e14a82d27f8acef907c7409c6e25c40d13fc5ac753e2279d4e7ea6b"
+            },
+            "sonoma": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/ruby-build/blobs/sha256:364cb83f4e14a82d27f8acef907c7409c6e25c40d13fc5ac753e2279d4e7ea6b",
+              "sha256": "364cb83f4e14a82d27f8acef907c7409c6e25c40d13fc5ac753e2279d4e7ea6b"
+            },
+            "ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/ruby-build/blobs/sha256:364cb83f4e14a82d27f8acef907c7409c6e25c40d13fc5ac753e2279d4e7ea6b",
+              "sha256": "364cb83f4e14a82d27f8acef907c7409c6e25c40d13fc5ac753e2279d4e7ea6b"
+            },
+            "monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/ruby-build/blobs/sha256:364cb83f4e14a82d27f8acef907c7409c6e25c40d13fc5ac753e2279d4e7ea6b",
+              "sha256": "364cb83f4e14a82d27f8acef907c7409c6e25c40d13fc5ac753e2279d4e7ea6b"
+            },
+            "x86_64_linux": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/ruby-build/blobs/sha256:fa85503fe8e6bf917d7163337ff88b15e283d0c461337c6b4ed43b3188dad87d",
+              "sha256": "fa85503fe8e6bf917d7163337ff88b15e283d0c461337c6b4ed43b3188dad87d"
+            }
+          }
+        }
       }
     },
     "cask": {
@@ -558,7 +602,7 @@
         }
       },
       "google-chrome": {
-        "version": "126.0.6478.183",
+        "version": "127.0.6533.73",
         "options": {
           "full_name": "google-chrome"
         }

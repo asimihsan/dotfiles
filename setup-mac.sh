@@ -41,8 +41,8 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-# Function to install Xcode Command Line Tools
-install_xcode_clt() {
+# Function to install Xcode and Xcode Command Line Tools
+install_xcode() {
     fancy_echo "Checking for Xcode Command Line Tools..."
     if ! xcode-select -p &>/dev/null; then
         fancy_echo "Installing Xcode Command Line Tools..."
@@ -51,6 +51,9 @@ install_xcode_clt() {
             sleep 5
         done
         fancy_echo "Xcode Command Line Tools installed successfully."
+
+        sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
+        sudo xcodebuild -runFirstLaunch
     else
         fancy_echo "Xcode Command Line Tools already installed."
     fi
@@ -302,9 +305,24 @@ setup_rust() {
     rustup default stable
 
     # Install common Rust tools
-    cargo install cargo-edit cargo-watch cargo-expand cargo-outdated
+    cargo install cargo-edit cargo-watch cargo-expand cargo-outdated cargo-prefetch
 
     fancy_echo "Rust $(rustc --version) installed with default stable toolchain."
+}
+
+setup_ruby() {
+    fancy_echo "Setting up Ruby..."
+
+    brew install rbenv
+    brew install ruby-build
+
+    eval "$(rbenv init - zsh)"
+
+    rbenv install 3.3.4
+    rbenv global 3.3.4
+
+    gem install bundler cocoapods
+    rbenv rehash
 }
 
 # Main function
@@ -312,8 +330,9 @@ main() {
     fancy_echo "Starting Mac setup..."
 
     install_rosetta
-    install_xcode_clt
+    install_xcode
     install_homebrew
+    install_homebrew_packages
     install_nix_and_devbox
     setup_dotfiles
     setup_ssh_and_github
@@ -321,7 +340,7 @@ main() {
     setup_node
     setup_python
     setup_rust
-    install_homebrew_packages
+    setup_ruby
     configure_mac_settings
 
     fancy_echo "Setup complete! Check the log file for details: $LOG_FILE"
