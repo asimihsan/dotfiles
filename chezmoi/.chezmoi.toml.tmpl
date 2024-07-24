@@ -4,10 +4,15 @@ sourceDir = {{ .chezmoi.config.sourceDir | quote }}
 command = "git"
 
 [edit]
-command = "code" # or your preferred editor
+command = "code"
+args = ["--wait"]
 
-[cd]
-command = "code" # or your preferred editor
+[diff]
+command = "meld"
+args = ["--diff", "{{ "{{" }} .Destination {{ "}}" }}", "{{ "{{" }} .Target {{ "}}" }}"]
+
+[merge]
+command = "meld"
 
 [data]
 sourceDir = "~/.dotfiles/chezmoi"
