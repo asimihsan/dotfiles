@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+meld "$1" "$2" --diff-file="$(difft "$1" "$2")"
