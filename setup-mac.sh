@@ -305,7 +305,7 @@ setup_rust() {
     rustup default stable
 
     # Install common Rust tools
-    cargo install cargo-edit cargo-watch cargo-expand cargo-outdated cargo-prefetch
+    cargo install cargo-edit cargo-watch cargo-expand cargo-outdated
 
     fancy_echo "Rust $(rustc --version) installed with default stable toolchain."
 }
@@ -313,8 +313,9 @@ setup_rust() {
 setup_ruby() {
     fancy_echo "Setting up Ruby..."
 
-    brew install rbenv
-    brew install ruby-build
+    # this is already done by install_homebrew_packages
+    # brew install rbenv
+    # brew install ruby-build
 
     eval "$(rbenv init - zsh)"
 
