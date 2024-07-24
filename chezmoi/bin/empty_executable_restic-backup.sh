@@ -47,6 +47,7 @@ do_backup() {
         --pack-size 64 \
         --read-concurrency 4 \
         "${BACKUP_PATHS[@]}"
+    forget_and_prune --cleanup-cache
 }
 
 # Function to list snapshots
