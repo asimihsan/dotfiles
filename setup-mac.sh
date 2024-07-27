@@ -305,7 +305,7 @@ setup_rust() {
     rustup default stable
 
     # Install common Rust tools
-    cargo install cargo-edit cargo-watch cargo-expand cargo-outdated
+    # cargo install cargo-edit cargo-watch cargo-expand cargo-outdated
 
     fancy_echo "Rust $(rustc --version) installed with default stable toolchain."
 }
