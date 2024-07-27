@@ -319,6 +319,7 @@ setup_ruby() {
 
     eval "$(rbenv init - zsh)"
 
+    export LIBRARY_PATH=""
     rbenv install 3.3.4
     rbenv global 3.3.4
 
