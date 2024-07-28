@@ -415,7 +415,7 @@ main() {
     stats)
         cmd_stats "$@"
         ;;
-    help)
+    help|--help|-h)
         if [[ $# -eq 0 ]]; then
             usage
         else
