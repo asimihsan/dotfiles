@@ -1,6 +1,10 @@
 [user]
 name = Asim Ihsan
+{{ if eq .chezmoi.hostname "yov3bc" -}}
+email = asim.ihsan@level.co
+{{ else }}
 email = ssh@sshemail.ihsan.io
+{{ end -}}
 
 [alias]
 co = checkout
@@ -48,7 +52,11 @@ autoSetupRemote = true
 hide-status = 1
 
 [user]
+{{ if eq .chezmoi.hostname "yov3bc" -}}
+signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOdZS3iTbk1bmMq1Oq9kFySUPbfa5bM41dAhH+og89or
+{{ else }}
 signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+6ch0i+pdf+48pQ/S180rtxe9yELTC9w/GYBZoRl89
+{{ end }}
 
 [gpg]
 format = ssh
