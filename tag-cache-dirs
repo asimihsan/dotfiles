@@ -137,6 +137,8 @@ def main(dry_run: bool = False, root_dir: Path | None = None) -> None:
         ProjectDirConfig(".eggs"),
         ProjectDirConfig(".cache"),
         ProjectDirConfig(".hypothesis"),
+        ProjectDirConfig("pyvenv.cfg"),
+        ProjectDirConfig(".venv"),
 
         # JavaScript
         ProjectDirConfig("node_modules"),
