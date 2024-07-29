@@ -8,7 +8,10 @@
         "revision": "f559d3eb556dceaf4611bc0b1cc2f233ce3b24ea"
       },
       "homebrew/services": {
-        "revision": "2f4a3fabf6f272133c464d46c6299036e9f32dad"
+        "revision": "264ec95aa71c42536a0d931c183c5e59bde931f0"
+      },
+      "terrastruct/tap": {
+        "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
       }
     },
     "brew": {
@@ -568,6 +571,56 @@
             }
           }
         }
+      },
+      "d2": {
+        "version": "0.6.5",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_sonoma": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/d2/blobs/sha256:badae3b8b62d0c18e663bb183d49fd47a599a965fc37cd148f81e9be77150310",
+              "sha256": "badae3b8b62d0c18e663bb183d49fd47a599a965fc37cd148f81e9be77150310"
+            },
+            "arm64_ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/d2/blobs/sha256:0245ce18c9bab9f9de4bdfff5aa87a997f6530f612d6b780e5aebc9816640c78",
+              "sha256": "0245ce18c9bab9f9de4bdfff5aa87a997f6530f612d6b780e5aebc9816640c78"
+            },
+            "arm64_monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/d2/blobs/sha256:e1ca7044d94e84f2558dc96dec20916c6968a4344d47ffea0767fd765bcc3a55",
+              "sha256": "e1ca7044d94e84f2558dc96dec20916c6968a4344d47ffea0767fd765bcc3a55"
+            },
+            "sonoma": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/d2/blobs/sha256:daffa2f0d1ba1460fe11028b6099dca4dea0a5c1613ce09da448a70ed28255dc",
+              "sha256": "daffa2f0d1ba1460fe11028b6099dca4dea0a5c1613ce09da448a70ed28255dc"
+            },
+            "ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/d2/blobs/sha256:53a4719c990267cdfee1a7af1be19f506f122459cc4fc2b3ee392890c539276a",
+              "sha256": "53a4719c990267cdfee1a7af1be19f506f122459cc4fc2b3ee392890c539276a"
+            },
+            "monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/d2/blobs/sha256:0fb24aef8ab7aec24363141fe01fd16875a84638078cf3cbb11903e4624e4a48",
+              "sha256": "0fb24aef8ab7aec24363141fe01fd16875a84638078cf3cbb11903e4624e4a48"
+            },
+            "x86_64_linux": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/d2/blobs/sha256:8222035b37bcc11ed13382fbd60f162a59baaedb265a0c86e285214aff332f1c",
+              "sha256": "8222035b37bcc11ed13382fbd60f162a59baaedb265a0c86e285214aff332f1c"
+            }
+          }
+        }
+      },
+      "terratruct/tap/tala": {
+      },
+      "terrastruct/tap/tala": {
+        "version": "0.4.0",
+        "bottle": false
       }
     },
     "cask": {
@@ -845,7 +898,7 @@
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.3.9-471-gdf6b06c",
+        "HOMEBREW_VERSION": "4.3.9-477-g3b9bec8",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.3.0.0.1.1708646388",
