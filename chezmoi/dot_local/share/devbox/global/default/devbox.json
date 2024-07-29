@@ -57,7 +57,8 @@
     "meld@latest",
     "gcc@latest",
     "ruby@latest",
-    "cocoapods@latest"
+    "cocoapods@latest",
+    "just@latest"
   ],
   "env": {
     "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",
