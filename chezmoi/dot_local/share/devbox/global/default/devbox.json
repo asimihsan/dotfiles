@@ -28,7 +28,6 @@
     "moreutils@latest",
     "neofetch@latest",
     "neovim@latest",
-    "openssl@latest",
     "pv@latest",
     "rclone@latest",
     "ripgrep@latest",
@@ -58,7 +57,10 @@
     "gcc@latest",
     "ruby@latest",
     "cocoapods@latest",
-    "just@latest"
+    "just@latest",
+    "aws-vault@latest",
+    "awscli2@latest",
+    "redis@latest"
   ],
   "env": {
     "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",
