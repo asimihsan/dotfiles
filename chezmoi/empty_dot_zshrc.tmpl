@@ -1,8 +1,3 @@
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-
 # add devbox bits to zsh
 fpath+=($DEVBOX_GLOBAL_PREFIX/share/zsh/site-functions $DEVBOX_GLOBAL_PREFIX/share/zsh/$ZSH_VERSION/functions $DEVBOX_GLOBAL_PREFIX/share/zsh/vendor-completions)
 autoload -U compinit && compinit
@@ -11,6 +6,11 @@ eval "$(devbox global shellenv)"
 export PATH="$HOME/.bin:$HOME/bin:$PATH"
 export PATH="/usr/local/bin:$HOME/bin:$PATH"
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
 
 export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
@@ -95,6 +95,12 @@ load_secret() {
 
 # Define a function to load all secrets
 load_all_secrets() {
+    load_secret "Private/D2 API token/credential" "TSTRUCT_TOKEN"
+    load_secret "Private/LocalStack Auth Token/password" "LOCALSTACK_AUTH_TOKEN"
+    load_secret "Private/OpenAPI API key work/password" "OPENAI_API_KEY"
+    load_secret "Private/Anthropic API key/credential" "ANTHROPIC_API_KEY"
+
+{{ if eq .chezmoi.hostname "yov3bc" }}
     load_secret "Private/SumoLogic Level/Access ID" "SUMOLOGIC_ACCESS_ID"
     load_secret "Private/SumoLogic Level/Access Key" "SUMOLOGIC_ACCESS_KEY"
     load_secret "pvsttlycpwhbo6vjsedtjbgyc4/mdu_pypi_readonly/username" "POETRY_HTTP_BASIC_DEFAULT_USERNAME"
@@ -102,15 +108,16 @@ load_all_secrets() {
     load_secret "Private/Level Jira API token/password" "JIRA_API_TOKEN"
     load_secret "Private/Level Jira API token/server" "JIRA_API_SERVER"
     load_secret "Private/Level Jira API token/email" "JIRA_API_EMAIL"
-    load_secret "Private/LocalStack Auth Token/password" "LOCALSTACK_AUTH_TOKEN"
-    load_secret "Private/OpenAPI API key work/password" "OPENAI_API_KEY"
     load_secret "Private/Notion API key for Level workspace/credential" "NOTION_KEY"
-    load_secret "Private/Anthropic API key/credential" "ANTHROPIC_API_KEY"
+{{ end }}
+
+{{ if eq .chezmoi.hostname "yov3bc" }}
     load_secret "Private/Huggingface Token/credential" "HUGGINGFACE_TOKEN"
     load_secret "Private/hlru5i AppStore API key 2/private key" "APPLE_APP_STORE_CONNECT_PRIVATE_KEY"
     load_secret "Private/hlru5i AppStore API key 2/issuer id" "APPLE_APP_STORE_CONNECT_ISSUER_ID"
     load_secret "Private/hlru5i AppStore API key 2/key ID" "APPLE_APP_STORE_CONNECT_KEY_ID"
-    load_secret "Private/D2 API token/credential" "TSTRUCT_TOKEN"
+{{ end }}
+
     echo "All secrets have been loaded."
 }
 
