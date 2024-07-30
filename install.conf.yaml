@@ -23,9 +23,6 @@
       ~/.config/starship.toml: starship.toml
 
 - shell:
-      - devbox global update
-
-- shell:
       - command: sudo -v
         stdin: true
         description: Caching sudo credentials
@@ -80,6 +77,7 @@
       ~/bin/tag-cache-dirs: tag-cache-dirs
 
 - shell:
+      - devbox global update
       - [devbox global run -- rustup default stable]
       - [devbox global run -- rustup component add clippy rustfmt]
       - [
