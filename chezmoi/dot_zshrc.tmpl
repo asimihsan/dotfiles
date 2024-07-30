@@ -99,8 +99,9 @@ load_all_secrets() {
     load_secret "Private/LocalStack Auth Token/password" "LOCALSTACK_AUTH_TOKEN"
     load_secret "Private/OpenAPI API key work/password" "OPENAI_API_KEY"
     load_secret "Private/Anthropic API key/credential" "ANTHROPIC_API_KEY"
+    load_secret "Private/Bing search API key/password" "BING_SEARCH_API_KEY"
 
-
+{{ if eq .chezmoi.hostname "yov3bc" }}
     load_secret "Private/SumoLogic Level/Access ID" "SUMOLOGIC_ACCESS_ID"
     load_secret "Private/SumoLogic Level/Access Key" "SUMOLOGIC_ACCESS_KEY"
     load_secret "pvsttlycpwhbo6vjsedtjbgyc4/mdu_pypi_readonly/username" "POETRY_HTTP_BASIC_DEFAULT_USERNAME"
@@ -109,14 +110,14 @@ load_all_secrets() {
     load_secret "Private/Level Jira API token/server" "JIRA_API_SERVER"
     load_secret "Private/Level Jira API token/email" "JIRA_API_EMAIL"
     load_secret "Private/Notion API key for Level workspace/credential" "NOTION_KEY"
+{{ end }}
 
-
-
+{{ if eq .chezmoi.hostname "hlru5i" }}
     load_secret "Private/Huggingface Token/credential" "HUGGINGFACE_TOKEN"
     load_secret "Private/hlru5i AppStore API key 2/private key" "APPLE_APP_STORE_CONNECT_PRIVATE_KEY"
     load_secret "Private/hlru5i AppStore API key 2/issuer id" "APPLE_APP_STORE_CONNECT_ISSUER_ID"
     load_secret "Private/hlru5i AppStore API key 2/key ID" "APPLE_APP_STORE_CONNECT_KEY_ID"
-
+{{ end }}
 
     echo "All secrets have been loaded."
 }
