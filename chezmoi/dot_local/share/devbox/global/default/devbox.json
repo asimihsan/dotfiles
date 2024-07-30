@@ -60,7 +60,8 @@
     "just@latest",
     "aws-vault@latest",
     "awscli2@latest",
-    "redis@latest"
+    "redis@latest",
+    "sqlc@latest"
   ],
   "env": {
     "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",
