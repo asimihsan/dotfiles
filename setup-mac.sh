@@ -341,8 +341,18 @@ setup_ruby() {
 
     eval "$(rbenv init - zsh)"
 
-    export LIBRARY_PATH=""
-    rbenv install 3.3.4
+    (
+        # Remove paths containing .devbox and set the new PATH
+        NEW_PATH=$(echo "$PATH" | tr ':' '\n' | grep -v '\.devbox' | tr '\n' ':' | sed 's/:$//')
+        export PATH="$NEW_PATH"
+        export LIBRARY_PATH=""
+        
+        # Execute the desired command
+        rbenv install 3.3.4
+        
+        # The PATH will automatically revert when the subshell exits
+    )
+
     rbenv global 3.3.4
 
     gem install bundler cocoapods
