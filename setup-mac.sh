@@ -224,11 +224,22 @@ setup_python() {
     # PYTHON_CFLAGS="-march=native" \
     #     CONFIGURE_OPTS="--enable-optimizations --with-lto" \
 
-    pyenv install --skip-existing 3.11.9
+    (
+        # Remove paths containing .devbox and set the new PATH
+        NEW_PATH=$(echo "$PATH" | tr ':' '\n' | grep -v '\.devbox' | tr '\n' ':' | sed 's/:$//')
+        export PATH="$NEW_PATH"
+        
+        # Execute the desired command
+        pyenv install --skip-existing 3.11.9
+        
+        # The PATH will automatically revert when the subshell exits
+    )
+
     pyenv global 3.11.9
 
     export PYENV_ROOT="$HOME/.pyenv"
-    [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init --path)"
     eval "$(pyenv init -)"
 
     pip install --upgrade pip
