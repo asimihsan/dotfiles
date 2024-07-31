@@ -57,6 +57,8 @@ install_xcode() {
     else
         fancy_echo "Xcode Command Line Tools already installed."
     fi
+
+    sudo softwareupdate --download --all --agree-to-license
 }
 
 # Function to install Homebrew
@@ -191,6 +193,9 @@ install_homebrew_packages() {
     fancy_echo "Installing Homebrew packages ..."
 
     (cd "$HOME"/.dotfiles && brew bundle install)
+
+    brew update
+    brew upgrade
 }
 
 setup_node() {
@@ -219,8 +224,8 @@ setup_python() {
     # PYTHON_CFLAGS="-march=native" \
     #     CONFIGURE_OPTS="--enable-optimizations --with-lto" \
 
-    pyenv install --skip-existing 3.11
-    pyenv global 3.11
+    pyenv install --skip-existing 3.11.9
+    pyenv global 3.11.9
 
     export PYENV_ROOT="$HOME/.pyenv"
     [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
