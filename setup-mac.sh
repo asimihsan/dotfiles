@@ -216,12 +216,15 @@ setup_python() {
     export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib"
     export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include"
 
-
     # PYTHON_CFLAGS="-march=native" \
     #     CONFIGURE_OPTS="--enable-optimizations --with-lto" \
 
     pyenv install --skip-existing 3.11
     pyenv global 3.11
+
+    export PYENV_ROOT="$HOME/.pyenv"
+    [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
 
     pip install --upgrade pip
     pip install pipx
