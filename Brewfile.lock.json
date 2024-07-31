@@ -5,10 +5,10 @@
         "revision": "85046aea0dd974a7e1c33a9d08cac7c61918630b"
       },
       "homebrew/bundle": {
-        "revision": "f559d3eb556dceaf4611bc0b1cc2f233ce3b24ea"
+        "revision": "260b3b482f39f92ccb4de1acecbb5bf081108d7c"
       },
       "homebrew/services": {
-        "revision": "264ec95aa71c42536a0d931c183c5e59bde931f0"
+        "revision": "e402a056397e1daf9d25d7be684b555fecd6236a"
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
@@ -791,7 +791,7 @@
         }
       },
       "google-chrome": {
-        "version": "127.0.6533.73",
+        "version": "127.0.6533.89",
         "options": {
           "full_name": "google-chrome"
         }
@@ -887,7 +887,7 @@
         }
       },
       "slack": {
-        "version": "4.39.90",
+        "version": "4.39.95",
         "options": {
           "full_name": "slack"
         }
@@ -911,7 +911,7 @@
         }
       },
       "zoom": {
-        "version": "6.1.5.37534",
+        "version": "6.1.6.37851",
         "options": {
           "full_name": "zoom"
         }
@@ -1028,7 +1028,7 @@
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.3.11-10-g1b0fdae",
+        "HOMEBREW_VERSION": "4.3.12-23-gca22e9c",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.3.0.0.1.1708646388",
