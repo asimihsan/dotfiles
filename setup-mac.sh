@@ -218,13 +218,14 @@ setup_python() {
     fancy_echo "Setting up Python..."
 
     brew install openssl readline sqlite3 xz zlib
-    export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib"
-    export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include"
 
     # PYTHON_CFLAGS="-march=native" \
     #     CONFIGURE_OPTS="--enable-optimizations --with-lto" \
 
     (
+        export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib"
+        export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include"
+
         # Remove paths containing .devbox and set the new PATH
         NEW_PATH=$(echo "$PATH" | tr ':' '\n' | grep -v '\.devbox' | tr '\n' ':' | sed 's/:$//')
         export PATH="$NEW_PATH"
