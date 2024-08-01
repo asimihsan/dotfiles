@@ -19,7 +19,6 @@
     "git@latest",
     "glab@latest",
     "gnumake@latest",
-    "go@latest",
     "htop@latest",
     "imagemagick@latest",
     "jq@latest",
@@ -61,7 +60,8 @@
     "aws-vault@latest",
     "awscli2@latest",
     "redis@latest",
-    "sqlc@latest"
+    "sqlc@latest",
+    "k9s@latest"
   ],
   "env": {
     "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",
