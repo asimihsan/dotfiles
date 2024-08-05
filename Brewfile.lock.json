@@ -1009,6 +1009,12 @@
         "options": {
           "full_name": "openlens"
         }
+      },
+      "screenflick": {
+        "version": "3.2.6",
+        "options": {
+          "full_name": "screenflick"
+        }
       }
     },
     "vscode": {
