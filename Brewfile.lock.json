@@ -5,10 +5,10 @@
         "revision": "85046aea0dd974a7e1c33a9d08cac7c61918630b"
       },
       "homebrew/bundle": {
-        "revision": "e97d33cc31c64fdd0c7412c182668783a2d706d6"
+        "revision": "c16d5c9c553be18b9c0d3832d7f46881ff23d941"
       },
       "homebrew/services": {
-        "revision": "e402a056397e1daf9d25d7be684b555fecd6236a"
+        "revision": "ee2e62a109706e431a4220e26cd0d5eb16ead74a"
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
@@ -843,7 +843,7 @@
     },
     "cask": {
       "1password": {
-        "version": "8.10.36",
+        "version": "8.10.38",
         "options": {
           "full_name": "1password"
         }
@@ -867,7 +867,7 @@
         }
       },
       "firefox": {
-        "version": "128.0.3",
+        "version": "129.0",
         "options": {
           "full_name": "firefox"
         }
@@ -891,7 +891,7 @@
         }
       },
       "hammerspoon": {
-        "version": "0.9.100",
+        "version": "1.0.0",
         "options": {
           "full_name": "hammerspoon"
         }
@@ -933,7 +933,7 @@
         }
       },
       "loopback": {
-        "version": "2.4.2",
+        "version": "2.4.3",
         "options": {
           "full_name": "loopback"
         }
@@ -1122,7 +1122,7 @@
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.3.13-6-g87fec6c",
+        "HOMEBREW_VERSION": "4.3.13",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.3.0.0.1.1708646388",
