@@ -177,7 +177,7 @@ setup_dotfiles() {
     fi
 
     cd "$HOME/.dotfiles"
-    git pull
+    git town sync
 
     # chezmoi
     "$HOME"/bin/chezmoi --source ~/.dotfiles/chezmoi apply
