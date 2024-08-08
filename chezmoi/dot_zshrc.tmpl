@@ -28,8 +28,9 @@ export NDK=$ANDROID_HOME/ndk/25.1.8937393
 # export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
 # export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
 
-export GRAALVM_HOME="/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.3.0/Contents/Home"
-export PATH="${PATH}":"${GRAALVM_HOME}"/bin
+export JAVA_HOME=$($HOME/bin/set-java-home.sh)
+# export GRAALVM_HOME="/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.3.0/Contents/Home"
+# export PATH="${PATH}":"${GRAALVM_HOME}"/bin
 # export PATH=$HOME/.emacs.d/bin:"$PATH"
 
 # brew install coreutils
@@ -59,7 +60,6 @@ export PATH=$PATH:$(go env GOPATH)/bin
 
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 export NDK_HOME=$HOME/Library/Android/sdk/ndk/25.1.8937393
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-17.jdk/Contents/Home
 export PATH=$HOME/flutter/bin:$PATH
 export PATH=$PATH:/Users/asimi/.local/bin:/Users/asimi/bin
 
