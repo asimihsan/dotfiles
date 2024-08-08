@@ -24,13 +24,8 @@ update_dotfiles() {
     
     echo "Updating dotfiles repository..."
     
-    if ! git fetch; then
-        echo "Failed to fetch updates from remote"
-        return 1
-    fi
-
-    if ! git pull --autostash --rebase; then
-        echo "Failed to pull updates from remote"
+    if ! git town sync; then
+        echo "Failed to git town sync"
         return 1
     fi
 }
