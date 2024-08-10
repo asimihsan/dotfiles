@@ -8,7 +8,7 @@
         "revision": "c16d5c9c553be18b9c0d3832d7f46881ff23d941"
       },
       "homebrew/services": {
-        "revision": "ee2e62a109706e431a4220e26cd0d5eb16ead74a"
+        "revision": "24f45a2a9abe1d425a56508caa9be89c853ca999"
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
@@ -843,7 +843,7 @@
     },
     "cask": {
       "1password": {
-        "version": "8.10.38",
+        "version": "8.10.39",
         "options": {
           "full_name": "1password"
         }
@@ -915,7 +915,7 @@
         }
       },
       "karabiner-elements": {
-        "version": "14.13.0",
+        "version": "15.0.0",
         "options": {
           "full_name": "karabiner-elements"
         }
@@ -1122,12 +1122,12 @@
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.3.14-3-geaa5204",
+        "HOMEBREW_VERSION": "4.3.14-25-g102dec8",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.3.0.0.1.1708646388",
         "Xcode": "15.4",
-        "macOS": "14.6"
+        "macOS": "14.6.1"
       }
     }
   }
