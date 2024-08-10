@@ -108,7 +108,7 @@ def touch_cachedir_tag(directory: Path, dry_run: bool = False) -> None:
     tag_path.write_text("Signature: 8a477f597d28d172789f06886806bc55")
 
 
-def main(dry_run: bool = False, root_dir: Path | None = None) -> None:
+def main(dry_run: bool = False, root_dirs: list[Path] | None = None) -> None:
     fixed_dirs = [
         ".cargo",
         ".rustup",
@@ -163,17 +163,24 @@ def main(dry_run: bool = False, root_dir: Path | None = None) -> None:
         # Java Gradle
         ProjectDirConfig(".gradle"),
     ]
-    project_finder = ProjectDirFinder(project_configs, root_dir=root_dir)
 
-    # Find and tag fixed directories
-    for directory in fixed_finder.find_directories():
-        touch_cachedir_tag(directory, dry_run)
+    if root_dirs is None:
+        root_dirs = []
+    for root_dir in root_dirs:
+        if not root_dir.exists():
+            print(f"Root directory {root_dir} does not exist")
+            return
+        project_finder = ProjectDirFinder(project_configs, root_dir=root_dir)
 
-    # Find and tag project directories
-    found_project_dirs = project_finder.find_directories()
-    for config, directories in found_project_dirs.items():
-        for directory in directories:
+        # Find and tag fixed directories
+        for directory in fixed_finder.find_directories():
             touch_cachedir_tag(directory, dry_run)
+
+        # Find and tag project directories
+        found_project_dirs = project_finder.find_directories()
+        for config, directories in found_project_dirs.items():
+            for directory in directories:
+                touch_cachedir_tag(directory, dry_run)
 
 
 if __name__ == "__main__":
@@ -185,11 +192,18 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--root-dir",
-        type=Path,
-        help="Root directory to search for project directories",
+        dest="root_dirs",
+        action="append",
+        help="Root directory to search for project directories. Can be specified multiple times",
+        nargs="+",
     )
 
     args = parser.parse_args()
     if args.dry_run:
         print("Dry run, won't actually touch any CACHEDIR.TAG files")
-    main(args.dry_run, args.root_dir)
+
+    # flatten root_dirs
+    if args.root_dirs:
+        args.root_dirs = [Path(item) for sublist in args.root_dirs for item in sublist]
+    
+    main(args.dry_run, args.root_dirs)

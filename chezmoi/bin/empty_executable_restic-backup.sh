@@ -6,6 +6,9 @@ eval "$(devbox global shellenv)"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+ORIGINAL_ALIAS_REMOTE="${ALIAS_REMOTE:-}"
+ORIGINAL_PASSWORD_COMMAND="${PASSWORD_COMMAND:-}"
+
 # Source the configuration file
 CONFIG_FILE="${SCRIPT_DIR}/restic-config.sh"
 if [[ ! -f "$CONFIG_FILE" ]]; then
@@ -13,6 +16,16 @@ if [[ ! -f "$CONFIG_FILE" ]]; then
     exit 1
 fi
 source "$CONFIG_FILE"
+
+# If ORIGINAL_ALIAS_REMOTE is set then restore it
+if [[ -n "$ORIGINAL_ALIAS_REMOTE" ]]; then
+    ALIAS_REMOTE="$ORIGINAL_ALIAS_REMOTE"
+fi
+
+# If ORIGINAL_PASSWORD_COMMAND is set then restore it
+if [[ -n "$ORIGINAL_PASSWORD_COMMAND" ]]; then
+    PASSWORD_COMMAND="$ORIGINAL_PASSWORD_COMMAND"
+fi
 
 error() {
     echo "Error: $1" >&2
