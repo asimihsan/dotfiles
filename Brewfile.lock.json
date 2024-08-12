@@ -8,7 +8,7 @@
         "revision": "c16d5c9c553be18b9c0d3832d7f46881ff23d941"
       },
       "homebrew/services": {
-        "revision": "24f45a2a9abe1d425a56508caa9be89c853ca999"
+        "revision": "52d1e5f4b318e878ae0872eaeefeb27c0fac30a8"
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
@@ -897,7 +897,7 @@
         }
       },
       "iterm2": {
-        "version": "3.5.3",
+        "version": "3.5.4",
         "options": {
           "full_name": "iterm2"
         }
@@ -1122,7 +1122,7 @@
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.3.14-25-g102dec8",
+        "HOMEBREW_VERSION": "4.3.15",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.3.0.0.1.1708646388",
