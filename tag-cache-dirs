@@ -162,6 +162,9 @@ def main(dry_run: bool = False, root_dirs: list[Path] | None = None) -> None:
 
         # Java Gradle
         ProjectDirConfig(".gradle"),
+
+        # Devbox
+        ProjectDirConfig(".devbox"),
     ]
 
     if root_dirs is None:
