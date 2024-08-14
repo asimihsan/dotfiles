@@ -60,7 +60,6 @@
     "aws-vault@latest",
     "awscli2@latest",
     "redis@latest",
-    "sqlc@latest",
     "k9s@latest"
   ],
   "env": {
