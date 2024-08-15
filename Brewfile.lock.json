@@ -12,6 +12,9 @@
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
+      },
+      "isen-ng/dotnet-sdk-versions": {
+        "revision": "a79db3b9b812305a6c28c08de2274cc4c03fcc7d"
       }
     },
     "brew": {
@@ -1020,6 +1023,18 @@
         "version": "42.2",
         "options": {
           "full_name": "flux"
+        }
+      },
+      "cmake": {
+        "version": "3.30.2",
+        "options": {
+          "full_name": "cmake"
+        }
+      },
+      "dotnet-sdk8-0-200": {
+        "version": "8.0.204,8.0.4",
+        "options": {
+          "full_name": "dotnet-sdk8-0-200"
         }
       }
     },
