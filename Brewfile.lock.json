@@ -5,7 +5,7 @@
         "revision": "85046aea0dd974a7e1c33a9d08cac7c61918630b"
       },
       "homebrew/bundle": {
-        "revision": "6908c482f46130d42065f0a528e749177c2f7418"
+        "revision": "2e0553aa509afb939ee1621b452bbebe7f62e559"
       },
       "homebrew/services": {
         "revision": "3002ac3a0523f3fdcfe4f545182fcae5cd027f38"
@@ -14,7 +14,7 @@
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
       },
       "isen-ng/dotnet-sdk-versions": {
-        "revision": "a79db3b9b812305a6c28c08de2274cc4c03fcc7d"
+        "revision": "b01402ee7a5a7cd80064dcda21197457e5368db8"
       }
     },
     "brew": {
@@ -906,7 +906,7 @@
         }
       },
       "jetbrains-toolbox": {
-        "version": "2.4.1,2.4.1.32573",
+        "version": "2.4.2,2.4.2.32922",
         "options": {
           "full_name": "jetbrains-toolbox"
         }
@@ -972,7 +972,7 @@
         }
       },
       "raycast": {
-        "version": "1.81.0",
+        "version": "1.81.1",
         "options": {
           "full_name": "raycast"
         }
@@ -984,7 +984,7 @@
         }
       },
       "spotify": {
-        "version": "1.2.43.420,c7b23f70,2569",
+        "version": "1.2.44.405,81fd6352,3712",
         "options": {
           "full_name": "spotify"
         }
@@ -1035,6 +1035,12 @@
         "version": "8.0.204,8.0.4",
         "options": {
           "full_name": "dotnet-sdk8-0-200"
+        }
+      },
+      "visual-studio-code": {
+        "version": "1.92.2",
+        "options": {
+          "full_name": "visual-studio-code"
         }
       }
     },
