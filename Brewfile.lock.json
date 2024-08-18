@@ -14,7 +14,7 @@
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
       },
       "isen-ng/dotnet-sdk-versions": {
-        "revision": "b01402ee7a5a7cd80064dcda21197457e5368db8"
+        "revision": "74b796c5716507f8850159202773b743191ce670"
       }
     },
     "brew": {
@@ -912,7 +912,7 @@
         }
       },
       "jordanbaird-ice": {
-        "version": "0.10.4",
+        "version": "0.10.5",
         "options": {
           "full_name": "jordanbaird-ice"
         }
@@ -1042,6 +1042,12 @@
         "options": {
           "full_name": "visual-studio-code"
         }
+      },
+      "calibre": {
+        "version": "7.16.0",
+        "options": {
+          "full_name": "calibre"
+        }
       }
     },
     "vscode": {
@@ -1149,7 +1155,7 @@
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.3.16",
+        "HOMEBREW_VERSION": "4.3.16-19-g277c425",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.3.0.0.1.1708646388",
