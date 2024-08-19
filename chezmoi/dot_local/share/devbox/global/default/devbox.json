@@ -61,7 +61,8 @@
     "awscli2@latest",
     "redis@latest",
     "k9s@latest",
-    "expect@latest"
+    "expect@latest",
+    "trufflehog@latest"
   ],
   "env": {
     "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",
