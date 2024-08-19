@@ -5,10 +5,10 @@
         "revision": "85046aea0dd974a7e1c33a9d08cac7c61918630b"
       },
       "homebrew/bundle": {
-        "revision": "2e0553aa509afb939ee1621b452bbebe7f62e559"
+        "revision": "2e4e17a6a193afd7a3d2f9b5a8a9aab9c761f0fc"
       },
       "homebrew/services": {
-        "revision": "3002ac3a0523f3fdcfe4f545182fcae5cd027f38"
+        "revision": "c176acebf3f131f92b1bd65e90d00949b75e45bf"
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
@@ -972,7 +972,7 @@
         }
       },
       "raycast": {
-        "version": "1.81.1",
+        "version": "1.81.2",
         "options": {
           "full_name": "raycast"
         }
@@ -1002,7 +1002,7 @@
         }
       },
       "zoom": {
-        "version": "6.1.6.37851",
+        "version": "6.1.10.38818",
         "options": {
           "full_name": "zoom"
         }
@@ -1155,7 +1155,7 @@
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.3.16-19-g277c425",
+        "HOMEBREW_VERSION": "4.3.17-6-g5fb5467",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.3.0.0.1.1708646388",
