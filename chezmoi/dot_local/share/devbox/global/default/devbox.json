@@ -62,7 +62,8 @@
     "redis@latest",
     "k9s@latest",
     "expect@latest",
-    "trufflehog@latest"
+    "trufflehog@latest",
+    "rustic@latest"
   ],
   "env": {
     "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",

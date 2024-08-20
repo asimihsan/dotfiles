@@ -2651,6 +2651,54 @@
         }
       }
     },
+    "rustic@latest": {
+      "last_modified": "2024-08-15T06:27:57Z",
+      "resolved": "github:NixOS/nixpkgs/8b908192e64224420e2d59dfd9b2e4309e154c5d#rustic",
+      "source": "devbox-search",
+      "version": "0.7.0-unstable-2024-08-10",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/wwla5nl5rxjbfnmqvxc10pzjj3w9yyiv-rustic-0.7.0-unstable-2024-08-10",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/wwla5nl5rxjbfnmqvxc10pzjj3w9yyiv-rustic-0.7.0-unstable-2024-08-10"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/n19wzxknlwf374h73knbrhgyz9sgncpj-rustic-0.7.0-unstable-2024-08-10",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/n19wzxknlwf374h73knbrhgyz9sgncpj-rustic-0.7.0-unstable-2024-08-10"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/09a16acc1gv6bxzwj91b2wyqg3q9vc2p-rustic-0.7.0-unstable-2024-08-10",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/09a16acc1gv6bxzwj91b2wyqg3q9vc2p-rustic-0.7.0-unstable-2024-08-10"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/ki2zxrsrqdczccpkli84rc3if114vgqh-rustic-0.7.0-unstable-2024-08-10",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/ki2zxrsrqdczccpkli84rc3if114vgqh-rustic-0.7.0-unstable-2024-08-10"
+        }
+      }
+    },
     "rustup@latest": {
       "last_modified": "2024-08-13T00:39:45Z",
       "plugin_version": "0.0.1",
