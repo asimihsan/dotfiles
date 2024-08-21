@@ -5,10 +5,10 @@
         "revision": "85046aea0dd974a7e1c33a9d08cac7c61918630b"
       },
       "homebrew/bundle": {
-        "revision": "2e4e17a6a193afd7a3d2f9b5a8a9aab9c761f0fc"
+        "revision": "6b32c84c4a1f66429fbb21305c7844524d9ff5bf"
       },
       "homebrew/services": {
-        "revision": "c176acebf3f131f92b1bd65e90d00949b75e45bf"
+        "revision": "cb77b10160207b38c51002694013f9156253841a"
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
@@ -870,7 +870,7 @@
         }
       },
       "firefox": {
-        "version": "129.0.1",
+        "version": "129.0.2",
         "options": {
           "full_name": "firefox"
         }
@@ -1155,7 +1155,7 @@
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.3.17-6-g5fb5467",
+        "HOMEBREW_VERSION": "4.3.17",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.3.0.0.1.1708646388",
