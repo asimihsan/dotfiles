@@ -1048,6 +1048,12 @@
         "options": {
           "full_name": "calibre"
         }
+      },
+      "zed": {
+        "version": "0.149.3",
+        "options": {
+          "full_name": "zed"
+        }
       }
     },
     "vscode": {
@@ -1155,7 +1161,7 @@
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.3.17",
+        "HOMEBREW_VERSION": "4.3.17-83-g21979c0",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.3.0.0.1.1708646388",
