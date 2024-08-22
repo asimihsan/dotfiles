@@ -47,7 +47,6 @@
     "zstd@latest",
     "restic@latest",
     "age@latest",
-    "golangci-lint@latest",
     "binutils@latest",
     "zulu@latest",
     "lazydocker@latest",
