@@ -217,38 +217,21 @@ setup_node() {
 setup_python() {
     fancy_echo "Setting up Python..."
 
-    brew install openssl readline sqlite3 xz zlib
+    # Install uv, if not already installed
+    if ! command_exists uv; then
+        fancy_echo "Installing uv..."
+        brew install openssl readline sqlite3 xz zlib
+        curl -LsSf https://astral.sh/uv/install.sh | sh
+        source "$HOME/.cargo/env"
+    else
+        fancy_echo "uv already installed."
+    fi
 
-    # PYTHON_CFLAGS="-march=native" \
-    #     CONFIGURE_OPTS="--enable-optimizations --with-lto" \
-
-    (
-        export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib"
-        export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include"
-
-        # Remove paths containing .devbox and set the new PATH
-        NEW_PATH=$(echo "$PATH" | tr ':' '\n' | grep -v '\.devbox' | tr '\n' ':' | sed 's/:$//')
-        export PATH="$NEW_PATH"
-        
-        # Execute the desired command
-        pyenv install --skip-existing 3.11.9
-        
-        # The PATH will automatically revert when the subshell exits
-    )
-
-    pyenv global 3.11.9
-
-    export PYENV_ROOT="$HOME/.pyenv"
-    export PATH="$PYENV_ROOT/bin:$PATH"
-    eval "$(pyenv init --path)"
-    eval "$(pyenv init -)"
-
-    pip install --upgrade pip
-    pip install pipx
-    pipx ensurepath
-    pipx install aider-chat
-    pipx install pre-commit
-    pipx install llm
+    uv python install 3.11
+    uv tool install aider-chat
+    uv tool install pre-commit
+    uv tool install llm
+    uv tool upgrade --all
 }
 
 # Function to configure Mac settings
@@ -347,10 +330,10 @@ setup_ruby() {
         NEW_PATH=$(echo "$PATH" | tr ':' '\n' | grep -v '\.devbox' | tr '\n' ':' | sed 's/:$//')
         export PATH="$NEW_PATH"
         export LIBRARY_PATH=""
-        
+
         # Execute the desired command
         rbenv install 3.3.4
-        
+
         # The PATH will automatically revert when the subshell exits
     )
 
