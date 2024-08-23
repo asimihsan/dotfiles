@@ -1541,55 +1541,51 @@
         }
       }
     },
-    "hadolint@latest": {
-      "last_modified": "2024-08-20T00:35:34Z",
-      "resolved": "github:NixOS/nixpkgs/f02fa2f654c7bcc45f0e815c29d093da7f1245b4#hadolint",
+    "golangci-lint@latest": {
+      "last_modified": "2024-08-21T11:30:02Z",
+      "resolved": "github:NixOS/nixpkgs/f132a77a82530de0d10216f09857090d324fee05#golangci-lint",
       "source": "devbox-search",
-      "version": "2.12.0",
+      "version": "1.60.2",
       "systems": {
         "aarch64-darwin": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/mkv713r7ngbmzsy2xsaildjszr5dr940-hadolint-2.12.0",
+              "path": "/nix/store/zl8l769wimy5bsvrlcvq9f6b7465z4hx-golangci-lint-1.60.2",
               "default": true
-            },
-            {
-              "name": "doc",
-              "path": "/nix/store/wjinyza96bfd6ishli861a31qx1kgcg4-hadolint-2.12.0-doc"
             }
           ],
-          "store_path": "/nix/store/mkv713r7ngbmzsy2xsaildjszr5dr940-hadolint-2.12.0"
+          "store_path": "/nix/store/zl8l769wimy5bsvrlcvq9f6b7465z4hx-golangci-lint-1.60.2"
         },
         "aarch64-linux": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/807c51gxfh4m15528xsx7jmx6fghy014-hadolint-2.12.0",
+              "path": "/nix/store/drgzg08jxcc50azd6bchxy6gcym2kwav-golangci-lint-1.60.2",
               "default": true
             }
           ],
-          "store_path": "/nix/store/807c51gxfh4m15528xsx7jmx6fghy014-hadolint-2.12.0"
+          "store_path": "/nix/store/drgzg08jxcc50azd6bchxy6gcym2kwav-golangci-lint-1.60.2"
         },
         "x86_64-darwin": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/k3g1rbbr4ds6xnb0ilfi2w86gpg1sgw0-hadolint-2.12.0",
+              "path": "/nix/store/my7afydss5zsi4z30mzshj31bm2v5chd-golangci-lint-1.60.2",
               "default": true
             }
           ],
-          "store_path": "/nix/store/k3g1rbbr4ds6xnb0ilfi2w86gpg1sgw0-hadolint-2.12.0"
+          "store_path": "/nix/store/my7afydss5zsi4z30mzshj31bm2v5chd-golangci-lint-1.60.2"
         },
         "x86_64-linux": {
           "outputs": [
             {
               "name": "out",
-              "path": "/nix/store/mia5d0syxyc49m9j3m0xm0wr6ddf82il-hadolint-2.12.0",
+              "path": "/nix/store/rp23zfccxkvzqphhrx0sp2pz682v89r8-golangci-lint-1.60.2",
               "default": true
             }
           ],
-          "store_path": "/nix/store/mia5d0syxyc49m9j3m0xm0wr6ddf82il-hadolint-2.12.0"
+          "store_path": "/nix/store/rp23zfccxkvzqphhrx0sp2pz682v89r8-golangci-lint-1.60.2"
         }
       }
     },
