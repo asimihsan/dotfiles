@@ -93,32 +93,67 @@ def get_line_context(file_path: str, line_number: int, context_lines: int = 3) -
 
     return "\n".join(context)
 
+def prepare_batch(lint_results: list[LintIssue], batch_size: int) -> list[list[LintIssue]]:
+    batches = []
+    current_batch = []
+    added_files = set()
 
-def fix_lint_issue(coder: Coder, issue: LintIssue, working_dir: str):
-    full_path = os.path.join(working_dir, issue.Pos.Filename)
-    print(f"\nIssue in {full_path} at line {issue.Pos.Line}:")
-    print(f"Linter: {issue.FromLinter}")
-    print(f"Message: {issue.Text}")
-    print("\nContext:")
-    print(get_line_context(full_path, issue.Pos.Line))
+    for issue in lint_results:
+        if issue.Pos.Filename not in added_files:
+            added_files.add(issue.Pos.Filename)
+            current_batch.append(issue)
 
-    user_input = input(
-        "Press Enter to continue fixing this issue, or 'q' to quit: "
-    )
-    if user_input.lower() == "q":
-        sys.exit(0)
+        if len(current_batch) == batch_size:
+            batches.append(current_batch)
+            current_batch = []
+            added_files.clear()
 
-    # Use aider to fix the issue
-    coder.add_rel_fname(issue.Pos.Filename)
-    coder.run(
-        f"Fix the following {issue.FromLinter} issue in {full_path} at line {issue.Pos.Line}: {issue.Text}"
-    )
-    coder.drop_rel_fname(issue.Pos.Filename)
+    if current_batch:
+        batches.append(current_batch)
 
-    print("\nAfter fix:")
-    print(get_line_context(full_path, issue.Pos.Line))
+    return batches
 
-    linecache.clearcache()  # Clear the cache to ensure we read the updated file
+
+def fix_lint_issues(coder: Coder, issues: list[LintIssue], working_dir: str):
+    # Display all issues in the batch
+    print("\nIssues to be fixed in this batch:")
+    for i, issue in enumerate(issues, 1):
+        print(f"{i}. {issue.Pos.Filename}:{issue.Pos.Line} - {issue.FromLinter}: {issue.Text}")
+
+    # Ask for user confirmation
+    user_input = input("\nPress Enter to fix these issues, or 'q' to quit: ")
+    if user_input.lower() == 'q':
+        return
+
+    # Add all relevant files to coder
+    unique_files = set(issue.Pos.Filename for issue in issues)
+    for filename in unique_files:
+        coder.add_rel_fname(filename)
+
+    # Create a combined prompt for all issues
+    prompt = "Fix the following issues:\n"
+    for issue in issues:
+        full_path = os.path.join(working_dir, issue.Pos.Filename)
+        prompt += f"- In {full_path} at line {issue.Pos.Line}: {issue.FromLinter} - {issue.Text}\n"
+        prompt += f"  Context:\n{get_line_context(full_path, issue.Pos.Line)}\n"
+
+    # Use coder to fix all issues
+    coder.run(prompt)
+
+    # Remove files from coder
+    for filename in unique_files:
+        coder.drop_rel_fname(filename)
+
+    # Show context after fixes
+    print("\nAfter fixes:")
+    for issue in issues:
+        full_path = os.path.join(working_dir, issue.Pos.Filename)
+        print(f"Issue in {issue.Pos.Filename} at line {issue.Pos.Line}:")
+        print(get_line_context(full_path, issue.Pos.Line))
+        print()
+
+    # Clear linecache after processing all files
+    linecache.clearcache()
 
 
 def parse_arguments():
@@ -134,6 +169,12 @@ def parse_arguments():
         default="make envfile && source external-build.env && make generate-mocks && golangci-lint run ./... --concurrency 8 --issues-exit-code 0 --out-format=json > {}",
         help="Command to run golangci-lint",
     )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=5,
+        help="Number of lint issues to fix in each batch (default: 5)",
+    )
     return parser.parse_args()
 
 
@@ -145,14 +186,16 @@ def main():
         print(f"Error: {working_dir} is not a valid directory")
         sys.exit(1)
 
-    lint_results = run_golangci_lint(working_dir, args.lint_command)
+    lint_results: list[LintIssue] = run_golangci_lint(working_dir, args.lint_command)
+    lint_batches: list[list[LintIssue]] = prepare_batch(lint_results, args.batch_size)
+
     os.chdir(working_dir)
 
     coder: Coder | None = None
 
-    for issue in lint_results:
+    for issues in lint_batches:
         coder = setup_aider(coder)
-        fix_lint_issue(coder, issue, working_dir)
+        fix_lint_issues(coder, issues, working_dir)
 
 
 if __name__ == "__main__":
