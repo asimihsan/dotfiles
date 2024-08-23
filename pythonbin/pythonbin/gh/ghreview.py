@@ -29,7 +29,7 @@ def get_pr_description(pr_url):
 
 def get_pr_diff(pr_url, exclude_files=None):
     if exclude_files is None:
-        exclude_files = ["poetry.lock", "pyproject.toml"]  # Default files to ignore
+        exclude_files = ["poetry.lock", "pyproject-old.toml"]  # Default files to ignore
     diff_text = run_command(f"gh pr diff {pr_url}")
     filtered_diff = []
     diff_lines = diff_text.split("\n")
