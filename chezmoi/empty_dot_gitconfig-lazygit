@@ -1,2 +1,6 @@
+[user]
+name = Asim Ihsan
+email = asim.ihsan@level.co
+
 [commit]
     gpgsign = false
