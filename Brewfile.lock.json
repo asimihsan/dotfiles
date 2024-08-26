@@ -5,10 +5,10 @@
         "revision": "cc4929c73825ca172324e5492242e6f889492d85"
       },
       "homebrew/bundle": {
-        "revision": "daee6f1442cc86a7fa340da6112b1b8fe73385c5"
+        "revision": "88ecf2f0f8fe496c2f8994df4d820dd791aea69a"
       },
       "homebrew/services": {
-        "revision": "66c3ade2a2ac8815cb6ed88671383d582f9bad05"
+        "revision": "7daf8e7b2ccc06d5601180e96e0b004c69e2ee90"
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
@@ -998,7 +998,7 @@
         }
       },
       "moom": {
-        "version": "3.2.27",
+        "version": "4.0.1",
         "options": {
           "full_name": "moom"
         }
@@ -1205,7 +1205,7 @@
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.3.17-112-g89a3473",
+        "HOMEBREW_VERSION": "4.3.17-136-gaf4cd63",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.3.0.0.1.1708646388",
