@@ -47,7 +47,6 @@
     "zstd@latest",
     "restic@latest",
     "age@latest",
-    "golangci-lint@latest",
     "binutils@latest",
     "zulu@latest",
     "lazydocker@latest",
@@ -63,7 +62,8 @@
     "k9s@latest",
     "expect@latest",
     "trufflehog@latest",
-    "rustic@latest"
+    "rustic@latest",
+    "hadolint@latest"
   ],
   "env": {
     "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",
