@@ -3433,8 +3433,8 @@
       }
     },
     "zsh@latest": {
-      "last_modified": "2024-08-20T09:32:23Z",
-      "resolved": "github:NixOS/nixpkgs/a04eac9c5aa7f82e02d6e9e0b203b6eb5704c141#zsh",
+      "last_modified": "2024-08-18T21:16:56Z",
+      "resolved": "github:NixOS/nixpkgs/9aa35efbea27d320d0cdc5f922f0890812affb60#zsh",
       "source": "devbox-search",
       "version": "5.9",
       "systems": {
