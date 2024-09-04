@@ -5,10 +5,10 @@
         "revision": "cc4929c73825ca172324e5492242e6f889492d85"
       },
       "homebrew/bundle": {
-        "revision": "5b019a719bfc87e0b80c4abd72ada660204ada13"
+        "revision": "980753399e0bc5802610cd1eeacdb16cba53744b"
       },
       "homebrew/services": {
-        "revision": "80f934851cea918d35f93fa1b4ea11b670969c85"
+        "revision": "ed45b21f9e7b2598e5687ded25e6d0535e1f7674"
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
@@ -860,7 +860,7 @@
     },
     "cask": {
       "1password": {
-        "version": "8.10.40",
+        "version": "8.10.44",
         "options": {
           "full_name": "1password"
         }
@@ -884,7 +884,7 @@
         }
       },
       "firefox": {
-        "version": "129.0.2",
+        "version": "130.0",
         "options": {
           "full_name": "firefox"
         }
@@ -986,7 +986,7 @@
         }
       },
       "raycast": {
-        "version": "1.81.2",
+        "version": "1.82.0",
         "options": {
           "full_name": "raycast"
         }
@@ -1010,7 +1010,7 @@
         }
       },
       "tor-browser": {
-        "version": "13.5.2",
+        "version": "13.5.3",
         "options": {
           "full_name": "tor-browser"
         }
