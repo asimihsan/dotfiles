@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "@githubnext/github-copilot-cli": "^0.1.36",
-    "aws-cdk": "^2.151.0",
     "npm": "^10.8.2"
   }
 }
