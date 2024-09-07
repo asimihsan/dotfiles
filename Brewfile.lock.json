@@ -1064,7 +1064,7 @@
         }
       },
       "zed": {
-        "version": "0.151.1",
+        "version": "0.151.2",
         "options": {
           "full_name": "zed"
         }
@@ -1175,7 +1175,7 @@
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.3.19-88-g94eb0c7",
+        "HOMEBREW_VERSION": "4.3.19-98-g9978c3d",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.3.0.0.1.1708646388",
