@@ -2034,8 +2034,8 @@
       }
     },
     "meld@latest": {
-      "last_modified": "2024-09-05T11:07:25Z",
-      "resolved": "github:NixOS/nixpkgs/9bb1e7571aadf31ddb4af77fc64b2d59580f9a39#meld",
+      "last_modified": "2024-09-03T04:23:05Z",
+      "resolved": "github:NixOS/nixpkgs/45508c1098a3fb7140ae3d86414cee8f5ee7511c#meld",
       "source": "devbox-search",
       "version": "3.22.2",
       "systems": {

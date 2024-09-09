@@ -8,7 +8,7 @@
         "revision": "753199dbccbca69fca47313750f6d2fcb38140c5"
       },
       "homebrew/services": {
-        "revision": "a06200d55943f1e173ac8aa8c98dd71f0329a142"
+        "revision": "b51a12730378ab4fcc8012bec8eb07d94f98e228"
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
@@ -970,7 +970,7 @@
         }
       },
       "raycast": {
-        "version": "1.82.3",
+        "version": "1.82.4",
         "options": {
           "full_name": "raycast"
         }
@@ -1171,7 +1171,7 @@
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.3.20-29-gc8e8aa5",
+        "HOMEBREW_VERSION": "4.3.20",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.3.0.0.1.1708646388",
