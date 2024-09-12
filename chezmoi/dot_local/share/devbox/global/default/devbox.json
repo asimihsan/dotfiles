@@ -68,11 +68,11 @@
   ],
   "env": {
     "DEVBOX_GLOBAL_PREFIX": "$HOME/.local/share/devbox/global/default/.devbox/nix/profile/default",
-    "DEVBOX_GLOBAL_ROOT":   "$HOME/.local/share/devbox/global/current",
-    "CC":                   "/usr/bin/clang",
-    "CXX":                  "/usr/bin/clang++",
-    "LD":                   "/usr/bin/clang",
-    "GOFLAGS":              "-buildmode=pie"
+    "DEVBOX_GLOBAL_ROOT": "$HOME/.local/share/devbox/global/current",
+    "CC": "/usr/bin/clang",
+    "CXX": "/usr/bin/clang++",
+    "LD": "/usr/bin/clang",
+    "GOFLAGS": "-buildmode=pie"
   },
   "shell": {
     "init_hook": [". ${DEVBOX_GLOBAL_ROOT}/init.sh"],

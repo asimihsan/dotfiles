@@ -15,6 +15,9 @@
       },
       "isen-ng/dotnet-sdk-versions": {
         "revision": "ed469ecc915801835c7d4a4c5592e88bb884559e"
+      },
+      "smithy-lang/tap": {
+        "revision": "fb3f9797eb52f7a2bbb3ddfde59c248d44051831"
       }
     },
     "brew": {
@@ -908,13 +911,18 @@
         }
       },
       "aws-cdk": {
+<<<<<<< Updated upstream
         "version": "2.158.0",
+=======
+        "version": "2.157.0",
+>>>>>>> Stashed changes
         "bottle": {
           "rebuild": 0,
           "root_url": "https://ghcr.io/v2/homebrew/core",
           "files": {
             "all": {
               "cellar": ":any_skip_relocation",
+<<<<<<< Updated upstream
               "url": "https://ghcr.io/v2/homebrew/core/aws-cdk/blobs/sha256:086b0fac3499c38d8d3f9e92fc9881b6e9718d504f43a2a1a09523677b88d4f5",
               "sha256": "086b0fac3499c38d8d3f9e92fc9881b6e9718d504f43a2a1a09523677b88d4f5"
             }
@@ -966,9 +974,17 @@
               "cellar": ":any_skip_relocation",
               "url": "https://ghcr.io/v2/homebrew/core/llvm/blobs/sha256:ae14bc6846afd9200f04941136d74b725e6886eb625e09df8cfa67bde91dd801",
               "sha256": "ae14bc6846afd9200f04941136d74b725e6886eb625e09df8cfa67bde91dd801"
+=======
+              "url": "https://ghcr.io/v2/homebrew/core/aws-cdk/blobs/sha256:c7f2ddc098b1d6c8b9466aef3a0e2bd333baf04961ceaf49ae793a9ad521f5ac",
+              "sha256": "c7f2ddc098b1d6c8b9466aef3a0e2bd333baf04961ceaf49ae793a9ad521f5ac"
+>>>>>>> Stashed changes
             }
           }
         }
+      },
+      "smithy-lang/tap/smithy-cli": {
+        "version": "1.51.0",
+        "bottle": false
       }
     },
     "cask": {
