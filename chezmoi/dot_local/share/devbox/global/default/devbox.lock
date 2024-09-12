@@ -1073,6 +1073,54 @@
         }
       }
     },
+    "erdtree@latest": {
+      "last_modified": "2024-08-31T10:12:23Z",
+      "resolved": "github:NixOS/nixpkgs/5629520edecb69630a3f4d17d3d33fc96c13f6fe#erdtree",
+      "source": "devbox-search",
+      "version": "3.1.2",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/49h05mkcrbndq6d34s8gyhxary05sv2y-erdtree-3.1.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/49h05mkcrbndq6d34s8gyhxary05sv2y-erdtree-3.1.2"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/py8qscf5wib5kac3fxaj75k9bqhv7pyn-erdtree-3.1.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/py8qscf5wib5kac3fxaj75k9bqhv7pyn-erdtree-3.1.2"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/pq89rqn63yyfgj9hi71351vcsf11s545-erdtree-3.1.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/pq89rqn63yyfgj9hi71351vcsf11s545-erdtree-3.1.2"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/avbwpidqx8ddqbfqb0531wlcya4v378y-erdtree-3.1.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/avbwpidqx8ddqbfqb0531wlcya4v378y-erdtree-3.1.2"
+        }
+      }
+    },
     "expect@latest": {
       "last_modified": "2024-08-31T10:12:23Z",
       "resolved": "github:NixOS/nixpkgs/5629520edecb69630a3f4d17d3d33fc96c13f6fe#expect",
