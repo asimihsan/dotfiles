@@ -1205,6 +1205,12 @@
         "options": {
           "full_name": "android-sdk"
         }
+      },
+      "android-commandlinetools": {
+        "version": "11076708",
+        "options": {
+          "full_name": "android-commandlinetools"
+        }
       }
     },
     "vscode": {
