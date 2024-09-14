@@ -34,11 +34,3 @@ BACKUP_PATHS=(
 {{ if eq .chezmoi.hostname "hlru5i" }}
 BACKUP_PATHS+=("$HOME/Obsidian")
 {{ end }}
-
-# You can add more host-specific configurations here
-# For example:
-# if [[ "$(hostname)" == "laptop" ]]; then
-#     BACKUP_PATHS+=("$HOME/laptop-specific-folder")
-# elif [[ "$(hostname)" == "desktop" ]]; then
-#     BACKUP_PATHS+=("$HOME/desktop-specific-folder")
-# fi
