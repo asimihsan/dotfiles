@@ -62,6 +62,7 @@
     "zstd@latest",
     "zulu@latest",
     "curl@latest",
-    "erdtree@latest"
+    "erdtree@latest",
+    "ktlint@latest"
   ]
 }
