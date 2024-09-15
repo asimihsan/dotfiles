@@ -2429,6 +2429,10 @@
         }
       }
     },
+    "pkgs.darwin.apple_sdk.frameworks.Security": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#pkgs.darwin.apple_sdk.frameworks.Security",
+      "source": "nixpkg"
+    },
     "pv@latest": {
       "last_modified": "2024-09-12T11:58:09Z",
       "resolved": "github:NixOS/nixpkgs/280db3decab4cbeb22a4599bd472229ab74d25e1#pv",
@@ -2848,34 +2852,6 @@
             }
           ],
           "store_path": "/nix/store/3kqgbyp136g6qanfynag62b283fd05pn-starship-1.20.1"
-        }
-      }
-    },
-    "swiftformat@latest": {
-      "last_modified": "2024-09-10T15:01:03Z",
-      "resolved": "github:NixOS/nixpkgs/5ed627539ac84809c78b2dd6d26a5cebeb5ae269#swiftformat",
-      "source": "devbox-search",
-      "version": "0.47.10",
-      "systems": {
-        "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/ikklg09na5v2q3q59nv8f7myhkkzd8il-swiftformat-0.47.10",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/ikklg09na5v2q3q59nv8f7myhkkzd8il-swiftformat-0.47.10"
-        },
-        "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/6k1wr9rngqq3y6j1cv0jl3v3p16r2y74-swiftformat-0.47.10",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/6k1wr9rngqq3y6j1cv0jl3v3p16r2y74-swiftformat-0.47.10"
         }
       }
     },
