@@ -2431,7 +2431,17 @@
     },
     "pkgs.darwin.apple_sdk.frameworks.Security": {
       "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#pkgs.darwin.apple_sdk.frameworks.Security",
-      "source": "nixpkg"
+      "source": "nixpkg",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "path": "/nix/store/9jbhn62ld50znjqxll0q5gq9i4disc1s-apple-framework-Security-11.0.0",
+              "default": true
+            }
+          ]
+        }
+      }
     },
     "pv@latest": {
       "last_modified": "2024-09-12T11:58:09Z",
