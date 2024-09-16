@@ -8,7 +8,7 @@
         "revision": "acfb8210d4366ff63fa23d6a7a8ddbacd0234532"
       },
       "homebrew/services": {
-        "revision": "b51a12730378ab4fcc8012bec8eb07d94f98e228"
+        "revision": "3d5a2fdfffe91e6c9485619edff30f695dc0e388"
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
@@ -1026,7 +1026,7 @@
         }
       },
       "jordanbaird-ice": {
-        "version": "0.11.0",
+        "version": "0.11.1",
         "options": {
           "full_name": "jordanbaird-ice"
         }
@@ -1068,7 +1068,7 @@
         }
       },
       "moom": {
-        "version": "4.1.0",
+        "version": "4.1.1",
         "options": {
           "full_name": "moom"
         }
@@ -1305,7 +1305,7 @@
   "system": {
     "macos": {
       "sonoma": {
-        "HOMEBREW_VERSION": "4.3.21-26-g076c4e0",
+        "HOMEBREW_VERSION": "4.3.21",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "15.3.0.0.1.1708646388",
