@@ -1114,13 +1114,13 @@
         }
       },
       "todoist": {
-        "version": "9.7.5",
+        "version": "9.7.6",
         "options": {
           "full_name": "todoist"
         }
       },
       "tor-browser": {
-        "version": "13.5.3",
+        "version": "13.5.4",
         "options": {
           "full_name": "tor-browser"
         }
@@ -1323,7 +1323,7 @@
         "macOS": "14.6.1"
       },
       "sequoia": {
-        "HOMEBREW_VERSION": "4.3.23",
+        "HOMEBREW_VERSION": "4.3.23-18-g8f59614",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "16.0.0.0.1.1724870825",
