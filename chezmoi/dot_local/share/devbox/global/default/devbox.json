@@ -64,6 +64,7 @@
     "curl@latest",
     "erdtree@latest",
     "ktlint@latest",
-    "pkgs.darwin.apple_sdk.frameworks.Security"
+    "pkgs.darwin.apple_sdk.frameworks.Security",
+    "bat@latest"
   ]
 }

@@ -48,6 +48,9 @@
     "allow_concurrent_runs": false,
     "use_new_terminal": false,
     "reveal": "always",
-    "hide": "on_success"
+    "hide": "on_success",
+    "shell": {
+      "program": "/Users/asimi/.local/share/devbox/global/default/.devbox/nix/profile/default/bin/zsh"
+    }
   }
 ]
