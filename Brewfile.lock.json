@@ -8,7 +8,7 @@
         "revision": "8b0df4d29278e734a00121dd453fe9758e5486ed"
       },
       "homebrew/services": {
-        "revision": "759751ea41092d91d0d03f7629c53269865ffa16"
+        "revision": "a362409022882ef5737e86df6e6edb8b714c2646"
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
@@ -886,15 +886,15 @@
         }
       },
       "aws-cdk": {
-        "version": "2.159.0",
+        "version": "2.159.1",
         "bottle": {
           "rebuild": 0,
           "root_url": "https://ghcr.io/v2/homebrew/core",
           "files": {
             "all": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/aws-cdk/blobs/sha256:380d15f8c0b9dc40974daa97175ac48c776044d3ecb07a957313ce67747798c1",
-              "sha256": "380d15f8c0b9dc40974daa97175ac48c776044d3ecb07a957313ce67747798c1"
+              "url": "https://ghcr.io/v2/homebrew/core/aws-cdk/blobs/sha256:7c1e9d0f4f81391fb2ae7213a1728a41a0b84545de2ee6e6f84076846eaea3a8",
+              "sha256": "7c1e9d0f4f81391fb2ae7213a1728a41a0b84545de2ee6e6f84076846eaea3a8"
             }
           }
         }
@@ -1014,7 +1014,7 @@
         }
       },
       "iterm2": {
-        "version": "3.5.4",
+        "version": "3.5.5",
         "options": {
           "full_name": "iterm2"
         }
@@ -1026,7 +1026,7 @@
         }
       },
       "jordanbaird-ice": {
-        "version": "0.11.2",
+        "version": "0.11.3",
         "options": {
           "full_name": "jordanbaird-ice"
         }
@@ -1164,7 +1164,7 @@
         }
       },
       "zed": {
-        "version": "0.152.4",
+        "version": "0.153.6",
         "options": {
           "full_name": "zed"
         }
