@@ -1104,7 +1104,7 @@
         }
       },
       "todoist": {
-        "version": "9.7.6",
+        "version": "9.7.7",
         "options": {
           "full_name": "todoist"
         }
@@ -1197,6 +1197,12 @@
         "version": "11076708",
         "options": {
           "full_name": "android-commandlinetools"
+        }
+      },
+      "thunderbird": {
+        "version": "128.2.3esr",
+        "options": {
+          "full_name": "thunderbird"
         }
       }
     },
@@ -1313,7 +1319,7 @@
         "macOS": "14.6.1"
       },
       "sequoia": {
-        "HOMEBREW_VERSION": "4.3.23",
+        "HOMEBREW_VERSION": "4.3.23-53-g29c22e0",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "16.0.0.0.1.1724870825",
