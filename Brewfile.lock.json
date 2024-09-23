@@ -8,7 +8,7 @@
         "revision": "8b0df4d29278e734a00121dd453fe9758e5486ed"
       },
       "homebrew/services": {
-        "revision": "a362409022882ef5737e86df6e6edb8b714c2646"
+        "revision": "d4e97512f68222c65048e372c7c2586c5ef3d2b1"
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
@@ -1319,7 +1319,7 @@
         "macOS": "14.6.1"
       },
       "sequoia": {
-        "HOMEBREW_VERSION": "4.3.23-53-g29c22e0",
+        "HOMEBREW_VERSION": "4.3.24-5-gbd3c7f8",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "16.0.0.0.1.1724870825",
