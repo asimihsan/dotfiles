@@ -931,6 +931,45 @@
       "smithy-lang/tap/smithy-cli": {
         "version": "1.51.0",
         "bottle": false
+      },
+      "podman": {
+        "version": "5.2.3",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_sequoia": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/podman/blobs/sha256:95f7e0e136a356bc452533bd514abf7ea0d6035a743fe8a9985398d0eea4f7fc",
+              "sha256": "95f7e0e136a356bc452533bd514abf7ea0d6035a743fe8a9985398d0eea4f7fc"
+            },
+            "arm64_sonoma": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/podman/blobs/sha256:ff4085107b505dd34f0183325c667a7a969a527e1aae328d592430127997e759",
+              "sha256": "ff4085107b505dd34f0183325c667a7a969a527e1aae328d592430127997e759"
+            },
+            "arm64_ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/podman/blobs/sha256:199fd65f78e702a1ec3ca819a0468712a38528dba96fa863f261188cb8ce99fb",
+              "sha256": "199fd65f78e702a1ec3ca819a0468712a38528dba96fa863f261188cb8ce99fb"
+            },
+            "sonoma": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/podman/blobs/sha256:f13a7acdd16c500869417e1a373416151d65d79c2d62998ca7e8f17e4c12f5f2",
+              "sha256": "f13a7acdd16c500869417e1a373416151d65d79c2d62998ca7e8f17e4c12f5f2"
+            },
+            "ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/podman/blobs/sha256:31fb4084e4c8a89bf2bcf99013c8fdacfa6fb261753caf84f2b9da163797fc3f",
+              "sha256": "31fb4084e4c8a89bf2bcf99013c8fdacfa6fb261753caf84f2b9da163797fc3f"
+            },
+            "x86_64_linux": {
+              "cellar": "/home/linuxbrew/.linuxbrew/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/podman/blobs/sha256:4d24c3f5daff22cbc17464900a04bffe3f5bd7e7e1249630c66d0077e97fc016",
+              "sha256": "4d24c3f5daff22cbc17464900a04bffe3f5bd7e7e1249630c66d0077e97fc016"
+            }
+          }
+        }
       }
     },
     "cask": {
@@ -1139,7 +1178,7 @@
         }
       },
       "zed": {
-        "version": "0.153.7",
+        "version": "0.154.1",
         "options": {
           "full_name": "zed"
         }
@@ -1178,6 +1217,12 @@
         "version": "128.2.3esr",
         "options": {
           "full_name": "thunderbird"
+        }
+      },
+      "podman-desktop": {
+        "version": "1.12.0",
+        "options": {
+          "full_name": "podman-desktop"
         }
       }
     },
