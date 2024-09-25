@@ -9,10 +9,25 @@
 {
   "assistant": {
     "default_model": {
-      "provider": "anthropic",
-      "model": "claude-3-5-sonnet-20240620"
+      "provider": "openai",
+      "model": "gpt-4o"
     },
     "version": "2"
+  },
+  "language_models": {
+    "ollama": {
+      "low_speed_timeout_in_seconds": 600,
+      "available_models": [
+        {
+          "name": "llama3.1:70b",
+          "max_tokens": 32000
+        },
+        {
+          "name": "llama3.1:405b-instruct-q2_K",
+          "max_tokens": 32000
+        }
+      ]
+    }
   },
   "ui_font_size": 16,
   "buffer_font_size": 16,
