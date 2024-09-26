@@ -8,7 +8,7 @@
         "revision": "a882a221ecb33f855f8a0b78adaa525926901a19"
       },
       "homebrew/services": {
-        "revision": "d5d8a1d4ba61312a490fc818f1f2d733be50a467"
+        "revision": "8589da010d2aeb29f8164d5dde4a28f74a233ce3"
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
@@ -980,7 +980,7 @@
         }
       },
       "camo-studio": {
-        "version": "2.1.6,12923",
+        "version": "2.1.7,13148",
         "options": {
           "full_name": "camo-studio"
         }
@@ -1339,7 +1339,7 @@
         "macOS": "14.6.1"
       },
       "sequoia": {
-        "HOMEBREW_VERSION": "4.3.24-67-gd1509cb",
+        "HOMEBREW_VERSION": "4.3.24",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "16.0.0.0.1.1724870825",
