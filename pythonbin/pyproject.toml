@@ -51,6 +51,7 @@ dependencies = [
     "unstructured>=0.15.7",
     "watchdog>=4.0.2",
     "zstandard>=0.23.0",
+    "ipdb>=0.13.13",
 ]
 
 [build-system]
