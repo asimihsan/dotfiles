@@ -20,15 +20,11 @@
       "available_models": [
         {
           "name": "llama3.1:70b",
-          "max_tokens": 2048
+          "max_tokens": 32000
         },
         {
           "name": "llama3.1:405b-instruct-q2_K",
-          "max_tokens": 2048
-        },
-        {
-          "name": "llama3.1:70b",
-          "max_tokens": 2048
+          "max_tokens": 32000
         }
       ]
     }
