@@ -1062,6 +1062,45 @@
             }
           }
         }
+      },
+      "dvc": {
+        "version": "3.55.2_1",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_sequoia": {
+              "cellar": ":any",
+              "url": "https://ghcr.io/v2/homebrew/core/dvc/blobs/sha256:081402479420933e5c52f3fe0c8bc5108d981fa45eae34208be6840c54b755af",
+              "sha256": "081402479420933e5c52f3fe0c8bc5108d981fa45eae34208be6840c54b755af"
+            },
+            "arm64_sonoma": {
+              "cellar": ":any",
+              "url": "https://ghcr.io/v2/homebrew/core/dvc/blobs/sha256:1654c2fecf29e235c46a74a2b869755666c0a0c84002955ba5c6b03f7abbcdbf",
+              "sha256": "1654c2fecf29e235c46a74a2b869755666c0a0c84002955ba5c6b03f7abbcdbf"
+            },
+            "arm64_ventura": {
+              "cellar": ":any",
+              "url": "https://ghcr.io/v2/homebrew/core/dvc/blobs/sha256:00255b05a5df5df29c8384f02e073342b19385245910dab861197b2dd7373553",
+              "sha256": "00255b05a5df5df29c8384f02e073342b19385245910dab861197b2dd7373553"
+            },
+            "sonoma": {
+              "cellar": ":any",
+              "url": "https://ghcr.io/v2/homebrew/core/dvc/blobs/sha256:e2b4a2e5541eeccb8e799adb69e4dace9983e8d44736fe9157ac17bf7f26f76a",
+              "sha256": "e2b4a2e5541eeccb8e799adb69e4dace9983e8d44736fe9157ac17bf7f26f76a"
+            },
+            "ventura": {
+              "cellar": ":any",
+              "url": "https://ghcr.io/v2/homebrew/core/dvc/blobs/sha256:8d5208b0c48467d3e65356fedf1e5fa73bfe311d3a17becac59dad3dba9733d1",
+              "sha256": "8d5208b0c48467d3e65356fedf1e5fa73bfe311d3a17becac59dad3dba9733d1"
+            },
+            "x86_64_linux": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/dvc/blobs/sha256:38e87aacac453a8a33289a809ec1813dc61e2e6924aac01cc492a727d8584082",
+              "sha256": "38e87aacac453a8a33289a809ec1813dc61e2e6924aac01cc492a727d8584082"
+            }
+          }
+        }
       }
     },
     "cask": {

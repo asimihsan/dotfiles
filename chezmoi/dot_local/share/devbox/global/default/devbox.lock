@@ -1417,6 +1417,54 @@
         }
       }
     },
+    "git-lfs@latest": {
+      "last_modified": "2024-09-10T15:01:03Z",
+      "resolved": "github:NixOS/nixpkgs/5ed627539ac84809c78b2dd6d26a5cebeb5ae269#git-lfs",
+      "source": "devbox-search",
+      "version": "3.5.1",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/wm5x0479n14z8knzbaqr21dv248b7g53-git-lfs-3.5.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/wm5x0479n14z8knzbaqr21dv248b7g53-git-lfs-3.5.1"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/3p3rli34fah56j8dm9dihxyz0967nqvs-git-lfs-3.5.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/3p3rli34fah56j8dm9dihxyz0967nqvs-git-lfs-3.5.1"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/lf1y7wy2hmgbp767hwf07873wj0f96bd-git-lfs-3.5.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/lf1y7wy2hmgbp767hwf07873wj0f96bd-git-lfs-3.5.1"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/ijhb93ms06007damwsx9dcd9v9qg96rc-git-lfs-3.5.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/ijhb93ms06007damwsx9dcd9v9qg96rc-git-lfs-3.5.1"
+        }
+      }
+    },
     "git@latest": {
       "last_modified": "2024-09-10T15:01:03Z",
       "resolved": "github:NixOS/nixpkgs/5ed627539ac84809c78b2dd6d26a5cebeb5ae269#git",

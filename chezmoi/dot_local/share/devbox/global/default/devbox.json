@@ -63,6 +63,7 @@
     "zulu@latest",
     "curl@latest",
     "erdtree@latest",
-    "ktlint@latest"
+    "ktlint@latest",
+    "git-lfs@latest"
   ]
 }
