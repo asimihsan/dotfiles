@@ -162,3 +162,10 @@ source <(git-town completions zsh)
 export PATH="$PATH:/Users/asimi/.dotnet/tools"
 
 source <(erd --completions zsh)
+
+export PATH="/opt/homebrew/opt/protobuf@3/bin:$PATH"
+
+export LDFLAGS="-L/opt/homebrew/opt/libiconv/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/libiconv/include"
+
+alias ar=/usr/bin/ar
