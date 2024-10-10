@@ -3159,54 +3159,6 @@
         }
       }
     },
-    "tree@latest": {
-      "last_modified": "2024-09-10T15:01:03Z",
-      "resolved": "github:NixOS/nixpkgs/5ed627539ac84809c78b2dd6d26a5cebeb5ae269#tree",
-      "source": "devbox-search",
-      "version": "2.1.3",
-      "systems": {
-        "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/jgh9vb39mjd3bz8y9b4pjqbx9hw4z60y-tree-2.1.3",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/jgh9vb39mjd3bz8y9b4pjqbx9hw4z60y-tree-2.1.3"
-        },
-        "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/p5xags5v4fasxgpcyv05bhvlsykxp3zl-tree-2.1.3",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/p5xags5v4fasxgpcyv05bhvlsykxp3zl-tree-2.1.3"
-        },
-        "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/ivcxdmqmw6z9gy6vlnycapfhvpg7ywsc-tree-2.1.3",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/ivcxdmqmw6z9gy6vlnycapfhvpg7ywsc-tree-2.1.3"
-        },
-        "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/9scrmwzsz29hwnmq6s2wiiw3brjvfjr4-tree-2.1.3",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/9scrmwzsz29hwnmq6s2wiiw3brjvfjr4-tree-2.1.3"
-        }
-      }
-    },
     "trufflehog@latest": {
       "last_modified": "2024-09-29T05:15:19Z",
       "resolved": "github:NixOS/nixpkgs/2dcd9c55e8914017226f5948ac22c53872a13ee2#trufflehog",

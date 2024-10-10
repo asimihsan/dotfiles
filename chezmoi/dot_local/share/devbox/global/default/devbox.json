@@ -64,7 +64,6 @@
     "curl@latest",
     "erdtree@latest",
     "ktlint@latest",
-    "git-lfs@latest",
-    "tree@latest"
+    "git-lfs@latest"
   ]
 }
