@@ -5,10 +5,10 @@
         "revision": "cc4929c73825ca172324e5492242e6f889492d85"
       },
       "homebrew/bundle": {
-        "revision": "768486e33e4373c9c48455f8ba20c52415c4e493"
+        "revision": "836b67f84a21deec9016253f41f994c2a98cea15"
       },
       "homebrew/services": {
-        "revision": "052d11e0f2733f5d33f0af500de2607eb8a4ed54"
+        "revision": "c8e771d0dd37044a2d3b2f5aa533e1d83d0cf3f1"
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
@@ -836,15 +836,15 @@
         }
       },
       "aws-cdk": {
-        "version": "2.161.1",
+        "version": "2.162.0",
         "bottle": {
           "rebuild": 0,
           "root_url": "https://ghcr.io/v2/homebrew/core",
           "files": {
             "all": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/aws-cdk/blobs/sha256:1418bc0b3a0a841dc2809e87be898857985d997de113713d38a90613cf2b74e2",
-              "sha256": "1418bc0b3a0a841dc2809e87be898857985d997de113713d38a90613cf2b74e2"
+              "url": "https://ghcr.io/v2/homebrew/core/aws-cdk/blobs/sha256:6c1814f1c0977bfe002fe0cb8ecf04179363adde84f9582090a0c62315e94e4d",
+              "sha256": "6c1814f1c0977bfe002fe0cb8ecf04179363adde84f9582090a0c62315e94e4d"
             }
           }
         }
@@ -1217,13 +1217,13 @@
         }
       },
       "slack": {
-        "version": "4.40.128",
+        "version": "4.40.133",
         "options": {
           "full_name": "slack"
         }
       },
       "spotify": {
-        "version": "1.2.47.364",
+        "version": "1.2.48.405",
         "options": {
           "full_name": "spotify"
         }
@@ -1277,7 +1277,7 @@
         }
       },
       "visual-studio-code": {
-        "version": "1.94.1",
+        "version": "1.94.2",
         "options": {
           "full_name": "visual-studio-code"
         }
@@ -1289,7 +1289,7 @@
         }
       },
       "zed": {
-        "version": "0.156.0",
+        "version": "0.156.1",
         "options": {
           "full_name": "zed"
         }
@@ -1325,13 +1325,13 @@
         }
       },
       "thunderbird": {
-        "version": "131.0",
+        "version": "131.0.1",
         "options": {
           "full_name": "thunderbird"
         }
       },
       "podman-desktop": {
-        "version": "1.12.0",
+        "version": "1.13.2",
         "options": {
           "full_name": "podman-desktop"
         }
@@ -1450,7 +1450,7 @@
         "macOS": "14.6.1"
       },
       "sequoia": {
-        "HOMEBREW_VERSION": "4.4.0-117-gbdb9ed0",
+        "HOMEBREW_VERSION": "4.4.0-119-g587949b",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "16.0.0.0.1.1724870825",
