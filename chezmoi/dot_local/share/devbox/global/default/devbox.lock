@@ -306,8 +306,8 @@
       }
     },
     "bash@latest": {
-      "last_modified": "2024-09-29T13:45:20Z",
-      "resolved": "github:NixOS/nixpkgs/7eee17a8a5868ecf596bbb8c8beb527253ea8f4d#bash",
+      "last_modified": "2024-10-10T05:33:31Z",
+      "resolved": "github:NixOS/nixpkgs/b69de56fac8c2b6f8fd27f2eca01dcda8e0a4221#bash",
       "source": "devbox-search",
       "version": "5.2p32",
       "systems": {
@@ -1546,8 +1546,8 @@
       }
     },
     "hadolint@latest": {
-      "last_modified": "2024-10-06T02:39:15Z",
-      "resolved": "github:NixOS/nixpkgs/7d49afd36b5590f023ec56809c02e05d8164fbc4#hadolint",
+      "last_modified": "2024-10-06T12:21:13Z",
+      "resolved": "github:NixOS/nixpkgs/50b3bd3fed0442bcbf7f58355e990da84af1749d#hadolint",
       "source": "devbox-search",
       "version": "2.12.0",
       "systems": {
@@ -3448,8 +3448,8 @@
       }
     },
     "zsh@latest": {
-      "last_modified": "2024-09-29T13:45:20Z",
-      "resolved": "github:NixOS/nixpkgs/7eee17a8a5868ecf596bbb8c8beb527253ea8f4d#zsh",
+      "last_modified": "2024-10-09T11:07:23Z",
+      "resolved": "github:NixOS/nixpkgs/4fa56ac6d86a213b556d4db9b1cb43a51b3e40ec#zsh",
       "source": "devbox-search",
       "version": "5.9",
       "systems": {
