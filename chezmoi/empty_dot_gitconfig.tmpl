@@ -6,6 +6,13 @@ email = asim.ihsan@level.co
 email = ssh@sshemail.ihsan.io
 {{ end -}}
 
+[user]
+{{ if eq .chezmoi.hostname "yov3bc" -}}
+signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOdZS3iTbk1bmMq1Oq9kFySUPbfa5bM41dAhH+og89or
+{{ else }}
+signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+6ch0i+pdf+48pQ/S180rtxe9yELTC9w/GYBZoRl89
+{{ end }}
+
 [alias]
 co = checkout
 br = branch
@@ -15,21 +22,21 @@ unstage = reset HEAD --
 last = log -1 HEAD
 lol = log --graph --decorate --pretty=oneline --abbrev-commit
 lola = log --graph --decorate --pretty=oneline --abbrev-commit --all --date=local
-	append = town append
-	compress = town compress
-	contribute = town contribute
-	diff-parent = town diff-parent
-	hack = town hack
-	kill = town kill
-	observe = town observe
-	park = town park
-	prepend = town prepend
-	propose = town propose
-	rename-branch = town rename-branch
-	repo = town repo
-	set-parent = town set-parent
-	ship = town ship
-	sync = town sync
+append = town append
+compress = town compress
+contribute = town contribute
+diff-parent = town diff-parent
+hack = town hack
+kill = town kill
+observe = town observe
+park = town park
+prepend = town prepend
+propose = town propose
+rename-branch = town rename-branch
+repo = town repo
+set-parent = town set-parent
+ship = town ship
+sync = town sync
 
 [color]
 branch = auto
@@ -50,6 +57,7 @@ required = true
 [credential]
 helper = cache --timeout=3600
 helper =
+helper = /usr/local/share/gcm-core/git-credential-manager
 
 [init]
 defaultBranch = main
@@ -66,13 +74,6 @@ autoSetupRemote = true
 [oh-my-zsh]
 hide-status = 1
 
-[user]
-{{ if eq .chezmoi.hostname "yov3bc" -}}
-signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOdZS3iTbk1bmMq1Oq9kFySUPbfa5bM41dAhH+og89or
-{{ else }}
-signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+6ch0i+pdf+48pQ/S180rtxe9yELTC9w/GYBZoRl89
-{{ end }}
-
 [gpg]
 format = ssh
 
@@ -87,12 +88,5 @@ template = /Users/asimi/.gitmessage
 autocrlf = false
 editor = nvim
 
-[credential]
-helper = 
-helper = 
-helper = /usr/local/share/gcm-core/git-credential-manager
-[credential "https://dev.azure.com"]
-useHttpPath = true
-
 [git-town]
-	sync-feature-strategy = rebase
+sync-feature-strategy = rebase
