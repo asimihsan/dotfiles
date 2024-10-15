@@ -5,7 +5,7 @@
         "revision": "cc4929c73825ca172324e5492242e6f889492d85"
       },
       "homebrew/bundle": {
-        "revision": "836b67f84a21deec9016253f41f994c2a98cea15"
+        "revision": "fe1993b309857707a008b6c2e480c69349301110"
       },
       "homebrew/services": {
         "revision": "8c790ff3af4c4084a222b8d1f16e6938ed6e180a"
@@ -1151,7 +1151,7 @@
         }
       },
       "jordanbaird-ice": {
-        "version": "0.11.9",
+        "version": "0.11.10",
         "options": {
           "full_name": "jordanbaird-ice"
         }
@@ -1211,7 +1211,7 @@
         }
       },
       "raycast": {
-        "version": "1.84.2",
+        "version": "1.84.3",
         "options": {
           "full_name": "raycast"
         }
@@ -1289,7 +1289,7 @@
         }
       },
       "zed": {
-        "version": "0.156.1",
+        "version": "0.156.2",
         "options": {
           "full_name": "zed"
         }
