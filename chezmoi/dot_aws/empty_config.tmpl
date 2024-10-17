@@ -22,6 +22,12 @@ sso_start_url=https://d-9a671990ce.awsapps.com/start
 sso_region=us-east-2
 sso_account_id=167205424669
 sso_role_name=EKSEngineeringAccess_prod
+
+[profile level-platform-dev-admin]
+sso_start_url=https://d-9a671990ce.awsapps.com/start
+sso_region=us-east-2
+sso_account_id=905418337205
+sso_role_name=AdministratorAccess
 {{ else if eq .chezmoi.hostname "hlru5i" -}}
 [profile retail-admin]
 mfa_serial = arn:aws:iam::519160639284:mfa/Authenticator
