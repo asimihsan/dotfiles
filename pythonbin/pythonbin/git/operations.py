@@ -1,6 +1,24 @@
 # git_operations.py
 import os
+from dataclasses import dataclass
+from typing import List
+
 from git import Repo, GitCommandError
+
+
+@dataclass
+class GitRange:
+    start: str  # This could be a tag, commit hash, or other git reference
+    end: str = "HEAD"  # Default to HEAD if not specified
+
+
+@dataclass
+class GitCommit:
+    hash: str
+    author: str
+    date: str
+    message: str
+    files_changed: List[str]
 
 
 class GitOperations:
@@ -53,3 +71,53 @@ class GitOperations:
         except GitCommandError as e:
             print(f"Error committing changes: {str(e)}")
             return False
+
+    def get_commits_in_range(
+            self, git_range: GitRange, remote_branch: str = "origin/master"
+    ) -> List[GitCommit]:
+        """
+        Retrieve a list of commits in the specified range that are also present on the remote branch.
+
+        Args:
+            git_range (GitRange): The range of commits to consider.
+            remote_branch (str): The remote branch to compare against. Defaults to "origin/master".
+
+        Returns:
+            List[GitCommit]: A list of GitCommit objects representing commits that are in the specified range
+                             and also present on the remote branch.
+
+        Raises:
+            ValueError: If there's an error fetching commits or accessing the remote.
+        """
+        try:
+            # Fetch the latest changes from the remote
+            self.repo.remotes.origin.fetch()
+
+            # Get the commits in the specified range
+            local_commits = list(
+                self.repo.iter_commits(f"{git_range.start}..{git_range.end}")
+            )
+
+            # Get the commits on the remote branch
+            remote_commits = list(self.repo.iter_commits(remote_branch))
+
+            # Filter commits that exist on both local and remote
+            merged_commits = [
+                commit for commit in local_commits
+                if commit.hexsha in {rc.hexsha for rc in remote_commits}
+            ]
+
+            return [
+                GitCommit(
+                    hash=commit.hexsha,
+                    author=str(commit.author),
+                    date=commit.committed_datetime.isoformat(),
+                    message=commit.message.decode("utf-8")
+                    if isinstance(commit.message, bytes)
+                    else commit.message,
+                    files_changed=list(str(k) for k in commit.stats.files.keys()),
+                )
+                for commit in merged_commits
+            ]
+        except GitCommandError as e:
+            raise ValueError(f"Error fetching commits in range: {str(e)}")
