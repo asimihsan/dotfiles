@@ -1546,8 +1546,8 @@
       }
     },
     "hadolint@latest": {
-      "last_modified": "2024-10-06T02:39:15Z",
-      "resolved": "github:NixOS/nixpkgs/7d49afd36b5590f023ec56809c02e05d8164fbc4#hadolint",
+      "last_modified": "2024-10-06T12:21:13Z",
+      "resolved": "github:NixOS/nixpkgs/50b3bd3fed0442bcbf7f58355e990da84af1749d#hadolint",
       "source": "devbox-search",
       "version": "2.12.0",
       "systems": {
@@ -1646,8 +1646,8 @@
       }
     },
     "imagemagick@latest": {
-      "last_modified": "2024-10-09T02:21:25Z",
-      "resolved": "github:NixOS/nixpkgs/2b58bfe2c0d73341362870a0f1e50b2b8f2e4b84#imagemagick",
+      "last_modified": "2024-10-08T17:43:25Z",
+      "resolved": "github:NixOS/nixpkgs/1366d1af8f58325602280e43ed6233849fb92216#imagemagick",
       "source": "devbox-search",
       "version": "7.1.1-39",
       "systems": {
