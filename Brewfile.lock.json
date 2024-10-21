@@ -1325,6 +1325,12 @@
         "options": {
           "full_name": "podman-desktop"
         }
+      },
+      "keycastr": {
+        "version": "0.10.1",
+        "options": {
+          "full_name": "keycastr"
+        }
       }
     },
     "vscode": {
