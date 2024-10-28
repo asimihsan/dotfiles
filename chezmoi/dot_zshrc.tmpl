@@ -169,3 +169,7 @@ export LDFLAGS="-L/opt/homebrew/opt/libiconv/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/libiconv/include"
 
 alias ar=/usr/bin/ar
+
+{{ if eq .chezmoi.hostname "yov3bc" }}
+export PATH="/opt/homebrew/opt/node@18/bin:$PATH"
+{{ end }}
