@@ -797,54 +797,6 @@
         }
       }
     },
-    "difftastic@latest": {
-      "last_modified": "2024-10-13T23:44:06Z",
-      "resolved": "github:NixOS/nixpkgs/d4f247e89f6e10120f911e2e2d2254a050d0f732#difftastic",
-      "source": "devbox-search",
-      "version": "0.60.0",
-      "systems": {
-        "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/py2dvqh3kcclnksm46cfy8dkx4hxpc2g-difftastic-0.60.0",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/py2dvqh3kcclnksm46cfy8dkx4hxpc2g-difftastic-0.60.0"
-        },
-        "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/v3ip4icic2r04k6ak746h8b1p0j96rpk-difftastic-0.60.0",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/v3ip4icic2r04k6ak746h8b1p0j96rpk-difftastic-0.60.0"
-        },
-        "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/idzmdz99dhsxjf04g710afryvzz18qzj-difftastic-0.60.0",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/idzmdz99dhsxjf04g710afryvzz18qzj-difftastic-0.60.0"
-        },
-        "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/pjnvhg2k6xcgc2rv3574sir3gg4s2w4y-difftastic-0.60.0",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/pjnvhg2k6xcgc2rv3574sir3gg4s2w4y-difftastic-0.60.0"
-        }
-      }
-    },
     "direnv@latest": {
       "last_modified": "2024-10-13T23:44:06Z",
       "resolved": "github:NixOS/nixpkgs/d4f247e89f6e10120f911e2e2d2254a050d0f732#direnv",
