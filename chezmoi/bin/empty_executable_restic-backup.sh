@@ -596,7 +596,7 @@ forget_and_prune() {
     run_restic prune \
         --repack-small \
         --repack-uncompressed \
-        --max-repack-size 1G \
+        --max-repack-size 2G \
         ${cleanup_cache}
 }
 
