@@ -111,6 +111,7 @@ load_all_secrets() {
     load_secret "Private/Notion API key for Level workspace/credential" "NOTION_KEY"
     load_secret "Private/Linear API key/password" "LINEAR_API_KEY"
     load_secret "Private/Iterable Level/password" "ITERABLE_API_KEY"
+    load_secret "Private/Perplexity API key/credential" "PERPLEXITY_API_KEY"
 {{ end }}
 
 {{ if eq .chezmoi.hostname "hlru5i" }}
