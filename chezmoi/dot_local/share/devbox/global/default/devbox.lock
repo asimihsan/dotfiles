@@ -797,6 +797,54 @@
         }
       }
     },
+    "difftastic@latest": {
+      "last_modified": "2024-10-24T16:50:28Z",
+      "resolved": "github:NixOS/nixpkgs/63487b2f26fa065cfeeaa47dddb08e2856ba53e8#difftastic",
+      "source": "devbox-search",
+      "version": "0.61.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/lhlwb6q4q8rvw66xx7ypk0gs687kw00m-difftastic-0.61.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/lhlwb6q4q8rvw66xx7ypk0gs687kw00m-difftastic-0.61.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/mj00v1xqhi89csi82vy6crysaqiwsz6r-difftastic-0.61.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/mj00v1xqhi89csi82vy6crysaqiwsz6r-difftastic-0.61.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/nc9ddgx6792jba3k8f7s3zz7wilmyy6c-difftastic-0.61.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/nc9ddgx6792jba3k8f7s3zz7wilmyy6c-difftastic-0.61.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/s7na3p2gn9f501v1zakfdscmz2h6mhha-difftastic-0.61.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/s7na3p2gn9f501v1zakfdscmz2h6mhha-difftastic-0.61.0"
+        }
+      }
+    },
     "direnv@latest": {
       "last_modified": "2024-10-13T23:44:06Z",
       "resolved": "github:NixOS/nixpkgs/d4f247e89f6e10120f911e2e2d2254a050d0f732#direnv",
@@ -1598,8 +1646,8 @@
       }
     },
     "imagemagick@latest": {
-      "last_modified": "2024-10-25T10:07:37Z",
-      "resolved": "github:NixOS/nixpkgs/41dea55321e5a999b17033296ac05fe8a8b5a257#imagemagick",
+      "last_modified": "2024-10-23T22:21:09Z",
+      "resolved": "github:NixOS/nixpkgs/6301495959cf1737c6ebcd153833e4c4596f56e2#imagemagick",
       "source": "devbox-search",
       "version": "7.1.1-39",
       "systems": {
@@ -3400,8 +3448,8 @@
       }
     },
     "zsh@latest": {
-      "last_modified": "2024-10-17T04:50:07Z",
-      "resolved": "github:NixOS/nixpkgs/1bde3e8e37a72989d4d455adde764d45f45dc11c#zsh",
+      "last_modified": "2024-10-13T23:44:06Z",
+      "resolved": "github:NixOS/nixpkgs/d4f247e89f6e10120f911e2e2d2254a050d0f732#zsh",
       "source": "devbox-search",
       "version": "5.9",
       "systems": {

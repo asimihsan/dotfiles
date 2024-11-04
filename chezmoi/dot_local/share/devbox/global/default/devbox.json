@@ -13,6 +13,7 @@
     "cocoapods@latest",
     "coreutils@latest",
     "ctags@latest",
+    "difftastic@latest",
     "direnv@latest",
     "dotnet-sdk_8@latest",
     "dust@latest",
