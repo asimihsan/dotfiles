@@ -5,10 +5,10 @@
         "revision": "cc4929c73825ca172324e5492242e6f889492d85"
       },
       "homebrew/bundle": {
-        "revision": "c9c3f604262d59ef9aa549c4d1bf3a5af9d60131"
+        "revision": "2de432e11bb93741a5d588cdf2d5d5428796827b"
       },
       "homebrew/services": {
-        "revision": "0b722ba2b6576698ed77a428ff6fb7cbefe470d3"
+        "revision": "f7b74f2ad5a601acdc53c25c2d079348b1b740ad"
       },
       "terrastruct/tap": {
         "revision": "da616baf9a4212f45f905a3749eaeaa68fc643a4"
@@ -554,15 +554,15 @@
         }
       },
       "ruby-build": {
-        "version": "20241030",
+        "version": "20241105",
         "bottle": {
           "rebuild": 0,
           "root_url": "https://ghcr.io/v2/homebrew/core",
           "files": {
             "all": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/ruby-build/blobs/sha256:8e2343d8e618f97001d54fb76f67142477f00b7b43b4f70f6ac24330425377c7",
-              "sha256": "8e2343d8e618f97001d54fb76f67142477f00b7b43b4f70f6ac24330425377c7"
+              "url": "https://ghcr.io/v2/homebrew/core/ruby-build/blobs/sha256:417b5c6509e39101c5c9b609292c2e8dc09710c33e0e51120218ace8368cfd65",
+              "sha256": "417b5c6509e39101c5c9b609292c2e8dc09710c33e0e51120218ace8368cfd65"
             }
           }
         }
@@ -1207,13 +1207,13 @@
         }
       },
       "moom": {
-        "version": "4.1.2",
+        "version": "4.1.3",
         "options": {
           "full_name": "moom"
         }
       },
       "obsidian": {
-        "version": "1.7.4",
+        "version": "1.7.5",
         "options": {
           "full_name": "obsidian"
         }
@@ -1354,6 +1354,12 @@
         "version": "0.10.1",
         "options": {
           "full_name": "keycastr"
+        }
+      },
+      "zotero": {
+        "version": "7.0.9",
+        "options": {
+          "full_name": "zotero"
         }
       }
     },
