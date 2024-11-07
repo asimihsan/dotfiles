@@ -42,7 +42,6 @@
     "redis@latest",
     "restic@latest",
     "ripgrep@latest",
-    "ruby@latest",
     "rustic@latest",
     "starship@latest",
     "terraform@latest",

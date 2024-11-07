@@ -12,15 +12,15 @@ def find_jira_tickets(description):
 
 
 def get_jira_details(ticket):
-    return run_command(f"jira --comments 100 issue view {ticket} --plain")
+    return run_command(f"uv run python src/linear_tools/main.py get-issue --issue-id {ticket}", cwd="/Users/asimi/workplace/linear-tools")
+    # return run_command(f"jira --comments 100 issue view {ticket} --plain")
 
 
 def create_prompt(pr_description, pr_diff, pr_comments: str, jira_details=None):
-    jira_section = (
-        "- The related Jira ticket details are as follows:\n$jira_details"
-        if jira_details
-        else "- There are no related Jira ticket details provided."
-    )
+    if jira_details is not None:
+        jira_section = "The related Jira ticket details are as follows:\n" + jira_details
+    else:
+        jira_section = "There are no related Jira ticket details provided."
 
     template = Template(
         """
