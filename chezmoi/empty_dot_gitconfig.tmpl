@@ -87,6 +87,20 @@ template = /Users/asimi/.gitmessage
 [core]
 autocrlf = false
 editor = nvim
+pager = delta
+
+[interactive]
+diffFilter = delta --color-only
+
+[delta]
+navigate = true    # use n and N to move between diff sections
+
+# delta detects terminal colors automatically; set one of these to disable auto-detection
+# dark = true
+# light = true
+
+[merge]
+conflictstyle = zdiff3
 
 [git-town]
 sync-feature-strategy = rebase

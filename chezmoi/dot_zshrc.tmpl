@@ -99,6 +99,7 @@ load_all_secrets() {
     load_secret "Private/OpenAPI API key work/password" "OPENAI_API_KEY"
     load_secret "Private/Anthropic API key/credential" "ANTHROPIC_API_KEY"
     load_secret "Private/Bing search API key/password" "BING_SEARCH_API_KEY"
+    load_secret "Private/Perplexity API key/credential" "PERPLEXITY_API_KEY"
 
 {{ if eq .chezmoi.hostname "yov3bc" }}
     load_secret "Private/SumoLogic Level/Access ID" "SUMOLOGIC_ACCESS_ID"
@@ -111,7 +112,6 @@ load_all_secrets() {
     load_secret "Private/Notion API key for Level workspace/credential" "NOTION_KEY"
     load_secret "Private/Linear API key/password" "LINEAR_API_KEY"
     load_secret "Private/Iterable Level/password" "ITERABLE_API_KEY"
-    load_secret "Private/Perplexity API key/credential" "PERPLEXITY_API_KEY"
 {{ end }}
 
 {{ if eq .chezmoi.hostname "hlru5i" }}
