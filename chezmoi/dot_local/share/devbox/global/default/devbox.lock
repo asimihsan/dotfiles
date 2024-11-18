@@ -797,54 +797,6 @@
         }
       }
     },
-    "difftastic@latest": {
-      "last_modified": "2024-11-03T14:18:04Z",
-      "resolved": "github:NixOS/nixpkgs/4ae2e647537bcdbb82265469442713d066675275#difftastic",
-      "source": "devbox-search",
-      "version": "0.61.0",
-      "systems": {
-        "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/7p6iszdw0dzr3fn3g8pxyvgkrbx99n4j-difftastic-0.61.0",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/7p6iszdw0dzr3fn3g8pxyvgkrbx99n4j-difftastic-0.61.0"
-        },
-        "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/3sqjkzark8iccv8c1jz3w6vfvd0pfy4d-difftastic-0.61.0",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/3sqjkzark8iccv8c1jz3w6vfvd0pfy4d-difftastic-0.61.0"
-        },
-        "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/9q762xwz8my8qii4lk5qcqamyzbcqbgl-difftastic-0.61.0",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/9q762xwz8my8qii4lk5qcqamyzbcqbgl-difftastic-0.61.0"
-        },
-        "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/l2mv2a9v5rw3z4j2x037h7k7640ghh7g-difftastic-0.61.0",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/l2mv2a9v5rw3z4j2x037h7k7640ghh7g-difftastic-0.61.0"
-        }
-      }
-    },
     "direnv@latest": {
       "last_modified": "2024-11-03T14:18:04Z",
       "resolved": "github:NixOS/nixpkgs/4ae2e647537bcdbb82265469442713d066675275#direnv",
@@ -1542,6 +1494,54 @@
             }
           ],
           "store_path": "/nix/store/f744fhzw1x6azh095hsfz32iyj4xr1di-gnumake-4.4.1"
+        }
+      }
+    },
+    "goimports-reviser@latest": {
+      "last_modified": "2024-11-03T14:18:04Z",
+      "resolved": "github:NixOS/nixpkgs/4ae2e647537bcdbb82265469442713d066675275#goimports-reviser",
+      "source": "devbox-search",
+      "version": "3.6.5",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/k7dsiqhz2zj0xmym7027ycldraskk2yq-goimports-reviser-3.6.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/k7dsiqhz2zj0xmym7027ycldraskk2yq-goimports-reviser-3.6.5"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/xdj71hdgxaq2nmrp3kqmzrmzxswlhsnr-goimports-reviser-3.6.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/xdj71hdgxaq2nmrp3kqmzrmzxswlhsnr-goimports-reviser-3.6.5"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/qj6hs6zprrl9srw0yn1ii3dqfv6ikhpy-goimports-reviser-3.6.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/qj6hs6zprrl9srw0yn1ii3dqfv6ikhpy-goimports-reviser-3.6.5"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/89l10jznsyyr5isybf1ivndhjfhmjxrr-goimports-reviser-3.6.5",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/89l10jznsyyr5isybf1ivndhjfhmjxrr-goimports-reviser-3.6.5"
         }
       }
     },
@@ -2587,71 +2587,6 @@
             }
           ],
           "store_path": "/nix/store/mylhaqsd9mxs2ihl02kc75nlg4cd07rz-ripgrep-14.1.1"
-        }
-      }
-    },
-    "ruby@latest": {
-      "last_modified": "2024-11-03T14:18:04Z",
-      "plugin_version": "0.0.2",
-      "resolved": "github:NixOS/nixpkgs/4ae2e647537bcdbb82265469442713d066675275#ruby",
-      "source": "devbox-search",
-      "version": "3.3.5",
-      "systems": {
-        "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/v8ls0ws5j9wlghn7v0mvnxq4fwp5xlgv-ruby-3.3.5",
-              "default": true
-            },
-            {
-              "name": "devdoc",
-              "path": "/nix/store/5yb1vvik4y7vccdb8fja78dj944bsxhk-ruby-3.3.5-devdoc"
-            }
-          ],
-          "store_path": "/nix/store/v8ls0ws5j9wlghn7v0mvnxq4fwp5xlgv-ruby-3.3.5"
-        },
-        "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/pyb6l1ch48zr4kwp1wy7669aflwbr6hs-ruby-3.3.5",
-              "default": true
-            },
-            {
-              "name": "devdoc",
-              "path": "/nix/store/jv04q86hk83mmkss25vy4yypnqmna3y8-ruby-3.3.5-devdoc"
-            }
-          ],
-          "store_path": "/nix/store/pyb6l1ch48zr4kwp1wy7669aflwbr6hs-ruby-3.3.5"
-        },
-        "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/aksb2bb4nfjkznd1l72qbsh1qyb2jvwg-ruby-3.3.5",
-              "default": true
-            },
-            {
-              "name": "devdoc",
-              "path": "/nix/store/0h2cgyr9z93ygvh6n3qlabghz10axra4-ruby-3.3.5-devdoc"
-            }
-          ],
-          "store_path": "/nix/store/aksb2bb4nfjkznd1l72qbsh1qyb2jvwg-ruby-3.3.5"
-        },
-        "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/zv3lmwvsv80ycb163a20dkcczgblgr71-ruby-3.3.5",
-              "default": true
-            },
-            {
-              "name": "devdoc",
-              "path": "/nix/store/6y208gd4f6578jls5bdsmy883ps5aybx-ruby-3.3.5-devdoc"
-            }
-          ],
-          "store_path": "/nix/store/zv3lmwvsv80ycb163a20dkcczgblgr71-ruby-3.3.5"
         }
       }
     },

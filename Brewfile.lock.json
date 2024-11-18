@@ -5,7 +5,7 @@
         "revision": "806bd6f8a6c06aadfe7470d9dce99b011ba6233f"
       },
       "homebrew/bundle": {
-        "revision": "6c98fc5c2a8df8aef41b95dbfb7d065367a2d384"
+        "revision": "055eb6e7c6fc2e2d5fce43c6531a23ded4cb5d7a"
       },
       "homebrew/services": {
         "revision": "697262483fabecf2e1f3fc4b6acbb5d134f6bc37"
@@ -791,15 +791,15 @@
         }
       },
       "aws-cdk": {
-        "version": "2.167.1",
+        "version": "2.167.0",
         "bottle": {
           "rebuild": 0,
           "root_url": "https://ghcr.io/v2/homebrew/core",
           "files": {
             "all": {
               "cellar": ":any_skip_relocation",
-              "url": "https://ghcr.io/v2/homebrew/core/aws-cdk/blobs/sha256:0d2fd075f6fc568786fe25b547220f41071d573c97722317bbcb4ec552d4a61e",
-              "sha256": "0d2fd075f6fc568786fe25b547220f41071d573c97722317bbcb4ec552d4a61e"
+              "url": "https://ghcr.io/v2/homebrew/core/aws-cdk/blobs/sha256:bf1a260f5d808b106e0d705a4423f7831248bdda6adbd123f3a932ea4d79d4a8",
+              "sha256": "bf1a260f5d808b106e0d705a4423f7831248bdda6adbd123f3a932ea4d79d4a8"
             }
           }
         }
@@ -1221,7 +1221,7 @@
         }
       },
       "iterm2": {
-        "version": "3.5.9",
+        "version": "3.5.8",
         "options": {
           "full_name": "iterm2"
         }
@@ -1371,7 +1371,7 @@
         }
       },
       "zed": {
-        "version": "0.161.2",
+        "version": "0.161.1",
         "options": {
           "full_name": "zed"
         }
@@ -1550,7 +1550,7 @@
         "macOS": "14.6.1"
       },
       "sequoia": {
-        "HOMEBREW_VERSION": "4.4.6-9-g50cac38",
+        "HOMEBREW_VERSION": "4.4.5",
         "HOMEBREW_PREFIX": "/opt/homebrew",
         "Homebrew/homebrew-core": "api",
         "CLT": "16.1.0.0.1.1729049160",
