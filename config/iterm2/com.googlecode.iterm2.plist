@@ -419,8 +419,6 @@
 	<true/>
 	<key>PromptOnQuit</key>
 	<false/>
-	<key>ShowFullScreenTabBar</key>
-	<false/>
 	<key>Snippets</key>
 	<array>
 		<dict>

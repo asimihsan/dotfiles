@@ -13,6 +13,7 @@
     "cocoapods@latest",
     "coreutils@latest",
     "ctags@latest",
+    "difftastic@latest",
     "direnv@latest",
     "dotnet-sdk_8@latest",
     "dust@latest",
@@ -41,6 +42,7 @@
     "redis@latest",
     "restic@latest",
     "ripgrep@latest",
+    "ruby@latest",
     "rustic@latest",
     "starship@latest",
     "terraform@latest",
@@ -61,7 +63,6 @@
     "curl@latest",
     "erdtree@latest",
     "ktlint@latest",
-    "tree@latest",
-    "goimports-reviser@latest"
+    "tree@latest"
   ]
 }
