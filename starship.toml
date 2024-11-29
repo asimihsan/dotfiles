@@ -27,9 +27,9 @@ $line_break\
 $custom_status$character
 """
 
-right_format = """${cmd_duration}$time\
-[](bg:#33658A)\
-$memory_usage$battery"""
+# right_format = """${cmd_duration}$time\
+# [](bg:#33658A)\
+# $memory_usage$battery"""
 
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
@@ -144,12 +144,12 @@ format = '[[ $symbol ($version) ](bg:#89ABCE)]($style)'
 
 [time]
 disabled = false
-time_format = "%R" # Hour:Minute Format
+time_format = "%R"                       # Hour:Minute Format
 style = "bg:#33658A"
 format = '[[$time](bg:#33658A)]($style)'
 
 [cmd_duration]
-min_time = 100  # Show duration for commands that take 100ms or longer
+min_time = 100                           # Show duration for commands that take 100ms or longer
 format = "took [$duration](bold yellow)"
 
 # [git_status]
