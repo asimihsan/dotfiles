@@ -63,6 +63,8 @@
     "curl@latest",
     "erdtree@latest",
     "ktlint@latest",
-    "tree@latest"
+    "tree@latest",
+    "git-filter-repo@latest",
+    "socat@latest"
   ]
 }

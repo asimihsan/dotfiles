@@ -1333,6 +1333,70 @@
         }
       }
     },
+    "git-filter-repo@latest": {
+      "last_modified": "2024-11-16T04:25:12Z",
+      "resolved": "github:NixOS/nixpkgs/34a626458d686f1b58139620a8b2793e9e123bba#git-filter-repo",
+      "source": "devbox-search",
+      "version": "2.45.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/lcm20wcafrc125phlmncy2mz070chyac-python3.12-git-filter-repo-2.45.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/bp061wga749sgqsa3wzqb8rabdnrqlrr-python3.12-git-filter-repo-2.45.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/lcm20wcafrc125phlmncy2mz070chyac-python3.12-git-filter-repo-2.45.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/7mciwwi8dpb6lpbkkpm648lrvx6qi8l7-python3.12-git-filter-repo-2.45.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/n5lygv9pdcisl6cl5l2zvrd6ygz5nijl-python3.12-git-filter-repo-2.45.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/7mciwwi8dpb6lpbkkpm648lrvx6qi8l7-python3.12-git-filter-repo-2.45.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/g1m0mg1a644mwqwm2ljqsipdxqcgdqp2-python3.12-git-filter-repo-2.45.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/zk8lcfrfw2m1ra3icf05gb5k8zahdif5-python3.12-git-filter-repo-2.45.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/g1m0mg1a644mwqwm2ljqsipdxqcgdqp2-python3.12-git-filter-repo-2.45.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/jczs1d9rz3lzjj778g24wpjmyi1higqm-python3.12-git-filter-repo-2.45.0",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/ndz7dpzbr80r7y1mrfczlkvc1ndc3i1y-python3.12-git-filter-repo-2.45.0-dist"
+            }
+          ],
+          "store_path": "/nix/store/jczs1d9rz3lzjj778g24wpjmyi1higqm-python3.12-git-filter-repo-2.45.0"
+        }
+      }
+    },
     "git@latest": {
       "last_modified": "2024-11-16T04:25:12Z",
       "resolved": "github:NixOS/nixpkgs/34a626458d686f1b58139620a8b2793e9e123bba#git",
@@ -2700,6 +2764,54 @@
             }
           ],
           "store_path": "/nix/store/k88r2qsizr48hbmca13754z0mwm4kxrb-rustic-0.9.4"
+        }
+      }
+    },
+    "socat@latest": {
+      "last_modified": "2024-11-16T04:25:12Z",
+      "resolved": "github:NixOS/nixpkgs/34a626458d686f1b58139620a8b2793e9e123bba#socat",
+      "source": "devbox-search",
+      "version": "1.8.0.1",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/j9g18d6r60v5z3g20i52kqmy7iqjkw06-socat-1.8.0.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/j9g18d6r60v5z3g20i52kqmy7iqjkw06-socat-1.8.0.1"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/yac0a266ncpxqsjbpk7aq0zig9z3vamg-socat-1.8.0.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/yac0a266ncpxqsjbpk7aq0zig9z3vamg-socat-1.8.0.1"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/fhz57ca3lhkcvj124hnvq2khbxnc17zn-socat-1.8.0.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/fhz57ca3lhkcvj124hnvq2khbxnc17zn-socat-1.8.0.1"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/hv270bg2jl8x5amgh07j3vwnyd0f1qw4-socat-1.8.0.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/hv270bg2jl8x5amgh07j3vwnyd0f1qw4-socat-1.8.0.1"
         }
       }
     },

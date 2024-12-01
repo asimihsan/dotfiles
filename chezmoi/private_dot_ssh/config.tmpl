@@ -1,6 +1,7 @@
 # hostname: {{ .chezmoi.hostname }}
 
-Host * !127.0.0.1 !localhost
+#Host * !127.0.0.1 !localhost
+Host *
   AddKeysToAgent yes
   UseKeychain yes
   IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
@@ -14,4 +15,18 @@ Host bastion-dev
 Host control.uswest2a.level.dev
     User asim.ihsan
     ProxyJump bastion-dev
+{{ end -}}
+{{ if eq .chezmoi.hostname "hlru5i" }}
+Host wsl
+    HostName 192.168.1.74
+    Port 2222
+    User asimi
+    IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    ControlMaster auto
+    ControlPath ~/.ssh/control-%r@%h:%p
+    ControlPersist 1h
+    ForwardX11 yes
+    ForwardX11Trusted yes
 {{ end -}}
