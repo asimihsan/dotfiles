@@ -56,6 +56,10 @@ def create_prompt(pr_description, pr_diff, pr_comments: str, jira_details=None):
     Your goal is the give a high-level impression first, but then dive into the details for specific files and lines. If you need to see other files in the project ask me.
 
     This is going to be a large project so please break this down into a high-level plan before you begin. Then, as you execute the plan, only do so one step at a time, and after each step stop and wait for my feedback. After you get my feedback, re-state the plan and where you are (or if you've finished the plan) then do another small step. Remember to be critical and analytical and verify my goals and requirements and propose your own goals.
+    
+    If you need to see the contents of files let me know and I can provide them to you.
+    
+    Your goal is to go point by point in priority order, and for each point act as if you are me and prepare a pull request comment covering what the system is doing, why it is doing it, why it is a problem, and proposed solution.
     """
     )
     return template.substitute(

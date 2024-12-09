@@ -306,8 +306,16 @@
       }
     },
     "bash@latest": {
+<<<<<<< Updated upstream
       "last_modified": "2024-11-30T12:51:46Z",
       "resolved": "github:NixOS/nixpkgs/f40efe1ce90f9cd692c8d56d9305fa6b9c07f211#bash",
+||||||| Stash base
+      "last_modified": "2024-11-28T07:51:56Z",
+      "resolved": "github:NixOS/nixpkgs/226216574ada4c3ecefcbbec41f39ce4655f78ef#bash",
+=======
+      "last_modified": "2024-12-02T00:03:49Z",
+      "resolved": "github:NixOS/nixpkgs/2c15aa59df0017ca140d9ba302412298ab4bf22a#bash",
+>>>>>>> Stashed changes
       "source": "devbox-search",
       "version": "5.2p37",
       "systems": {
@@ -324,16 +332,16 @@
               "default": true
             },
             {
-              "name": "dev",
-              "path": "/nix/store/pxc3jga6jqr1mdjw1abmxqp95pz69xfq-bash-5.2p37-dev"
-            },
-            {
               "name": "doc",
               "path": "/nix/store/1s6pf1kfmablj7da6m4ywnmwjiqhc1yv-bash-5.2p37-doc"
             },
             {
               "name": "info",
               "path": "/nix/store/33nn1i4rpmd6hnh591xkshn3byw1d97d-bash-5.2p37-info"
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/pxc3jga6jqr1mdjw1abmxqp95pz69xfq-bash-5.2p37-dev"
             }
           ],
           "store_path": "/nix/store/sk8z3kdy6iaky6sg972k6fkh3iw2rn3d-bash-5.2p37"
@@ -351,10 +359,6 @@
               "default": true
             },
             {
-              "name": "debug",
-              "path": "/nix/store/swfbd3q8bqxb7z3f8cgy138zn8a2aypq-bash-5.2p37-debug"
-            },
-            {
               "name": "dev",
               "path": "/nix/store/hzrwnafym6h3d6i2y6vqaax5nnvn4h7y-bash-5.2p37-dev"
             },
@@ -365,6 +369,10 @@
             {
               "name": "info",
               "path": "/nix/store/xy8v4sskvsnxsajv7clvakbq83mlly0a-bash-5.2p37-info"
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/swfbd3q8bqxb7z3f8cgy138zn8a2aypq-bash-5.2p37-debug"
             }
           ],
           "store_path": "/nix/store/4vvkmiq95x6zzz82lcsbq8607x5v7aws-bash-5.2p37"
@@ -581,12 +589,12 @@
               "default": true
             },
             {
-              "name": "debug",
-              "path": "/nix/store/q70vk5m0nlz0qpy7z6nfczi8ksyaszap-coreutils-9.5-debug"
-            },
-            {
               "name": "info",
               "path": "/nix/store/cbk08ylbni3vx41g1hdd013146yvcf5c-coreutils-9.5-info"
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/q70vk5m0nlz0qpy7z6nfczi8ksyaszap-coreutils-9.5-debug"
             }
           ],
           "store_path": "/nix/store/g5manmr2a4jc9m06cf2lpnx1092wvvjh-coreutils-9.5"
@@ -1710,8 +1718,16 @@
       }
     },
     "imagemagick@latest": {
+<<<<<<< Updated upstream
       "last_modified": "2024-12-01T03:48:48Z",
       "resolved": "github:NixOS/nixpkgs/2c27ab2e60502d1ebb7cf38909de38663f762a79#imagemagick",
+||||||| Stash base
+      "last_modified": "2024-11-16T04:25:12Z",
+      "resolved": "github:NixOS/nixpkgs/34a626458d686f1b58139620a8b2793e9e123bba#imagemagick",
+=======
+      "last_modified": "2024-12-02T00:03:49Z",
+      "resolved": "github:NixOS/nixpkgs/2c15aa59df0017ca140d9ba302412298ab4bf22a#imagemagick",
+>>>>>>> Stashed changes
       "source": "devbox-search",
       "version": "7.1.1-40",
       "systems": {
@@ -1741,12 +1757,12 @@
               "default": true
             },
             {
-              "name": "dev",
-              "path": "/nix/store/0p0808k0m1xlhlmp5sp9m8977mj9n9j8-imagemagick-7.1.1-40-dev"
-            },
-            {
               "name": "doc",
               "path": "/nix/store/595c3bi6ingv0xkvphlql2yjq92nlw6v-imagemagick-7.1.1-40-doc"
+            },
+            {
+              "name": "dev",
+              "path": "/nix/store/0p0808k0m1xlhlmp5sp9m8977mj9n9j8-imagemagick-7.1.1-40-dev"
             }
           ],
           "store_path": "/nix/store/0w7kf0j5hclslzb52z4qfn8hn2rjlhn4-imagemagick-7.1.1-40"
@@ -1790,8 +1806,16 @@
       }
     },
     "jq@latest": {
+<<<<<<< Updated upstream
       "last_modified": "2024-12-01T14:53:25Z",
       "resolved": "github:NixOS/nixpkgs/31d66ae40417bb13765b0ad75dd200400e98de84#jq",
+||||||| Stash base
+      "last_modified": "2024-11-28T07:51:56Z",
+      "resolved": "github:NixOS/nixpkgs/226216574ada4c3ecefcbbec41f39ce4655f78ef#jq",
+=======
+      "last_modified": "2024-12-01T03:48:48Z",
+      "resolved": "github:NixOS/nixpkgs/2c27ab2e60502d1ebb7cf38909de38663f762a79#jq",
+>>>>>>> Stashed changes
       "source": "devbox-search",
       "version": "1.7.1",
       "systems": {
@@ -1862,16 +1886,16 @@
               "default": true
             },
             {
+              "name": "out",
+              "path": "/nix/store/ganc2d577ffr1h3qcvxln1d5gn6z3m83-jq-1.7.1"
+            },
+            {
               "name": "dev",
               "path": "/nix/store/cybp745j7fvdnxkf9889wiscn9cgbwjp-jq-1.7.1-dev"
             },
             {
               "name": "doc",
               "path": "/nix/store/0yhbxjsrbh7g6x7ngfc1qg6q613qbqhp-jq-1.7.1-doc"
-            },
-            {
-              "name": "out",
-              "path": "/nix/store/ganc2d577ffr1h3qcvxln1d5gn6z3m83-jq-1.7.1"
             }
           ],
           "store_path": "/nix/store/g6m0ggpijkm26ygd8vvhyd07sgriz26j-jq-1.7.1-bin"
@@ -3644,8 +3668,16 @@
       }
     },
     "zstd@latest": {
+<<<<<<< Updated upstream
       "last_modified": "2024-12-02T00:03:49Z",
       "resolved": "github:NixOS/nixpkgs/2c15aa59df0017ca140d9ba302412298ab4bf22a#zstd",
+||||||| Stash base
+      "last_modified": "2024-11-28T07:51:56Z",
+      "resolved": "github:NixOS/nixpkgs/226216574ada4c3ecefcbbec41f39ce4655f78ef#zstd",
+=======
+      "last_modified": "2024-12-01T14:53:25Z",
+      "resolved": "github:NixOS/nixpkgs/31d66ae40417bb13765b0ad75dd200400e98de84#zstd",
+>>>>>>> Stashed changes
       "source": "devbox-search",
       "version": "1.5.6",
       "systems": {
@@ -3731,12 +3763,12 @@
               "default": true
             },
             {
-              "name": "out",
-              "path": "/nix/store/6avf0gmd2sl573bv6qhsqybgvf86wdq5-zstd-1.5.6"
-            },
-            {
               "name": "dev",
               "path": "/nix/store/573mr74g4ayyisvsvq6wrbp277svlhd6-zstd-1.5.6-dev"
+            },
+            {
+              "name": "out",
+              "path": "/nix/store/6avf0gmd2sl573bv6qhsqybgvf86wdq5-zstd-1.5.6"
             }
           ],
           "store_path": "/nix/store/3n2m8g45sqa8zyl0w63315kgfv3absnp-zstd-1.5.6-bin"
