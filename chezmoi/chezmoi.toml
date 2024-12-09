@@ -19,5 +19,5 @@ command = "meld"
 sourceDir = "~/.dotfiles/chezmoi"
 
 [age]
-identity = "{{ onepasswordRead \"op://Private/Chezmoi age key/notesPlain\" }}"
+identity = "~/.config/chezmoi/key.txt"
 recipient = "age1n5dftqq8nmufwz9nr8jnk6yr04ad9wpf5vtws43854k9wgn644ksz6vmqv"
