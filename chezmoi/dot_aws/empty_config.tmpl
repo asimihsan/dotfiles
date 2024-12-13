@@ -34,6 +34,13 @@ sso_start_url=https://d-9a671990ce.awsapps.com/start
 sso_region=us-east-2
 sso_account_id=658822051532
 sso_role_name=ViewOnlyAccess
+
+[profile level-firmware-s3-rw]
+sso_start_url=https://d-9a671990ce.awsapps.com/start
+sso_region=us-east-2
+sso_account_id=658822051532
+sso_role_name=firmware-s3-rw
+
 {{ else if eq .chezmoi.hostname "hlru5i" -}}
 [profile retail-admin]
 mfa_serial = arn:aws:iam::519160639284:mfa/Authenticator

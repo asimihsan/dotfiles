@@ -1,23 +1,16 @@
 import argparse
 import collections
-import os
 import sys
 from pathlib import Path
 
-from unstructured.partition.auto import partition, partition_pdf, partition_epub
+from unstructured.partition.auto import partition
 from unstructured.cleaners.core import clean
 
 
 def extract(path: Path) -> str:
     print(f"Extracting {path}...")
 
-    ext = path.suffix.lower()
-    if ext == ".pdf":
-        method = partition_pdf
-    elif ext == ".epub":
-        method = partition_epub
-    else:
-        method = partition
+    method = partition
 
     elements = method(
         filename=str(path),
@@ -83,8 +76,12 @@ def run_main(paths: list[Path], write: bool = False):
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Extract text from files.")
-    parser.add_argument("paths", nargs="+", help="List of file or directory paths to process.")
-    parser.add_argument("--write", action="store_true", help="Write the output to text files.")
+    parser.add_argument(
+        "paths", nargs="+", help="List of file or directory paths to process."
+    )
+    parser.add_argument(
+        "--write", action="store_true", help="Write the output to text files."
+    )
     return parser.parse_args()
 
 
