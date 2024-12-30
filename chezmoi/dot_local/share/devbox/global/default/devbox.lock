@@ -3565,54 +3565,6 @@
           "store_path": "/nix/store/asrxwzp3znvrmsar8a3p3hixzabnd132-zstd-1.5.6-bin"
         }
       }
-    },
-    "zulu@latest": {
-      "last_modified": "2024-12-03T12:40:06Z",
-      "resolved": "github:NixOS/nixpkgs/566e53c2ad750c84f6d31f9ccb9d00f823165550#zulu23",
-      "source": "devbox-search",
-      "version": "23.0.0",
-      "systems": {
-        "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/19g7p8djz3dqq5s7727cpv1dy45y66c9-zulu-ca-jdk-23.0.0",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/19g7p8djz3dqq5s7727cpv1dy45y66c9-zulu-ca-jdk-23.0.0"
-        },
-        "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/q3d08nsfa56qylp19i50ncpjn36vz6xv-zulu-ca-jdk-23.0.0",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/q3d08nsfa56qylp19i50ncpjn36vz6xv-zulu-ca-jdk-23.0.0"
-        },
-        "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/2gsbpcdnhrc18sj8nz93sy100hdhlccs-zulu-ca-jdk-23.0.0",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/2gsbpcdnhrc18sj8nz93sy100hdhlccs-zulu-ca-jdk-23.0.0"
-        },
-        "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/18gajbv2vyygbd5dg8znw6gwrgb3ncsi-zulu-ca-jdk-23.0.0",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/18gajbv2vyygbd5dg8znw6gwrgb3ncsi-zulu-ca-jdk-23.0.0"
-        }
-      }
     }
   }
 }
