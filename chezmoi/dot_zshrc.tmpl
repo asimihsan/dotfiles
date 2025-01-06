@@ -179,21 +179,81 @@ eval "$(mise activate zsh)"
 LOGDIR="$HOME/logs"
 mkdir -p "$LOGDIR"
 
-# Function to start logging
-start_logging() {
-    LOG_FILE="$LOGDIR/full_log_$(date +%Y%m%d_%H%M%S).log"
+# Function to clean control characters and ANSI codes
+clean_control_chars() {
+    perl -pe '
+        s/\r//g;                          # Remove carriage returns
+        s/\e\[[0-9;]*[a-zA-Z]//g;        # Remove color codes
+        s/\e\[[\x30-\x3F]*[\x20-\x2F]*[\x40-\x7E]//g; # Remove other control sequences
+    '
+}
 
-    # Record command with timestamp
-    preexec() {
-        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [CMD] $1" >> "$LOG_FILE"
-        echo "" >> "$LOG_FILE"  # Add blank line after command for readability
-    }
+# Function to start recording session
+function record_session() {
+    TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+    mkdir -p "$LOGDIR"
+    
+    TTY_FILE="$LOGDIR/terminal_${TIMESTAMP}.tty"
+    TXT_FILE="$LOGDIR/terminal_${TIMESTAMP}.txt"
+    CLEAN_FILE="$LOGDIR/terminal_${TIMESTAMP}_clean.txt"
+    
+    echo "Starting recording session..."
+    echo "TTY file: $TTY_FILE"
+    echo "Text file: $TXT_FILE"
+    
+    # Start ttyrec and script simultaneously
+    ttyrec -e "script -q $TXT_FILE" "$TTY_FILE"
+    
+    if [[ -f "$TXT_FILE" ]]; then
+        echo "Cleaning control characters from $TXT_FILE"
+        cat "$TXT_FILE" | clean_control_chars > "$CLEAN_FILE"
+        echo "Cleaned output saved to $CLEAN_FILE"
+    fi
+}
 
-    # Enable command tracing
-    setopt XTRACE
+# Function to view last recording (cleaned)
+function lastlog() {
+    local LATEST=""
+    # Use find instead of ls for more reliable file matching
+    LATEST=$(find "$LOGDIR" -name "terminal_*_clean.txt" -type f -print0 | xargs -0 ls -t | head -n 1)
+    
+    if [[ -z "$LATEST" ]]; then
+        # Try raw text file if no clean file exists
+        LATEST=$(find "$LOGDIR" -name "terminal_*.txt" -type f -print0 | xargs -0 ls -t | head -n 1)
+    fi
+    
+    if [[ -n "$LATEST" && -f "$LATEST" && -s "$LATEST" ]]; then
+        echo "Opening log file: $LATEST"
+        if [[ "$LATEST" == *"_clean.txt" ]]; then
+            less -R "$LATEST"
+        else
+            echo "Using raw file, cleaning on-the-fly"
+            cat "$LATEST" | clean_control_chars | less -R
+        fi
+    else
+        echo "No valid log files found in $LOGDIR"
+        echo "Available files:"
+        find "$LOGDIR" -name "terminal_*" -type f -ls
+    fi
+}
 
-    # Set up logging pipe for both stdout and stderr, while maintaining terminal output
-    exec &> >(tee >(stdbuf -oL sed -E 's/\x1B\[[0-9;]*[mK]//g' >> "$LOG_FILE") >/dev/tty)
+# Function to play TTY recording with cleaned output
+function playtty() {
+    local FILE="$1"
+    if [[ -z "$FILE" ]]; then
+        # Find most recent tty file
+        FILE=$(find "$LOGDIR" -name "terminal_*.tty" -type f -print0 | xargs -0 ls -t | head -n 1)
+    fi
+    
+    if [[ -n "$FILE" && -f "$FILE" && -s "$FILE" ]]; then
+        echo "Playing TTY file: $FILE"
+        ttyplay -n "$FILE" | clean_control_chars | less -R
+    else
+        echo "Error: Cannot find valid TTY file"
+        echo "Specified file: $FILE"
+        echo "Available TTY files:"
+        find "$LOGDIR" -name "terminal_*.tty" -type f -ls
+    fi
 }
 
 # Function to rotate logs
@@ -204,7 +264,7 @@ rotate_logs() {
 # Auto-start logging for new sessions
 if [[ -z "$LOGGING_STARTED" ]]; then
     export LOGGING_STARTED=1
-    start_logging
-    # rotate_logs
+    record_session
+    rotate_logs
 fi
 # ---------------------------
