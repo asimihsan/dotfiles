@@ -102,7 +102,7 @@ load_all_secrets() {
     load_secret "Private/Perplexity API key/credential" "PERPLEXITY_API_KEY"
     load_secret "Private/Claude MCP server GitHub Personal Access Token/token" "GITHUB_PERSONAL_ACCESS_TOKEN"
 
-{{ if eq .chezmoi.hostname "yov3bc" }}
+
     load_secret "Private/SumoLogic Level/Access ID" "SUMOLOGIC_ACCESS_ID"
     load_secret "Private/SumoLogic Level/Access Key" "SUMOLOGIC_ACCESS_KEY"
     load_secret "pvsttlycpwhbo6vjsedtjbgyc4/mdu_pypi_readonly/username" "POETRY_HTTP_BASIC_DEFAULT_USERNAME"
@@ -113,14 +113,9 @@ load_all_secrets() {
     load_secret "Private/Notion API key for Level workspace/credential" "NOTION_KEY"
     load_secret "Private/Linear API key/password" "LINEAR_API_KEY"
     load_secret "Private/Iterable Level/password" "ITERABLE_API_KEY"
-{{ end }}
 
-{{ if eq .chezmoi.hostname "hlru5i" }}
-    load_secret "Private/Huggingface Token/credential" "HUGGINGFACE_TOKEN"
-    load_secret "Private/hlru5i AppStore API key 2/private key" "APPLE_APP_STORE_CONNECT_PRIVATE_KEY"
-    load_secret "Private/hlru5i AppStore API key 2/issuer id" "APPLE_APP_STORE_CONNECT_ISSUER_ID"
-    load_secret "Private/hlru5i AppStore API key 2/key ID" "APPLE_APP_STORE_CONNECT_KEY_ID"
-{{ end }}
+
+
 
     echo "All secrets have been loaded."
 }
@@ -172,8 +167,44 @@ export CPPFLAGS="-I/opt/homebrew/opt/libiconv/include"
 
 alias ar=/usr/bin/ar
 
-{{ if eq .chezmoi.hostname "yov3bc" }}
+
 export PATH="/opt/homebrew/opt/node@18/bin:$PATH"
-{{ end }}
+
 
 eval "$(mise activate zsh)"
+
+# ---------------------------
+# logging
+# ---------------------------
+LOGDIR="$HOME/logs"
+mkdir -p "$LOGDIR"
+
+# Function to start logging
+start_logging() {
+    LOG_FILE="$LOGDIR/full_log_$(date +%Y%m%d_%H%M%S).log"
+
+    # Record command with timestamp
+    preexec() {
+        echo "[$(date '+%Y-%m-%d %H:%M:%S')] [CMD] $1" >> "$LOG_FILE"
+        echo "" >> "$LOG_FILE"  # Add blank line after command for readability
+    }
+
+    # Enable command tracing
+    setopt XTRACE
+
+    # Set up logging pipe for both stdout and stderr, while maintaining terminal output
+    exec &> >(tee >(stdbuf -oL sed -E 's/\x1B\[[0-9;]*[mK]//g' >> "$LOG_FILE") >/dev/tty)
+}
+
+# Function to rotate logs
+rotate_logs() {
+    fd . "$LOGDIR" --changed-before 7d --type f --threads 1 --exclude "*.zst" --exec zstd -19 --rm
+}
+
+# Auto-start logging for new sessions
+if [[ -z "$LOGGING_STARTED" ]]; then
+    export LOGGING_STARTED=1
+    start_logging
+    # rotate_logs
+fi
+# ---------------------------
