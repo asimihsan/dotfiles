@@ -177,88 +177,109 @@ eval "$(mise activate zsh)"
 # logging
 # ---------------------------
 LOGDIR="$HOME/logs"
+LOGGER_SCRIPT="$HOME/bin/clean_logger.sh"
 mkdir -p "$LOGDIR"
-
-# Function to clean control characters and ANSI codes
-clean_control_chars() {
-    perl -pe '
-        s/\r//g;                          # Remove carriage returns
-        s/\e\[[0-9;]*[a-zA-Z]//g;        # Remove color codes
-        s/\e\[[\x30-\x3F]*[\x20-\x2F]*[\x40-\x7E]//g; # Remove other control sequences
-    '
-}
 
 # Function to start recording session
 function record_session() {
     TIMESTAMP=$(date +%Y%m%d_%H%M%S)
     mkdir -p "$LOGDIR"
-    
+
     TTY_FILE="$LOGDIR/terminal_${TIMESTAMP}.tty"
     TXT_FILE="$LOGDIR/terminal_${TIMESTAMP}.txt"
     CLEAN_FILE="$LOGDIR/terminal_${TIMESTAMP}_clean.txt"
-    
+
     echo "Starting recording session..."
     echo "TTY file: $TTY_FILE"
     echo "Text file: $TXT_FILE"
-    
-    # Start ttyrec and script simultaneously
-    ttyrec -e "script -q $TXT_FILE" "$TTY_FILE"
-    
-    if [[ -f "$TXT_FILE" ]]; then
-        echo "Cleaning control characters from $TXT_FILE"
-        cat "$TXT_FILE" | clean_control_chars > "$CLEAN_FILE"
-        echo "Cleaned output saved to $CLEAN_FILE"
-    fi
+    echo "Clean file: $CLEAN_FILE"
+
+    # Create empty file first
+    touch "$TXT_FILE"
+
+    # Start the background cleaner process with nohup
+    nohup bash -c "stdbuf -oL tail -f -n +1 \"$TXT_FILE\" | \"$LOGGER_SCRIPT\" > \"$CLEAN_FILE\"" >/dev/null 2>&1 &
+    CLEANER_PID=$!
+
+    # Set up cleanup trap for just the cleaner
+    trap 'kill $CLEANER_PID 2>/dev/null' EXIT
+
+    # Run script with shell command to execute ttyrec
+    script -q "$TXT_FILE" /bin/sh -c "exec ttyrec \"$TTY_FILE\""
 }
 
 # Function to view last recording (cleaned)
 function lastlog() {
     local LATEST=""
-    # Use find instead of ls for more reliable file matching
-    LATEST=$(find "$LOGDIR" -name "terminal_*_clean.txt" -type f -print0 | xargs -0 ls -t | head -n 1)
-    
+
+    echo "Searching for log files in $LOGDIR..."
+
+    # List all matching files first
+    echo "Found files:"
+    cd "$LOGDIR" && fd "terminal.*\.txt$" --type f
+
+    # Try clean file first
+    LATEST=$(cd "$LOGDIR" && fd "terminal.*clean\.txt$" --type f --exec-batch ls -t | head -n 1)
+
     if [[ -z "$LATEST" ]]; then
-        # Try raw text file if no clean file exists
-        LATEST=$(find "$LOGDIR" -name "terminal_*.txt" -type f -print0 | xargs -0 ls -t | head -n 1)
+        echo "No clean files found, trying raw text files..."
+        # Try raw text file, excluding clean files
+        LATEST=$(cd "$LOGDIR" && fd "terminal.*\.txt$" --type f --exclude "*clean.txt*" --exec-batch ls -t | head -n 1)
     fi
-    
-    if [[ -n "$LATEST" && -f "$LATEST" && -s "$LATEST" ]]; then
+
+    if [[ -n "$LATEST" && -f "$LOGDIR/$LATEST" && -s "$LOGDIR/$LATEST" ]]; then
         echo "Opening log file: $LATEST"
-        if [[ "$LATEST" == *"_clean.txt" ]]; then
-            less -R "$LATEST"
-        else
-            echo "Using raw file, cleaning on-the-fly"
-            cat "$LATEST" | clean_control_chars | less -R
-        fi
+        less -R "$LOGDIR/$LATEST"
     else
         echo "No valid log files found in $LOGDIR"
-        echo "Available files:"
-        find "$LOGDIR" -name "terminal_*" -type f -ls
+        echo "All terminal-related files:"
+        cd "$LOGDIR" && fd "terminal" --type f
     fi
 }
 
-# Function to play TTY recording with cleaned output
+# Function to open terminal on macOS
+function open_new_terminal() {
+    local cmd="$1"
+    osascript -e "tell application \"Terminal\" to do script \"$cmd\""
+}
+
+# Function to play TTY recording
 function playtty() {
     local FILE="$1"
     if [[ -z "$FILE" ]]; then
         # Find most recent tty file
-        FILE=$(find "$LOGDIR" -name "terminal_*.tty" -type f -print0 | xargs -0 ls -t | head -n 1)
+        FILE=$(cd "$LOGDIR" && fd "terminal.*\.tty$" --type f --exec-batch ls -t | head -n 1)
+        if [[ -n "$FILE" ]]; then
+            FILE="$LOGDIR/$FILE"
+        fi
     fi
-    
+
     if [[ -n "$FILE" && -f "$FILE" && -s "$FILE" ]]; then
         echo "Playing TTY file: $FILE"
-        ttyplay -n "$FILE" | clean_control_chars | less -R
+
+        if [[ "$TERM" == "xterm-kitty" ]]; then
+            # Try kitty first
+            if kitty @ ls-windows > /dev/null 2>&1; then
+                kitty @ new-window --new-tab ttyplay -n "$FILE"
+            else
+                echo "Kitty remote control disabled, falling back to new Terminal window..."
+                open_new_terminal "ttyplay -n '$FILE'"
+            fi
+        else
+            # For non-Kitty terminals, open in new Terminal window
+            open_new_terminal "ttyplay -n '$FILE'"
+        fi
     else
         echo "Error: Cannot find valid TTY file"
         echo "Specified file: $FILE"
         echo "Available TTY files:"
-        find "$LOGDIR" -name "terminal_*.tty" -type f -ls
+        cd "$LOGDIR" && fd "terminal.*\.tty$" --type f
     fi
 }
 
 # Function to rotate logs
 rotate_logs() {
-    fd . "$LOGDIR" --changed-before 7d --type f --threads 1 --exclude "*.zst" --exec zstd -19 --rm
+    fd . "$LOGDIR" --changed-before 7d --type f --threads 1 --exclude "*.zst" --exec zstd -19 --rm {}
 }
 
 # Auto-start logging for new sessions

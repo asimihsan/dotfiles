@@ -7,3 +7,4 @@ cp ~/.config/zed/settings.json ~/.dotfiles/chezmoi/dot_config/zed/private_settin
 cp ~/.config/zed/tasks.json ~/.dotfiles/chezmoi/dot_config/zed/private_tasks.json
 cp ~/.config/karabiner/karabiner.json ~/.dotfiles/chezmoi/dot_config/private_karabiner/private_karabiner.json
 cp ~/.config/kitty/kitty.conf ~/.dotfiles/chezmoi/dot_config/kitty/kitty.conf
+cp ~/.zshrc ~/.dotfiles/chezmoi/dot_zshrc.tmpl
