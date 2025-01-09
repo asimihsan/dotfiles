@@ -29,6 +29,16 @@
       ]
     }
   },
+  "context_servers": {
+    "sequentialthinking": {
+      "command": {
+        "path": "npx",
+        "args": ["-y", "@modelcontextprotocol/server-sequentialthinking"],
+        "env": {}
+      },
+      "settings": {}
+    }
+  },
   "ui_font_size": 20,
   "buffer_font_size": 20,
   "theme": {
