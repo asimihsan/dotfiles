@@ -19,15 +19,43 @@ function record_session() {
     # Create empty file first
     touch "$TXT_FILE"
 
-    # Start the background cleaner process with nohup
+    # Create a session-specific PID file
+    PID_FILE="/tmp/terminal_record_${TIMESTAMP}.pid"
+
+    # Cleanup function to handle all processes
+    cleanup() {
+        echo "Cleaning up processes..."
+
+        # Kill the cleaner process if it exists
+        if [[ -n "$CLEANER_PID" ]]; then
+            pkill -P "$CLEANER_PID" 2>/dev/null
+            kill "$CLEANER_PID" 2>/dev/null
+        fi
+
+        # Kill any remaining script/ttyrec processes for this session
+        pgrep -f "script.*$TXT_FILE" | xargs kill -TERM 2>/dev/null
+        pgrep -f "ttyrec.*$TTY_FILE" | xargs kill -TERM 2>/dev/null
+
+        # Remove PID file
+        rm -f "$PID_FILE"
+
+        # Remove trap
+        trap - EXIT HUP TERM INT
+    }
+
+    # Set up comprehensive trap
+    trap cleanup EXIT HUP TERM INT
+
+    # Start the background cleaner process
     nohup bash -c "stdbuf -oL tail -f -n +1 \"$TXT_FILE\" | \"$LOGGER_SCRIPT\" > \"$CLEAN_FILE\"" >/dev/null 2>&1 &
     CLEANER_PID=$!
+    echo "$CLEANER_PID" > "$PID_FILE"
 
-    # Set up cleanup trap for just the cleaner
-    trap 'kill $CLEANER_PID 2>/dev/null' EXIT
-
-    # Run script with shell command to execute ttyrec
+    # Run script and ttyrec in the foreground
     script -q "$TXT_FILE" /bin/sh -c "exec ttyrec \"$TTY_FILE\""
+
+    # Ensure cleanup runs
+    cleanup
 }
 
 # Function to view last recording (cleaned)
@@ -99,7 +127,23 @@ function playtty() {
     fi
 }
 
-# Function to rotate logs
 rotate_logs() {
-    fd . "$LOGDIR" --changed-before 7d --type f --threads 1 --exclude "*.zst" --exec zstd -7 --rm {}
+    # Create temporary file for open files list
+    local tmp_exclusions=$(mktemp)
+
+    # Get list of open files in the log directory
+    lsof -F n "$LOGDIR"/* 2>/dev/null | grep '^n/' | cut -c 2- > "$tmp_exclusions"
+
+    # Find files and filter out open ones
+    fd . "$LOGDIR" \
+        --changed-before 1d \
+        --type f \
+        --threads 1 \
+        --exclude "*.zst" \
+        -0 | \
+    grep -vzZf "$tmp_exclusions" | \
+    xargs -0 -I {} zstd -7 --rm "{}"
+
+    # Clean up
+    rm -f "$tmp_exclusions"
 }
