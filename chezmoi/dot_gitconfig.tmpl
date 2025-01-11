@@ -1,9 +1,13 @@
 [user]
 name = Asim Ihsan
+{{ if eq .chezmoi.hostname "yov3bc" -}}
 email = asim.ihsan@level.co
-[user]
 signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOdZS3iTbk1bmMq1Oq9kFySUPbfa5bM41dAhH+og89or
-
+{{ end -}}
+{{ if eq .chezmoi.hostname "hlru5i" -}}
+email = ssh@sshemail.ihsan.io
+signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+6ch0i+pdf+48pQ/S180rtxe9yELTC9w/GYBZoRl89
+{{ end -}}
 
 [alias]
 co = checkout
