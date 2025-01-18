@@ -23,6 +23,7 @@
     "gh@latest",
     "git@latest",
     "glab@latest",
+    "golangci-lint@1.62.2",
     "gnumake@latest",
     "hadolint@latest",
     "htop@latest",
