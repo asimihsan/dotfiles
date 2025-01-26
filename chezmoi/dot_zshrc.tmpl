@@ -96,7 +96,7 @@ load_all_secrets() {
     load_secret "Private/Bing search API key/password" "BING_SEARCH_API_KEY"
     load_secret "Private/Perplexity API key/credential" "PERPLEXITY_API_KEY"
     load_secret "Private/Claude MCP server GitHub Personal Access Token/token" "GITHUB_PERSONAL_ACCESS_TOKEN"
-
+    load_secret "Private/DEEPSEEK_API_KEY/password" "DEEPSEEK_API_KEY"
 
     load_secret "Private/SumoLogic Level/Access ID" "SUMOLOGIC_ACCESS_ID"
     load_secret "Private/SumoLogic Level/Access Key" "SUMOLOGIC_ACCESS_KEY"
@@ -108,9 +108,6 @@ load_all_secrets() {
     load_secret "Private/Notion API key for Level workspace/credential" "NOTION_KEY"
     load_secret "Private/Linear API key/password" "LINEAR_API_KEY"
     load_secret "Private/Iterable Level/password" "ITERABLE_API_KEY"
-
-
-
 
     echo "All secrets have been loaded."
 }
