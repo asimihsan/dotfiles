@@ -4,6 +4,8 @@ from urllib.parse import urlparse
 
 from pydantic import BaseModel
 
+from pythonbin.command.command import run_command
+
 
 class PullRequestURL(BaseModel):
     original_url: str
@@ -40,20 +42,7 @@ class PullRequestURL(BaseModel):
         return cls(original_url=url, owner=owner, repo=repo, number=number)
 
 
-class CommandFailedException(Exception):
-    def __init__(self, command, message):
-        self.command = command
-        self.message = f"Command failed: {command}\n{message}"
-        super().__init__(self.message)
 
-
-def run_command(command, cwd=None):
-    result = subprocess.run(
-        command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, cwd=cwd
-    )
-    if result.returncode != 0:
-        raise CommandFailedException(command, result.stderr.decode("utf-8"))
-    return result.stdout.decode("utf-8")
 
 
 def get_pr_description(pr_url):

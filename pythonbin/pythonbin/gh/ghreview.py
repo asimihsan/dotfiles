@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
 import argparse
-import re
 import subprocess
 from string import Template
 
-from pythonbin.gh.ghlib import run_command, get_pr_comments, get_pr_description, get_pr_diff, PullRequestURL
+from pythonbin.command.command import run_command
+from pythonbin.gh.changelog import find_linear_issue
+from pythonbin.gh.ghlib import get_pr_comments, get_pr_description, get_pr_diff, PullRequestURL
 
 
-def find_jira_tickets(description):
-    return re.findall(r"\b[A-Z]{2,}-\d+\b", description)
-
-
-def get_jira_details(ticket):
+def get_ticket_details(ticket):
     return run_command(f"uv run python src/linear_tools/main.py get-issue --issue-id {ticket}", cwd="/Users/asimi/workplace/linear-tools")
     # return run_command(f"jira --comments 100 issue view {ticket} --plain")
 
@@ -91,19 +88,14 @@ def main():
     pr_comments = get_pr_comments(pull_request_url)
     pr_description = get_pr_description(pr_url)
     pr_diff = get_pr_diff(pr_url)
-    jira_tickets = find_jira_tickets(pr_description)
 
-    try:
-        jira_details = (
-            "\n\n".join([get_jira_details(ticket) for ticket in jira_tickets])
-            if jira_tickets
-            else None
-        )
-    except Exception as e:
-        print("Error fetching Jira details:", e)
-        jira_details = None
+    linear_issue = find_linear_issue(pull_request_url)
+    if linear_issue:
+        linear_details = get_ticket_details(linear_issue["id"])
+    else:
+        linear_details = None
 
-    prompt = create_prompt(pr_description, pr_diff, pr_comments, jira_details)
+    prompt = create_prompt(pr_description, pr_diff, pr_comments, linear_details)
     prompt = prompt.strip()
     copy_to_clipboard(prompt)
 
