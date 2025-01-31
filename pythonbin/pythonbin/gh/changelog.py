@@ -10,7 +10,7 @@ from typing import Optional, List
 from pythonbin.gh.ghlib import PullRequestURL
 from pythonbin.git.operations import GitOperations, GitRange
 from pythonbin.command.command import run_command
-from pythonbin.gh.linears import get_bot_comments
+from pythonbin.gh.ghlib import get_bot_comments
 
 
 @dataclass

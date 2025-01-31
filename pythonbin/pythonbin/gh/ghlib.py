@@ -1,48 +1,35 @@
 import json
+import re
 import subprocess
-from urllib.parse import urlparse
-
-from pydantic import BaseModel
+from dataclasses import dataclass
+from typing import Optional, List
 
 from pythonbin.command.command import run_command
+from pythonbin.gh.models import PullRequestURL
 
 
-class PullRequestURL(BaseModel):
-    original_url: str
-    owner: str
-    repo: str
-    number: int
-
-    @classmethod
-    def from_url(cls, url: str) -> "PullRequestURL":
-        """
-        :param url: GitHub PR URL, e.g. https://github.com/LevelHome/LevelServer/pull/3940
-        :return: PullRequestURL instance
-        """
-
-        elems = urlparse(url)
-
-        if elems.hostname != "github.com":
-            raise ValueError(f"Invalid hostname: {elems.hostname}")
-
-        path = elems.path
-        path_elems = path.split("/")
-
-        # if it ends with "files", we can ignore it
-        if path_elems[-1] == "files":
-            path_elems = path_elems[:-1]
-
-        if len(path_elems) != 5:
-            raise ValueError(f"Invalid path: {path}")
-
-        owner = path_elems[1]
-        repo = path_elems[2]
-        number = int(path_elems[4])
-
-        return cls(original_url=url, owner=owner, repo=repo, number=number)
+@dataclass
+class LinearIssue:
+    url: str
+    id: str
 
 
+@dataclass
+class Comment:
+    author: str
+    body: str
+    created_at: str
 
+    def __init__(self, payload: dict):
+        self.author = payload["user"]["login"]
+        self.body = payload["body"]
+        self.created_at = payload["created_at"]
+
+    def get_linear_issue(self) -> Optional[LinearIssue]:
+        match = re.search(r"https://linear.app/[^/]+/issue/([^/]+)/", self.body)
+        if match:
+            return LinearIssue(url=match.group(0), id=match.group(1))
+        return None
 
 
 def get_pr_description(pr_url):
@@ -64,7 +51,7 @@ def get_pr_diff(pr_url, exclude_files=None):
     return "\n".join(filtered_diff)
 
 
-def get_pr_comments(pr_url: "PullRequestURL") -> str:
+def get_pr_comments(pr_url: PullRequestURL) -> str:
     # Construct the GitHub API endpoint for PR comments
     endpoint = f"/repos/{pr_url.owner}/{pr_url.repo}/pulls/{pr_url.number}/comments"
 
@@ -116,3 +103,27 @@ def get_pr_comments(pr_url: "PullRequestURL") -> str:
         )
 
     return "\n".join(markdown_output)
+
+
+def get_bot_comments(pr_url: PullRequestURL) -> List[Comment]:
+    endpoint = f"/repos/{pr_url.owner}/{pr_url.repo}/issues/{pr_url.number}/comments"
+    cmd = f"gh api -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28' {endpoint}"
+
+    try:
+        result = run_command(cmd)
+        comments = json.loads(result)
+        return [
+            Comment(comment) for comment in comments if comment["user"]["type"] == "Bot"
+        ]
+    except Exception as e:
+        print(f"Error fetching PR comments: {e}")
+        return []
+
+
+def find_linear_issue(pr_url: PullRequestURL) -> Optional[dict]:
+    comments = get_bot_comments(pr_url)
+    for comment in comments:
+        issue = comment.get_linear_issue()
+        if issue:
+            return {"id": issue.id, "url": issue.url}
+    return None

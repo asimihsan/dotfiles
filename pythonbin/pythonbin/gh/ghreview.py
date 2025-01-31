@@ -4,7 +4,7 @@ import subprocess
 from string import Template
 
 from pythonbin.command.command import run_command
-from pythonbin.gh.changelog import find_linear_issue
+from pythonbin.gh.ghlib import find_linear_issue
 from pythonbin.gh.ghlib import get_pr_comments, get_pr_description, get_pr_diff, PullRequestURL
 
 

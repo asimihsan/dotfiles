@@ -9,7 +9,8 @@ from dataclasses import dataclass
 from os.path import expanduser
 from typing import Optional
 
-from pythonbin.gh.ghreview import run_command, PullRequestURL
+from pythonbin.command.command import run_command
+from pythonbin.gh.models import PullRequestURL
 from pythonbin.git.operations import GitOperations, GitRange
 
 
