@@ -62,6 +62,7 @@
     "erdtree@latest",
     "ktlint@latest",
     "tree@latest",
-    "goimports-reviser@latest"
+    "goimports-reviser@latest",
+    "jujutsu@latest"
   ]
 }

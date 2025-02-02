@@ -1889,6 +1889,54 @@
         }
       }
     },
+    "jujutsu@latest": {
+      "last_modified": "2025-01-19T08:16:51Z",
+      "resolved": "github:NixOS/nixpkgs/50165c4f7eb48ce82bd063e1fb8047a0f515f8ce#jujutsu",
+      "source": "devbox-search",
+      "version": "0.25.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/q6gk9k80rs81xjfflwik27l5n27rnl7s-jujutsu-0.25.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/q6gk9k80rs81xjfflwik27l5n27rnl7s-jujutsu-0.25.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/b8klpgvvgy36j8anikmq6apz0b2r64j2-jujutsu-0.25.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/b8klpgvvgy36j8anikmq6apz0b2r64j2-jujutsu-0.25.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/vdy43zg23akpr0asrjk29k0dy5abzc4j-jujutsu-0.25.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/vdy43zg23akpr0asrjk29k0dy5abzc4j-jujutsu-0.25.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/mw0sdm3slxxzvrp05l9vv5sc8jcbrcbq-jujutsu-0.25.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/mw0sdm3slxxzvrp05l9vv5sc8jcbrcbq-jujutsu-0.25.0"
+        }
+      }
+    },
     "just@latest": {
       "last_modified": "2025-01-25T23:17:58Z",
       "resolved": "github:NixOS/nixpkgs/b582bb5b0d7af253b05d58314b85ab8ec46b8d19#just",
