@@ -63,6 +63,7 @@
     "ktlint@latest",
     "tree@latest",
     "goimports-reviser@latest",
-    "jujutsu@latest"
+    "jujutsu@latest",
+    "copier@latest"
   ]
 }
