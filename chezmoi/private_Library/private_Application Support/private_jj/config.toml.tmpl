@@ -1,0 +1,21 @@
+[user]
+name = "Asim Ihsan"
+{{ if eq .chezmoi.hostname "yov3bc" -}}
+email = "asim.ihsan@level.co"
+{{ end -}}
+{{ if eq .chezmoi.hostname "hlru5i" -}}
+email = ssh@sshemail.ihsan.io
+{{ end -}}
+
+[ui]
+default-command = "log"
+
+[aliases]
+dds = ["diff", "--tool", "difft-s"]
+ddi = ["diff", "--tool", "difft-i"]
+di = ["diff", "--tool", "idea"]
+sm = ["b", "s", "main"]
+smb = ["b", "s", "main", "-B"]
+gp = ["git", "push"]
+gf = ["git", "fetch"]
+gpn = ["git", "push", "--allow-new"]

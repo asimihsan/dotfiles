@@ -1,0 +1,2 @@
+#!/bin/sh
+difft --display side-by-side --color=always "$@"
