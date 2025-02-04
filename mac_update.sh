@@ -22,12 +22,12 @@ update_dotfiles() {
         return 1
     }
 
-    echo "Updating dotfiles repository..."
+    # echo "Updating dotfiles repository..."
 
-    if ! git town sync; then
-        echo "Failed to git town sync"
-        return 1
-    fi
+    # if ! git town sync; then
+    #     echo "Failed to git town sync"
+    #     return 1
+    # fi
 }
 
 update_dotfiles
