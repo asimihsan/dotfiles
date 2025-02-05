@@ -1234,8 +1234,8 @@
       }
     },
     "fzf@latest": {
-      "last_modified": "2025-01-25T23:17:58Z",
-      "resolved": "github:NixOS/nixpkgs/b582bb5b0d7af253b05d58314b85ab8ec46b8d19#fzf",
+      "last_modified": "2025-01-20T10:56:48Z",
+      "resolved": "github:NixOS/nixpkgs/300081d0cc72df578b02d914df941b8ec62240e6#fzf",
       "source": "devbox-search",
       "version": "0.58.0",
       "systems": {
@@ -1422,8 +1422,8 @@
       }
     },
     "glab@latest": {
-      "last_modified": "2025-01-25T23:17:58Z",
-      "resolved": "github:NixOS/nixpkgs/b582bb5b0d7af253b05d58314b85ab8ec46b8d19#glab",
+      "last_modified": "2025-01-22T06:06:04Z",
+      "resolved": "github:NixOS/nixpkgs/5757bbb8bd7c0630a0cc4bb19c47e588db30b97c#glab",
       "source": "devbox-search",
       "version": "1.52.0",
       "systems": {
@@ -3059,8 +3059,8 @@
       }
     },
     "tree-sitter@latest": {
-      "last_modified": "2025-01-25T23:17:58Z",
-      "resolved": "github:NixOS/nixpkgs/b582bb5b0d7af253b05d58314b85ab8ec46b8d19#tree-sitter",
+      "last_modified": "2025-01-19T08:16:51Z",
+      "resolved": "github:NixOS/nixpkgs/50165c4f7eb48ce82bd063e1fb8047a0f515f8ce#tree-sitter",
       "source": "devbox-search",
       "version": "0.24.6",
       "systems": {
@@ -3203,8 +3203,8 @@
       }
     },
     "vim@latest": {
-      "last_modified": "2025-01-22T14:55:48Z",
-      "resolved": "github:NixOS/nixpkgs/606996d74f6e2a12635d41c1bf58bfc7ea3bb5ec#vim",
+      "last_modified": "2025-01-19T08:16:51Z",
+      "resolved": "github:NixOS/nixpkgs/50165c4f7eb48ce82bd063e1fb8047a0f515f8ce#vim",
       "source": "devbox-search",
       "version": "9.1.0990",
       "systems": {
@@ -3479,8 +3479,8 @@
       }
     },
     "zoxide@latest": {
-      "last_modified": "2025-01-25T23:17:58Z",
-      "resolved": "github:NixOS/nixpkgs/b582bb5b0d7af253b05d58314b85ab8ec46b8d19#zoxide",
+      "last_modified": "2025-01-20T10:56:48Z",
+      "resolved": "github:NixOS/nixpkgs/300081d0cc72df578b02d914df941b8ec62240e6#zoxide",
       "source": "devbox-search",
       "version": "0.9.6",
       "systems": {
