@@ -1,2 +1,2 @@
 #!/bin/sh
-difft --display inline --color=always "$@"
+difft --display inline --color=always --context 7 "$@"

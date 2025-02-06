@@ -1,2 +1,2 @@
 #!/bin/sh
-difft --display side-by-side --color=always "$@"
+difft --display side-by-side --color=always --context 7 "$@"
