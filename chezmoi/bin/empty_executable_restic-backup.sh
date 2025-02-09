@@ -588,7 +588,6 @@ forget_and_prune() {
         cleanup_cache="--cleanup-cache"
     fi
     echo "Forgetting old snapshots and pruning..."
-    run_restic cache --cleanup
     run_restic forget \
         --keep-hourly 4 \
         --keep-daily 7 \
