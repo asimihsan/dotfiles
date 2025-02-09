@@ -532,7 +532,7 @@ run_restic() {
     restic -r "rclone:$ALIAS_REMOTE:" \
         --verbose \
         --password-command "$PASSWORD_COMMAND" \
-        --limit-download 1024 \
+        --limit-download 5120 \
         --limit-upload 1024 \
         --option rclone.connections=10 \
         "$@"
