@@ -598,6 +598,7 @@ forget_and_prune() {
         --repack-small \
         --repack-uncompressed \
         --max-repack-size 2G \
+        --max-unused 3% \
         ${cleanup_cache}
 }
 
