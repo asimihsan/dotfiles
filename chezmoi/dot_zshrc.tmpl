@@ -32,8 +32,6 @@ export JAVA_HOME=$($HOME/bin/set-java-home.sh)
 # brew install vivid
 export LS_COLORS="$(vivid generate molokai)"
 
-export PATH="$HOME"/go/bin:"$PATH"
-
 autoload -U +X bashcompinit && bashcompinit
 
 # Hishtory Config:
@@ -162,3 +160,5 @@ if [[ -z "$LOGGING_STARTED" ]]; then
 fi
 
 export EDITOR=vim
+
+[ -f ~/.zprofile ] && source ~/.zprofile
