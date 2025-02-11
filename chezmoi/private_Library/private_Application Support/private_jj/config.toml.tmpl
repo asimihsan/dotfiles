@@ -24,6 +24,23 @@ program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 default-command = "log"
 diff.tool = ["difft", "--color=always", "$left", "$right"]
 
+[merge-tools.difft]
+diff-args = ["--color=always", "$left", "$right"]
+
+[merge-tools.diffconflicts]
+program = "nvim"
+merge-args = [
+    "-c", "let g:jj_diffconflicts_marker_length=$marker_length",
+    "-c", "JJDiffConflicts!", "$output", "$base", "$left", "$right",
+]
+merge-tool-edits-conflict-markers = true
+
+[merge-tools.intellij]
+program = "idea"
+diff-args = ["diff",  "$left", "$right"]
+edit-args = ["diff",  "$left", "$right"]
+merge-args = ["merge" , "$left", "$right", "$base", "$output"]
+
 [aliases]
 dds = ["diff", "--tool", "difft-s"]
 ddi = ["diff", "--tool", "difft-i"]
