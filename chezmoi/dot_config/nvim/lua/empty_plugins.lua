@@ -105,4 +105,11 @@ return { -- Existing plugins
             }
         end
     },
+    {
+        "rafikdraoui/jj-diffconflicts",
+        config = function()
+            -- No additional configuration is strictly necessary.
+            -- This plugin provides the JJDiffConflicts command which your merge tool config calls.
+        end
+    },
 }
