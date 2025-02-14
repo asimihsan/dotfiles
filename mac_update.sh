@@ -51,6 +51,8 @@ if command -v flutter; then
 fi
 
 rustup update stable
+cargo install cargo-binstall
+cargo binstall --no-confirm lazyjj
 
 ~/bin/install-npm-global.sh
 npm update -g
