@@ -7,7 +7,60 @@ signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOdZS3iTbk1bmMq1Oq9kFySUPbfa5bM
 {{ if eq .chezmoi.hostname "hlru5i" -}}
 email = ssh@sshemail.ihsan.io
 signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+6ch0i+pdf+48pQ/S180rtxe9yELTC9w/GYBZoRl89
-{{ end -}}
+{{ end }}
+
+# https://blog.gitbutler.com/how-git-core-devs-configure-git/
+
+# clearly makes git better
+
+[column]
+        ui = auto
+[branch]
+        sort = -committerdate
+[tag]
+        sort = version:refname
+[init]
+        defaultBranch = main
+[diff]
+        algorithm = histogram
+        colorMoved = plain
+        mnemonicPrefix = true
+        renames = true
+[push]
+        default = simple
+        autoSetupRemote = true
+        followTags = true
+[fetch]
+        prune = true
+        pruneTags = true
+        all = true
+
+# why the hell not?
+
+[help]
+        autocorrect = prompt
+[commit]
+        verbose = true
+[rerere]
+        enabled = true
+        autoupdate = true
+[core]
+        excludesfile = ~/.gitignore
+[rebase]
+        autoSquash = true
+        autoStash = true
+        updateRefs = true
+
+# a matter of taste (uncomment if you dare)
+
+[core]
+        # fsmonitor = true
+        # untrackedCache = true
+[merge]
+        # (just 'diff3' if git version < 2.3)
+        # conflictstyle = zdiff3 
+[pull]
+        # rebase = true
 
 [alias]
 co = checkout
@@ -31,8 +84,8 @@ repo = town repo
 set-parent = town set-parent
 ship = town ship
 sync = town sync
-	delete = town delete
-	rename = town rename
+delete = town delete
+rename = town rename
 
 [color]
 branch = auto
@@ -55,17 +108,11 @@ helper = cache --timeout=3600
 helper =
 helper = /usr/local/share/gcm-core/git-credential-manager
 
-[init]
-defaultBranch = main
-
 [remote "origin"]
 tagopt = --tags
 
 [diff]
 external = difft
-
-[push]
-autoSetupRemote = true
 
 [oh-my-zsh]
 hide-status = 1
