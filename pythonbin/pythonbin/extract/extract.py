@@ -62,7 +62,7 @@ def run_main(paths: list[Path], write: bool = False):
             continue
 
         if path.is_dir():
-            for p in path.iterdir():
+            for p in sorted(path.iterdir()):
                 if p.is_file():
                     deque.append(p)
             continue
@@ -87,7 +87,7 @@ def parse_arguments():
 
 def main():
     args = parse_arguments()
-    paths = [Path(p) for p in args.paths]
+    paths = sorted([Path(p) for p in args.paths])
     run_main(paths, write=args.write)
 
 
