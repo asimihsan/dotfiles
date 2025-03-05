@@ -1,4 +1,6 @@
 [tools]
+1password = "latest"
+aws-vault = "latest"
 go = 'prefix:1.24'
 java = 'prefix:corretto-23'
 node = 'lts'
