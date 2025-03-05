@@ -33,14 +33,14 @@ update_dotfiles() {
 update_dotfiles
 
 "$HOME"/.dotfiles/install
-cp $(devbox global path)/devbox.{lock,json} ~/.dotfiles/chezmoi/dot_local/share/devbox/global/default/
+cp "$(devbox global path)/devbox.{lock,json}" ~/.dotfiles/chezmoi/dot_local/share/devbox/global/default/
 
 chezmoi update
 chezmoi upgrade
 chezmoi apply
 
 devbox global update
-cp $(devbox global path)/devbox.{lock,json} ~/.dotfiles/chezmoi/dot_local/share/devbox/global/default/
+cp "$(devbox global path)/devbox.{lock,json}" ~/.dotfiles/chezmoi/dot_local/share/devbox/global/default/
 
 sudo softwareupdate --download --all --agree-to-license
 brew update
