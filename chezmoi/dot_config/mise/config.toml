@@ -1,9 +1,13 @@
 [tools]
 1password = "latest"
 aws-vault = "latest"
-go = 'prefix:1.24'
-java = 'prefix:corretto-23'
-node = 'lts'
-python = 'prefix:3.12'
-ruby = 'prefix:3.4'
-rust = 'latest'
+awscli = "latest"
+ffmpeg = "latest"
+go = "prefix:1.24"
+golangci-lint = "latest"
+gradle = "latest"
+java = "prefix:corretto-23"
+node = "lts"
+python = "prefix:3.12"
+ruby = "prefix:3.4"
+rust = "latest"
