@@ -2,9 +2,11 @@
 
 set -euo pipefail
 
-cp $(devbox global path)/devbox.{lock,json} ~/.dotfiles/chezmoi/dot_local/share/devbox/global/default/
+cp "$(devbox global path)"/devbox.{lock,json} ~/.dotfiles/chezmoi/dot_local/share/devbox/global/default/
 cp ~/.config/zed/settings.json ~/.dotfiles/chezmoi/dot_config/zed/private_settings.json
 cp ~/.config/zed/tasks.json ~/.dotfiles/chezmoi/dot_config/zed/private_tasks.json
 cp ~/.config/karabiner/karabiner.json ~/.dotfiles/chezmoi/dot_config/private_karabiner/private_karabiner.json
 cp ~/.config/kitty/kitty.conf ~/.dotfiles/chezmoi/dot_config/kitty/kitty.conf
 cp ~/.zshrc ~/.dotfiles/chezmoi/dot_zshrc.tmpl
+cp ~/Library/Preferences/com.googlecode.iterm2.plist chezmoi/private_Library/private_Preferences/private_com.googlecode.iterm2.plist
+cp ~/Library/Preferences/com.googlecode.iterm2.private.plist chezmoi/private_Library/private_Preferences/private_com.googlecode.iterm2.private.plist
