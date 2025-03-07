@@ -20,8 +20,6 @@
     # TODO FIXME
     # ~/.ssh/config: sshconfig
 
-    ~/.config/starship.toml: starship.toml
-
 - shell:
     - command: sudo -v
       stdin: true
