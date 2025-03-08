@@ -1005,6 +1005,70 @@
         }
       }
     },
+    "dvc@latest": {
+      "last_modified": "2025-02-28T17:02:31Z",
+      "resolved": "github:NixOS/nixpkgs/5954d3359cc7178623da6c7fd23dc7f7504d7187#dvc",
+      "source": "devbox-search",
+      "version": "3.59.1",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/1bffn80d8w9pimraif067wryp4y8mcp4-python3.12-dvc-3.59.1",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/14bkdk77fa2hmcwdz8kyjggp1mhzphyc-python3.12-dvc-3.59.1-dist"
+            }
+          ],
+          "store_path": "/nix/store/1bffn80d8w9pimraif067wryp4y8mcp4-python3.12-dvc-3.59.1"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/fnd268820nh85s9zs1x1r8d6clm5m6ar-python3.12-dvc-3.59.1",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/926srczcf3yimah3422q22a7n84fh79g-python3.12-dvc-3.59.1-dist"
+            }
+          ],
+          "store_path": "/nix/store/fnd268820nh85s9zs1x1r8d6clm5m6ar-python3.12-dvc-3.59.1"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/k28gplq1q29ivgi60k4n98s69s3g50p2-python3.12-dvc-3.59.1",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/frjws5zqbk3888shq48489j2qkbd2j1a-python3.12-dvc-3.59.1-dist"
+            }
+          ],
+          "store_path": "/nix/store/k28gplq1q29ivgi60k4n98s69s3g50p2-python3.12-dvc-3.59.1"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/j2rwqydbg1pgzxzasnwn9fh6r5730b8a-python3.12-dvc-3.59.1",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/km1b8vvdz3bg5q24qw02m9j333kjxirl-python3.12-dvc-3.59.1-dist"
+            }
+          ],
+          "store_path": "/nix/store/j2rwqydbg1pgzxzasnwn9fh6r5730b8a-python3.12-dvc-3.59.1"
+        }
+      }
+    },
     "erdtree@latest": {
       "last_modified": "2025-03-01T01:09:10Z",
       "resolved": "github:NixOS/nixpkgs/199169a2135e6b864a888e89a2ace345703c025d#erdtree",
@@ -2798,54 +2862,6 @@
             }
           ],
           "store_path": "/nix/store/4ik55n3a2aqmj8fa8b7q5gvrk6c9pqsg-rustic-0.9.5"
-        }
-      }
-    },
-    "starship@latest": {
-      "last_modified": "2025-02-07T11:26:36Z",
-      "resolved": "github:NixOS/nixpkgs/d98abf5cf5914e5e4e9d57205e3af55ca90ffc1d#starship",
-      "source": "devbox-search",
-      "version": "1.22.1",
-      "systems": {
-        "aarch64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/3l3xlqz8nna3isq2vzsas12lvyry997v-starship-1.22.1",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/3l3xlqz8nna3isq2vzsas12lvyry997v-starship-1.22.1"
-        },
-        "aarch64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/4zj9hz5iyj208900hmc2d1abs65mb3ic-starship-1.22.1",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/4zj9hz5iyj208900hmc2d1abs65mb3ic-starship-1.22.1"
-        },
-        "x86_64-darwin": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/7qivjdb3w4xj1vqnz0jr8lmpy1b9cgqq-starship-1.22.1",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/7qivjdb3w4xj1vqnz0jr8lmpy1b9cgqq-starship-1.22.1"
-        },
-        "x86_64-linux": {
-          "outputs": [
-            {
-              "name": "out",
-              "path": "/nix/store/2pdnxgx161j45i15v01qb16j7dp23zj0-starship-1.22.1",
-              "default": true
-            }
-          ],
-          "store_path": "/nix/store/2pdnxgx161j45i15v01qb16j7dp23zj0-starship-1.22.1"
         }
       }
     },

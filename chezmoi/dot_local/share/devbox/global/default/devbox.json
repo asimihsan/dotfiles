@@ -50,7 +50,6 @@
     "restic@latest",
     "ripgrep@latest",
     "rustic@latest",
-    "starship@latest",
     "terraform@latest",
     "tmux@latest",
     "tmuxPlugins.better-mouse-mode@latest",
