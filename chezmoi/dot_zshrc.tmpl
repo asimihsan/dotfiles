@@ -3,6 +3,8 @@ fpath=(/opt/homebrew/share/zsh/site-functions ${fpath:#/usr/local/share/zsh/site
 fpath+=($DEVBOX_GLOBAL_PREFIX/share/zsh/site-functions $DEVBOX_GLOBAL_PREFIX/share/zsh/$ZSH_VERSION/functions $DEVBOX_GLOBAL_PREFIX/share/zsh/vendor-completions)
 autoload -U compinit && compinit
 
+eval "$(starship init zsh)"
+
 # add devbox bits to zsh
 eval "$(devbox global shellenv)"
 
@@ -161,5 +163,3 @@ if [[ -z "$LOGGING_STARTED" ]]; then
 fi
 
 export EDITOR=vim
-
-[ -f ~/.zprofile ] && source ~/.zprofile

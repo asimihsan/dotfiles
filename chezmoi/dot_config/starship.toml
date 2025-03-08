@@ -3,7 +3,7 @@
 # Do not insert a blank line at the beginning of the prompt.
 add_newline = false
 
-format = "${custom.my_directory}$line_break$character"
+format = "${directory}$line_break$character"
 
 [directory]
 home_symbol = ""
@@ -15,7 +15,3 @@ format = "[ $path ]($style)"
 # Use a simple arrow for the prompt.
 success_symbol = "[➜](bold green)"
 error_symbol = "[➜](bold red)"
-
-[custom.my_directory]
-command = "bash -c 'pwd | sed \"s:^$HOME:~:\"'"
-format = "[$output](bold cyan) "
