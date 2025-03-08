@@ -8,5 +8,5 @@ cp ~/.config/zed/tasks.json ~/.dotfiles/chezmoi/dot_config/zed/private_tasks.jso
 cp ~/.config/karabiner/karabiner.json ~/.dotfiles/chezmoi/dot_config/private_karabiner/private_karabiner.json
 cp ~/.config/kitty/kitty.conf ~/.dotfiles/chezmoi/dot_config/kitty/kitty.conf
 cp ~/.zshrc ~/.dotfiles/chezmoi/dot_zshrc.tmpl
-cp ~/Library/Preferences/com.googlecode.iterm2.plist chezmoi/private_Library/private_Preferences/private_com.googlecode.iterm2.plist
-cp ~/Library/Preferences/com.googlecode.iterm2.private.plist chezmoi/private_Library/private_Preferences/private_com.googlecode.iterm2.private.plist
+cp ~/Library/Preferences/com.googlecode.iterm2.plist ~/.dotfiles/chezmoi/private_Library/private_Preferences/private_com.googlecode.iterm2.plist
+cp ~/Library/Preferences/com.googlecode.iterm2.private.plist ~/.dotfiles/chezmoi/private_Library/private_Preferences/private_com.googlecode.iterm2.private.plist
