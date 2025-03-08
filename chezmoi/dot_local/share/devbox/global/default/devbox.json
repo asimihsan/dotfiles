@@ -18,6 +18,7 @@
     "direnv@latest",
     "dotnet-sdk_8@latest",
     "dust@latest",
+    "dvc@latest",
     "erdtree@latest",
     "expect@latest",
     "eza@latest",

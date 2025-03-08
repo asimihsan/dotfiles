@@ -2,6 +2,7 @@
 1password = "latest"
 aws-vault = "latest"
 awscli = "latest"
+difftastic = "latest"
 ffmpeg = "latest"
 go = "prefix:1.24"
 golangci-lint = "latest"
