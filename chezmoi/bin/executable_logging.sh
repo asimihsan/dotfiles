@@ -160,8 +160,11 @@ is_tty_active() {
     # No TTY (shown as "??") is never active
     [[ "$tty" == "??" ]] && return 1
     
-    # Check if TTY is in the active list
-    echo "$active_ttys" | grep -q "^$tty$"
+    # Strip "tty" prefix if present for comparison
+    local tty_short="${tty#tty}"
+    
+    # Check if TTY (without prefix) is in the active list
+    echo "$active_ttys" | grep -q "^$tty_short$"
     return $?
 }
 
@@ -225,9 +228,9 @@ cleanup_pid_file() {
 function reap_orphaned_processes() {
     echo "Checking for orphaned terminal recording processes..."
     
-    # Get list of active TTYs
-    local active_ttys=$(w -h | awk '{print $2}')
-    echo "Active TTYs: $active_ttys"
+    # Get list of active TTYs (one per line)
+    local active_ttys=$(w -h | awk '{print $2}' | sort | uniq)
+    echo "Active TTYs: $(echo "$active_ttys" | tr '\n' ' ')"
     
     # Create a temporary file to store processed timestamps
     local tmp_processed=$(mktemp)
