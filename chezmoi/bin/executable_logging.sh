@@ -1,3 +1,7 @@
+#!/bin/zsh
+# shellcheck shell=bash
+# Terminal session recording and log management utilities
+
 LOGDIR="$HOME/logs"
 LOGGER_SCRIPT="$HOME/bin/clean_logger.sh"
 mkdir -p "$LOGDIR"
@@ -146,4 +150,139 @@ rotate_logs() {
 
     # Clean up
     rm -f "$tmp_exclusions"
+}
+
+# Check if a TTY is active
+is_tty_active() {
+    local tty="$1"
+    local active_ttys="$2"
+    
+    # No TTY (shown as "??") is never active
+    [[ "$tty" == "??" ]] && return 1
+    
+    # Check if TTY is in the active list
+    echo "$active_ttys" | grep -q "^$tty$"
+    return $?
+}
+
+# Extract timestamp from command
+extract_timestamp() {
+    local command="$1"
+    
+    # Try to extract timestamp using grep
+    local timestamp
+    timestamp=$(echo "$command" | grep -o "terminal_[0-9]\{8\}_[0-9]\{6\}" | head -1 | sed 's/terminal_//')
+    
+    if [[ -n "$timestamp" ]]; then
+        echo "$timestamp"
+        return 0
+    fi
+    
+    return 1
+}
+
+# Terminate a process group related to a timestamp
+terminate_process_group() {
+    local timestamp="$1"
+    
+    # Find all related processes
+    local related_pids=$(ps -eo pid,command | grep "terminal_${timestamp}" | grep -v grep | awk '{print $1}')
+    
+    # If no related processes found, return early
+    [[ -z "$related_pids" ]] && return 0
+    
+    echo "Found $(echo "$related_pids" | wc -l | tr -d ' ') related processes"
+    
+    # First try TERM signal
+    echo "Sending TERM signal to all processes..."
+    echo "$related_pids" | xargs -n1 kill -TERM 2>/dev/null
+    
+    # Wait a second
+    sleep 1
+    
+    # Check if any processes are still running and use KILL if needed
+    local still_running=$(echo "$related_pids" | xargs -n1 ps -p 2>/dev/null | grep -v PID | awk '{print $1}')
+    if [[ -n "$still_running" ]]; then
+        echo "Some processes still running, sending KILL signal..."
+        echo "$still_running" | xargs -n1 kill -KILL 2>/dev/null
+    fi
+    
+    return 0
+}
+
+# Clean up PID file for a timestamp
+cleanup_pid_file() {
+    local timestamp="$1"
+    local pid_file="/tmp/terminal_record_${timestamp}.pid"
+    
+    if [[ -f "$pid_file" ]]; then
+        rm -f "$pid_file"
+        echo "Removed PID file: $pid_file"
+    fi
+}
+
+# Function to reap orphaned terminal recording processes
+function reap_orphaned_processes() {
+    echo "Checking for orphaned terminal recording processes..."
+    
+    # Get list of active TTYs
+    local active_ttys=$(w -h | awk '{print $2}')
+    echo "Active TTYs: $active_ttys"
+    
+    # Create a temporary file to store processed timestamps
+    local tmp_processed=$(mktemp)
+    trap "rm -f $tmp_processed" EXIT
+    
+    # Find all ttyrec processes
+    local ttyrec_processes=$(ps -eo pid,ppid,tty,lstart,command | grep ttyrec | grep -v grep)
+    
+    if [[ -z "$ttyrec_processes" ]]; then
+        echo "No ttyrec processes found."
+        rm -f "$tmp_processed"
+        return 0
+    fi
+    
+    local total_processes=$(echo "$ttyrec_processes" | wc -l)
+    echo "Found $total_processes ttyrec processes"
+    
+    local orphaned_count=0
+    local processed_count=0
+    
+    # Process each ttyrec process
+    echo "$ttyrec_processes" | while read -r line; do
+        local pid=$(echo "$line" | awk '{print $1}')
+        local tty=$(echo "$line" | awk '{print $3}')
+        local command=$(echo "$line" | awk '{for(i=5;i<=NF;i++) printf "%s ", $i; print ""}')
+        
+        # Extract timestamp from command
+        local timestamp=$(extract_timestamp "$command")
+        
+        # Skip if no timestamp found
+        [[ -z "$timestamp" ]] && continue
+        
+        # Skip if we've already processed this timestamp
+        if grep -q "^$timestamp$" "$tmp_processed"; then
+            continue
+        fi
+        
+        # Mark this timestamp as processed
+        echo "$timestamp" >> "$tmp_processed"
+        ((processed_count++))
+        
+        # Check if session is active
+        if is_tty_active "$tty" "$active_ttys"; then
+            continue
+        fi
+        
+        # If we get here, the session is orphaned
+        echo "Found orphaned session: Timestamp $timestamp, TTY $tty"
+        ((orphaned_count++))
+        
+        # Terminate process group and clean up PID file
+        terminate_process_group "$timestamp"
+        cleanup_pid_file "$timestamp"
+    done
+    
+    echo "Processed $processed_count unique sessions, terminated $orphaned_count orphaned sessions"
+    echo "Orphaned process check complete"
 }
