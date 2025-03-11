@@ -33,14 +33,13 @@ update_dotfiles() {
 update_dotfiles
 
 "$HOME"/.dotfiles/install
-cp "$(devbox global path)/devbox.{lock,json}" ~/.dotfiles/chezmoi/dot_local/share/devbox/global/default/
 
 chezmoi update
 chezmoi upgrade
 chezmoi apply
 
 devbox global update
-cp "$(devbox global path)/devbox.{lock,json}" ~/.dotfiles/chezmoi/dot_local/share/devbox/global/default/
+eval "$(devbox global shellenv --recompute)"
 
 sudo softwareupdate --download --all --agree-to-license
 brew update
@@ -60,6 +59,7 @@ cargo binstall --no-confirm lazyjj
 
 ~/bin/install-npm-global.sh
 npm update -g
+claude update
 
 brew doctor
 if command -v flutter; then
@@ -70,3 +70,5 @@ dotnet tool update --global P
 gh extension upgrade gh-copilot
 
 brew bundle install
+
+~/bin/copy-to-backup.sh

@@ -27,8 +27,6 @@
     "git@latest",
     "glab@latest",
     "gnumake@latest",
-    "goimports-reviser@latest",
-    "golangci-lint@1.62.2",
     "hadolint@latest",
     "htop@latest",
     "imagemagick@latest",
