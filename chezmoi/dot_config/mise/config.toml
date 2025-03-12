@@ -2,6 +2,7 @@
 1password = "latest"
 aws-vault = "latest"
 awscli = "latest"
+cargo-binstall = "latest"
 chezmoi = "latest"
 difftastic = "latest"
 ffmpeg = "latest"

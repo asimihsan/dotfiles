@@ -54,7 +54,6 @@ mise install
 mise upgrade
 
 rustup update stable
-cargo install cargo-binstall
 cargo binstall --no-confirm lazyjj
 
 ~/bin/install-npm-global.sh
