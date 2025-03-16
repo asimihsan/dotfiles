@@ -9,6 +9,11 @@ function cache_sudo_credentials() {
 cache_sudo_credentials
 echo starting...
 
+mise cache clear
+mise install
+mise upgrade --yes
+mise prune --yes
+
 update_dotfiles() {
     local dotfiles_dir="$HOME/.dotfiles"
 
@@ -49,15 +54,10 @@ if command -v flutter; then
     flutter upgrade --force
 fi
 
-mise cache clear
-mise install
-mise upgrade
-
 rustup update stable
 cargo binstall --no-confirm lazyjj
 
 ~/bin/install-npm-global.sh
-npm update -g
 claude update
 
 brew doctor

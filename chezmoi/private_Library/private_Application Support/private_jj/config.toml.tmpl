@@ -8,7 +8,7 @@ email = "ssh@sshemail.ihsan.io"
 {{ end -}}
 
 [signing]
-sign-all = true
+behavior = "own"
 backend = "ssh"
 {{ if eq .chezmoi.hostname "yov3bc" -}}
 key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOdZS3iTbk1bmMq1Oq9kFySUPbfa5bM41dAhH+og89or"
