@@ -6,4 +6,6 @@
 @modelcontextprotocol/server-github
 @modelcontextprotocol/server-memory
 @modelcontextprotocol/server-sequential-thinking
-aws-sdk
+aws-cdk
+jsonlint
+markdownlint-cli

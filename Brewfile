@@ -1,4 +1,3 @@
-brew "aws-cdk"
 brew "borgbackup/tap/borgbackup-fuse"
 brew "chrony"
 brew "d2"
