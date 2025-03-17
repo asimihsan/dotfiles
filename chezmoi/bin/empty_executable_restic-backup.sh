@@ -460,6 +460,7 @@ init_restic() {
 # Function to perform backup
 do_backup() {
     echo "Performing backup..."
+    tag-cache-dirs --root-dir ~/workplace --root-dir ~/Downloads
     run_restic backup \
         --exclude-caches \
         --exclude-file "${SCRIPT_DIR}/restic-excludes" \
