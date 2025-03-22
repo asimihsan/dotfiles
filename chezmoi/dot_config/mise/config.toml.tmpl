@@ -10,7 +10,6 @@ difftastic = "latest"
 direnv = "latest"
 dust = "latest"
 fd = "latest"
-ffmpeg = "latest"
 fzf = "latest"
 gh = "latest"
 go = "prefix:1.24"
@@ -32,3 +31,8 @@ ruby = "prefix:3.4"
 rust = "latest"
 starship = "latest"
 uv = "latest"
+
+{{ if eq .chezmoi.hostname "hlru5i" }}
+ffmpeg = "latest"
+yt-dlp = "latest"
+{{ end }}
