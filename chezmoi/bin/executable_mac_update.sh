@@ -50,10 +50,6 @@ sudo softwareupdate --download --all --agree-to-license
 brew update
 brew upgrade
 
-if command -v flutter; then
-    flutter upgrade --force
-fi
-
 rustup update stable
 cargo binstall --no-confirm lazyjj
 

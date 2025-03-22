@@ -1,7 +1,7 @@
 # Ensure correct Homebrew completions path for Apple Silicon
 fpath=(/opt/homebrew/share/zsh/site-functions ${fpath:#/usr/local/share/zsh/site-functions})
 fpath+=($DEVBOX_GLOBAL_PREFIX/share/zsh/site-functions $DEVBOX_GLOBAL_PREFIX/share/zsh/$ZSH_VERSION/functions $DEVBOX_GLOBAL_PREFIX/share/zsh/vendor-completions)
-autoload -U compinit && compinit
+autoload -U compinit && compinit -u
 
 eval "$(starship init zsh)"
 
@@ -10,8 +10,6 @@ eval "$(devbox global shellenv)"
 
 export PATH="$HOME/.bin:$HOME/bin:$PATH"
 export PATH="/usr/local/bin:$HOME/bin:$PATH"
-
-export PATH="$PATH":$HOME/flutter/bin
 
 source <(fzf --zsh)
 
@@ -53,7 +51,6 @@ export PATH="${PATH}":/Users/asimi/Library/Application\ Support/JetBrains/Toolbo
 export PATH=$PATH:$(go env GOPATH)/bin
 
 export PATH="$PATH":"$HOME/.pub-cache/bin"
-export PATH=$HOME/flutter/bin:$PATH
 export PATH=$PATH:/Users/asimi/.local/bin:/Users/asimi/bin
 
 # -----------------------------------------------------------------------------
@@ -109,8 +106,6 @@ load_all_secrets() {
 # You can now call `load_all_secrets` manually whenever you need to populate the environment variables
 # -----------------------------------------------------------------------------
 
-export PATH="$HOME/flutter:$PATH"
-
 alias ll='eza -lh --git'
 alias ls="gls --color"
 alias du="dust"
@@ -135,8 +130,6 @@ fi
 # -----------------------------------------------------------------------------
 
 . "$HOME/.cargo/env"
-
-source <(git-town completions zsh)
 
 export PATH="$PATH:/Users/asimi/.dotnet/tools"
 
