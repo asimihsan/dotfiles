@@ -467,7 +467,7 @@ do_backup() {
         --pack-size 16 \
         --read-concurrency 4 \
         "${BACKUP_PATHS[@]}"
-    forget_and_prune --cleanup-cache
+    forget_and_prune
 }
 
 # Function to list snapshots
@@ -491,10 +491,11 @@ restore_snapshot() {
 # Function to forget old snapshots and prune
 forget_and_prune() {
     local cleanup_cache=""
+    echo "Forgetting old snapshots and pruning..."
     if [[ "${1-}" == "--cleanup-cache" ]]; then
+        echo "Will also cleanup cache"
         cleanup_cache="--cleanup-cache"
     fi
-    echo "Forgetting old snapshots and pruning..."
     run_restic forget \
         --keep-hourly 4 \
         --keep-daily 7 \
@@ -645,7 +646,7 @@ main() {
         cmd_prune "$@"
         ;;
     prune-cache)
-        cmd_prune --cleanup-cache
+        cmd_prune "$@" --cleanup-cache
         ;;
     unlock)
         cmd_unlock "$@"

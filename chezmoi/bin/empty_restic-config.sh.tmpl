@@ -34,5 +34,9 @@ BACKUP_PATHS=(
 )
 
 {{ if eq .chezmoi.hostname "hlru5i" }}
-BACKUP_PATHS+=("$HOME/Obsidian")
+BACKUP_PATHS+=(
+    "$HOME/Obsidian"
+    "$HOME/personal-documents-copy/PD07Subset02.sparsebundle"
+    "$HOME/Dropbox/Private/Personal Documents (dropbox)"
+)
 {{ end }}
