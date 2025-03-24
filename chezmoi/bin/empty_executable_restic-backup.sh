@@ -439,8 +439,8 @@ run_restic() {
         --verbose \
         --password-command "$PASSWORD_COMMAND" \
         --limit-download 5120 \
-        --limit-upload 1024 \
-        --option rclone.connections=10 \
+        --limit-upload 2048 \
+        --option rclone.connections=5 \
         "$@"
 }
 
