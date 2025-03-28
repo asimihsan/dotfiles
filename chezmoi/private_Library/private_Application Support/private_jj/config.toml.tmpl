@@ -1,11 +1,12 @@
 [user]
 name = "Asim Ihsan"
+
 {{ if eq .chezmoi.hostname "yov3bc" -}}
 email = "asim.ihsan@level.co"
 {{ end -}}
 {{ if eq .chezmoi.hostname "hlru5i" -}}
 email = "ssh@sshemail.ihsan.io"
-{{ end -}}
+{{ end }}
 
 [git]
 auto-local-bookmarks = true
@@ -13,12 +14,13 @@ auto-local-bookmarks = true
 [signing]
 behavior = "own"
 backend = "ssh"
+
 {{ if eq .chezmoi.hostname "yov3bc" -}}
 key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOdZS3iTbk1bmMq1Oq9kFySUPbfa5bM41dAhH+og89or"
 {{ end -}}
 {{ if eq .chezmoi.hostname "hlru5i" -}}
 key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+6ch0i+pdf+48pQ/S180rtxe9yELTC9w/GYBZoRl89"
-{{ end -}}
+{{ end }}
 
 [signing.backends.ssh]
 program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
@@ -39,10 +41,8 @@ merge-args = [
 merge-tool-edits-conflict-markers = true
 
 [merge-tools.intellij]
-program = "idea"
-diff-args = ["diff",  "$left", "$right"]
-edit-args = ["diff",  "$left", "$right"]
-merge-args = ["merge" , "$left", "$right", "$base", "$output"]
+program = "/Users/asimi/Applications/IntelliJ IDEA Ultimate.app/Contents/MacOS/idea"
+merge-args = ["merge", "$left", "$right", "$base", "$output"]
 
 [aliases]
 dds = ["diff", "--tool", "difft-s"]

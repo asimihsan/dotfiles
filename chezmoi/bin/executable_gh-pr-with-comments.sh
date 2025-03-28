@@ -3,7 +3,7 @@
 set -euo pipefail
 
 PR_NUMBER=$1
-REPO="LevelHome/LevelServer"
+REPO=$2
 
 # Get PR info
 PR_INFO=$(gh pr view "$PR_NUMBER" --json title,number,author,state,body)
