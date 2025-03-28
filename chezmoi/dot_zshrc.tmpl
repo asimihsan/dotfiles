@@ -147,7 +147,7 @@ alias ar=/usr/bin/ar
 
 if [[ -z "$LOGGING_STARTED" ]]; then
     export LOGGING_STARTED=1
-    reap_orphaned_processes
+    # reap_orphaned_processes
     record_session
     rotate_logs
 fi

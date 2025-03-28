@@ -53,3 +53,25 @@ smb = ["b", "s", "main", "-B"]
 gp = ["git", "push"]
 gf = ["git", "fetch"]
 gpn = ["git", "push", "--allow-new"]
+
+# Quick view of your current branch
+l = ["log", "-r", "@ | @- | trunk()"]
+
+# View all your visible branches
+{{ if eq .chezmoi.hostname "yov3bc" -}}
+mine = ["log", "-r", "author('asim.ihsan@level.co') & visible_heads()"]
+{{ end -}}
+{{ if eq .chezmoi.hostname "hlru5i" -}}
+mine = ["log", "-r", "author('ssh@sshemail.ihsan.io') & visible_heads()"]
+{{ end }}
+
+# View your open branches plus trunk()
+{{ if eq .chezmoi.hostname "yov3bc" -}}
+work = ["log", "-r", "@ | (author('asim.ihsan@level.co') & (visible_heads())) | trunk()"]
+{{ end -}}
+{{ if eq .chezmoi.hostname "hlru5i" -}}
+work = ["log", "-r", "@ | (author('ssh@sshemail.ihsan.io') & (visible_heads())) | trunk()"]
+{{ end }}
+
+# See the path between your working copy and master
+path = ["log", "-r", "@ | trunk() | remote_bookmarks('main') | remote_bookmarks('master')"]
