@@ -52,6 +52,7 @@ brew upgrade
 
 rustup update stable
 cargo binstall --no-confirm lazyjj
+cargo binstall --no-confirm monolith
 
 ~/bin/install-npm-global.sh
 claude update
@@ -65,5 +66,6 @@ dotnet tool update --global P
 gh extension upgrade gh-copilot
 
 brew bundle install
+xattr -cr /Applications/Chromium.app
 
 ~/bin/copy-to-backup.sh
