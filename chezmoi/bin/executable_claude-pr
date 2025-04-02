@@ -1,0 +1,303 @@
+#!/bin/bash
+
+# Exit on error, undefined variables, and pipe failures
+set -euo pipefail
+
+#------------------------------------------------------------------------------
+# Logging functions
+#------------------------------------------------------------------------------
+log_info() {
+    echo -e "\033[0;34m[INFO]\033[0m $1"
+}
+
+log_warning() {
+    echo -e "\033[0;33m[WARNING]\033[0m $1" >&2
+}
+
+log_error() {
+    echo -e "\033[0;31m[ERROR]\033[0m $1" >&2
+}
+
+log_success() {
+    echo -e "\033[0;32m[SUCCESS]\033[0m $1"
+}
+
+#------------------------------------------------------------------------------
+# Usage/help function
+#------------------------------------------------------------------------------
+show_usage() {
+    echo "Usage: $0 <GitHub PR URL> [options]"
+    echo ""
+    echo "Options:"
+    echo "  --edit       Open the prompt in an editor before sending to Claude"
+    echo "  --save=FILE  Save the prompt to the specified file without sending to Claude"
+    exit 1
+}
+
+#------------------------------------------------------------------------------
+# GitHub PR data fetching functions
+#------------------------------------------------------------------------------
+fetch_pr_info() {
+    local pr_number=$1
+    local repo=$2
+    
+    log_info "Fetching PR #$pr_number information from $repo..."
+    
+    # Get PR info using GitHub CLI
+    local pr_info
+    pr_info=$(gh pr view "$pr_number" --json title,number,author,state,body)
+    
+    if [ $? -ne 0 ]; then
+        log_error "Failed to fetch PR information"
+        exit 1
+    fi
+    
+    # Extract PR details
+    local pr_title pr_author pr_state pr_description
+    pr_title=$(echo "$pr_info" | jq -r '.title')
+    pr_author=$(echo "$pr_info" | jq -r '.author.login')
+    pr_state=$(echo "$pr_info" | jq -r '.state')
+    pr_description=$(echo "$pr_info" | jq -r '.body')
+    
+    log_info "Successfully fetched PR info: '$pr_title' by $pr_author"
+    
+    # Get PR diff
+    log_info "Fetching PR diff..."
+    local pr_diff
+    pr_diff=$(gh pr diff "$pr_number")
+    
+    if [ $? -ne 0 ]; then
+        log_error "Failed to fetch PR diff"
+        exit 1
+    fi
+    
+    # Get PR comments
+    log_info "Fetching PR review comments..."
+    local comments
+    comments=$(gh api "repos/$repo/pulls/$pr_number/comments")
+    
+    if [ $? -ne 0 ]; then
+        log_warning "Failed to fetch PR comments or no comments found"
+        comments="[]"
+    fi
+    
+    # Return formatted markdown
+    cat << EOF
+# PR #$pr_number: $pr_title
+- Author: $pr_author
+- State: $pr_state
+
+## Description
+$pr_description
+
+## Diff
+\`\`\`diff
+$pr_diff
+\`\`\`
+
+## Review Comments
+$(echo "$comments" | jq -r '.[] | "### Comment on file `\(.path)` line \(.line)\n**\(.user.login)** commented on \(.created_at):\n\n\(.body)\n\n```\n\(.diff_hunk)\n```\n"' 2>/dev/null || echo "No review comments found")
+EOF
+}
+
+#------------------------------------------------------------------------------
+# Claude output processing functions
+#------------------------------------------------------------------------------
+extract_claude_result() {
+    local json_file=$1
+    local result_file=$2
+    
+    log_info "Extracting Claude's review from JSON response..."
+    
+    # Try multiple extraction methods to handle different JSON structures
+    jq -r 'map(select(.role == "assistant" and .content != null)) | last | .content | if type == "array" then map(select(.type == "text") | .text) | join("\n") else . end' "$json_file" > "$result_file"
+    
+    # Check if extraction was successful
+    if [ ! -s "$result_file" ]; then
+        log_warning "First extraction method failed, trying alternative method..."
+        jq -r '.[] | select(.role == "assistant" and .content) | .content | if type == "array" then map(select(.type == "text") | .text) | join("\n") else . end' "$json_file" > "$result_file"
+    fi
+    
+    # If still empty, try one more approach
+    if [ ! -s "$result_file" ]; then
+        log_warning "Second extraction method failed, trying final method..."
+        jq -r 'last | select(.role == "assistant") | .content | if type == "array" then map(select(.type == "text") | .text) | join("\n") else . end' "$json_file" > "$result_file"
+    fi
+    
+    # Check final result
+    if [ ! -s "$result_file" ]; then
+        log_error "Failed to extract Claude's review from JSON response"
+        return 1
+    else
+        log_success "Successfully extracted Claude's review"
+        return 0
+    fi
+}
+
+#------------------------------------------------------------------------------
+# Main script execution
+#------------------------------------------------------------------------------
+
+# Check if jq is installed
+if ! command -v jq &> /dev/null; then
+    log_error "jq is not installed. Please install jq to process JSON output."
+    exit 1
+fi
+
+# Check if GitHub CLI is installed
+if ! command -v gh &> /dev/null; then
+    log_error "GitHub CLI (gh) is not installed. Please install it to fetch PR information."
+    exit 1
+fi
+
+# Check if a PR URL or number was provided
+if [ $# -lt 1 ]; then
+    show_usage
+fi
+
+# Default options
+EDIT_PROMPT=false
+SAVE_FILE=""
+
+# Parse PR URL or PR number + repo
+if [[ "$1" == http* ]]; then
+    # Parse URL to extract repository and PR number
+    if [[ "$1" =~ github\.com/([^/]+)/([^/]+)/pull/([0-9]+) ]]; then
+        OWNER="${BASH_REMATCH[1]}"
+        REPO_NAME="${BASH_REMATCH[2]}"
+        PR_NUM="${BASH_REMATCH[3]}"
+        REPO="$OWNER/$REPO_NAME"
+        PR_URL="$1"
+        shift
+    else
+        log_error "Invalid GitHub PR URL format. Expected: https://github.com/OWNER/REPO/pull/NUMBER"
+        exit 1
+    fi
+else
+    # Original usage: first arg is PR number, second arg is repo
+    if [ $# -lt 2 ]; then
+        log_error "When providing PR number directly, you must also specify the repository."
+        echo "Usage: $0 PR_NUMBER OWNER/REPO"
+        echo "   or: $0 https://github.com/OWNER/REPO/pull/NUMBER"
+        exit 1
+    fi
+    PR_NUM="$1"
+    REPO="$2"
+    PR_URL="https://github.com/$REPO/pull/$PR_NUM"
+    shift 2
+fi
+
+# Parse any additional options
+for arg in "$@"; do
+    case $arg in
+        --edit)
+            EDIT_PROMPT=true
+            ;;
+        --save=*)
+            SAVE_FILE="${arg#*=}"
+            ;;
+        *)
+            log_error "Unknown option: $arg"
+            show_usage
+            ;;
+    esac
+done
+
+log_info "Analyzing PR #$PR_NUM in repository $REPO..."
+
+# Fetch PR data
+PR_DATA=$(fetch_pr_info "$PR_NUM" "$REPO")
+
+# Construct the prompt for Claude
+log_info "Preparing prompt for Claude..."
+PROMPT="# GitHub Pull Request Review
+
+## PR Details
+Repository: $REPO
+PR Number: $PR_NUM
+URL: $PR_URL
+
+## PR Content
+$PR_DATA
+
+## Review Instructions
+
+You're reviewing a GitHub Pull Request. Provide a thorough, detailed code review. 
+
+Structure your review as follows:
+
+1. **Overall Summary**: 
+   - Brief description of the changes and their purpose
+   - General assessment of the implementation
+
+2. **Per-File Analysis**:
+   - If there are many files, triage and focus on the most important ones
+   - For each file or important file changed, create a separate section with detailed analysis
+   - Don't just summarize the changes - critically evaluate them
+   - Identify potential bugs, edge cases, and security issues
+   - Assess code quality, performance, and maintainability
+
+3. **Key Findings**:
+   - Highlight the most important issues or improvements needed
+   - Prioritize by severity and impact
+
+4. **Recommendations**:
+   - Provide specific, actionable feedback
+   - Suggest concrete improvements with explanations
+
+Think harder and deeper about your analysis. Consider both immediate issues and long-term implications.
+
+Format your entire review as well-structured Markdown."
+
+# Determine where to save the prompt
+if [ -n "$SAVE_FILE" ]; then
+    # Save to user-specified file
+    PROMPT_FILE="$SAVE_FILE"
+    echo "$PROMPT" > "$PROMPT_FILE"
+    log_success "Prompt saved to $PROMPT_FILE"
+    exit 0
+else
+    # Save to temporary file
+    PROMPT_FILE=$(mktemp)
+    echo "$PROMPT" > "$PROMPT_FILE"
+    log_info "Prompt saved to temporary file: $PROMPT_FILE"
+fi
+
+# Optionally open the prompt in an editor
+if [ "$EDIT_PROMPT" = true ]; then
+    # Use the default editor, or fallback to vim or nano
+    ${EDITOR:-${VISUAL:-$(which vim || which nano || which vi)}} "$PROMPT_FILE"
+    log_info "Prompt edited by user"
+fi
+
+# Create temporary files for output
+JSON_OUTPUT_FILE=$(mktemp)
+RESULT_FILE=$(mktemp).txt
+
+log_info "JSON output will be saved to: $JSON_OUTPUT_FILE"
+log_info "Extracted review will be saved to: $RESULT_FILE"
+
+# Call Claude with the prompt from the file and save JSON output
+log_info "Sending PR to Claude for analysis..."
+cat "$PROMPT_FILE" | claude --debug --verbose --json -p \
+  --allowedTools "Bash(git diff:*)" "Bash(git log:*)" "Bash(cat:*)" "Bash(grep:*)" "Bash(ls:*)" \
+  "mcp__server-brave-search__brave_web_search" "mcp__fetch__fetch" > "$JSON_OUTPUT_FILE"
+
+# Process Claude's response
+if [ -s "$JSON_OUTPUT_FILE" ]; then
+    log_success "Received response from Claude"
+    extract_claude_result "$JSON_OUTPUT_FILE" "$RESULT_FILE"
+else
+    log_error "No response received from Claude or empty response"
+    exit 1
+fi
+
+# Clean up prompt file if we used a temporary one
+if [ -z "$SAVE_FILE" ]; then
+    rm "$PROMPT_FILE"
+    log_info "Removed temporary prompt file"
+fi
+
+log_success "Analysis complete."
+log_success "Raw JSON output: $JSON_OUTPUT_FILE"
+log_success "Extracted review: $RESULT_FILE"
