@@ -230,18 +230,24 @@ Structure your review as follows:
    - Brief description of the changes and their purpose
    - General assessment of the implementation
 
-2. **Per-File Analysis**:
+2. **Understand call flows**:
+   - Read CLAUDE.md if available.
+   - Use the 'mcp-language-server' tool to trace symbols and understand the call flows.
+
+3. **Per-File Analysis**:
    - If there are many files, triage and focus on the most important ones
    - For each file or important file changed, create a separate section with detailed analysis
    - Don't just summarize the changes - critically evaluate them
    - Identify potential bugs, edge cases, and security issues
    - Assess code quality, performance, and maintainability
+   - Trace function calls and data flow even to files not in the PR to understand the context and
+     the impact of the changes
 
-3. **Key Findings**:
+4. **Key Findings**:
    - Highlight the most important issues or improvements needed
    - Prioritize by severity and impact
 
-4. **Recommendations**:
+5. **Recommendations**:
    - Provide specific, actionable feedback
    - Suggest concrete improvements with explanations
 
@@ -281,7 +287,8 @@ log_info "Extracted review will be saved to: $RESULT_FILE"
 log_info "Sending PR to Claude for analysis..."
 cat "$PROMPT_FILE" | claude --debug --verbose --json -p \
   --allowedTools "Bash(git diff:*)" "Bash(git log:*)" "Bash(cat:*)" "Bash(grep:*)" "Bash(ls:*)" \
-  "mcp__server-brave-search__brave_web_search" "mcp__fetch__fetch" > "$JSON_OUTPUT_FILE"
+  "Search(pattern:*)" "mcp__server-brave-search__brave_web_search" "mcp__fetch__fetch" \
+  "mcp-language-server:*" > "$JSON_OUTPUT_FILE"
 
 # Process Claude's response
 if [ -s "$JSON_OUTPUT_FILE" ]; then
