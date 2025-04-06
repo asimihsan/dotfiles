@@ -3,6 +3,7 @@
 set -euo pipefail
 
 eval "$(devbox global shellenv)"
+eval "$(/opt/homebrew/bin/mise activate bash)"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -618,6 +619,15 @@ EOF
     exit 0
 }
 
+check_dependencies() {
+    local dependencies=("rclone" "restic" "jq")
+    for dep in "${dependencies[@]}"; do
+        if ! command -v "$dep" &>/dev/null; then
+            error "Dependency $dep is not installed. Please install it."
+        fi
+    done
+}
+
 main() {
     if [[ $# -eq 0 ]]; then
         usage
@@ -673,4 +683,5 @@ main() {
     esac
 }
 
+check_dependencies
 main "$@"
