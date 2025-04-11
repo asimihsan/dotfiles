@@ -419,7 +419,7 @@ cmd_list() {
 }
 
 cmd_prune() {
-    forget_and_prune
+    forget_and_prune "$@"
 }
 
 cmd_unlock() {
@@ -491,11 +491,10 @@ restore_snapshot() {
 
 # Function to forget old snapshots and prune
 forget_and_prune() {
-    local cleanup_cache=""
     echo "Forgetting old snapshots and pruning..."
     if [[ "${1-}" == "--cleanup-cache" ]]; then
-        echo "Will also cleanup cache"
-        cleanup_cache="--cleanup-cache"
+        echo "Cleaning up cache..."
+        run_restic cache --cleanup
     fi
     run_restic forget \
         --keep-hourly 4 \
@@ -506,8 +505,7 @@ forget_and_prune() {
         --repack-small \
         --repack-uncompressed \
         --max-repack-size 2G \
-        --max-unused 3% \
-        ${cleanup_cache}
+        --max-unused 3%
 }
 
 unlock() {
@@ -544,6 +542,7 @@ Commands:
     ls                  List files in a snapshot
     forget              Forget snapshots according to a policy
     prune               Forget old snapshots and prune the repository
+    prune-cache         Forget old snapshots and prune the repository with cache cleanup
     unlock              Unlock the repository
     mount               Mount the repository
     stats               Show repository statistics
