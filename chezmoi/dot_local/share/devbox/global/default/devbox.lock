@@ -954,7 +954,7 @@
       }
     },
     "github:NixOS/nixpkgs/nixpkgs-unstable": {
-      "resolved": "github:NixOS/nixpkgs/d19cf9dfc633816a437204555afeb9e722386b76?lastModified=1744316434&narHash=sha256-lzFCg%2F1C39pyY2hMB2gcuHV79ozpOz%2FVu15hdjiFOfI%3D"
+      "resolved": "github:NixOS/nixpkgs/74a40410369a1c35ee09b8a1abee6f4acbedc059?lastModified=1743938762&narHash=sha256-UgFYn8sGv9B8PoFpUfCa43CjMZBl1x%2FShQhRDHBFQdI%3D"
     },
     "glab@latest": {
       "last_modified": "2025-03-25T17:32:05Z",
@@ -1774,6 +1774,54 @@
             }
           ],
           "store_path": "/nix/store/hxc3f3p97rcwx37w88damglpmdcc6rk9-rustic-0.9.5"
+        }
+      }
+    },
+    "tamarin-prover@latest": {
+      "last_modified": "2025-03-23T05:31:05Z",
+      "resolved": "github:NixOS/nixpkgs/dd613136ee91f67e5dba3f3f41ac99ae89c5406b#tamarin-prover",
+      "source": "devbox-search",
+      "version": "1.10.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/yqn4ywwg92ccgxi3znw88rhczm4x3s7j-tamarin-prover-1.10.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/yqn4ywwg92ccgxi3znw88rhczm4x3s7j-tamarin-prover-1.10.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/8iy8xi25pfx7p53k9jgs1nf0mq4gnnh2-tamarin-prover-1.10.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/8iy8xi25pfx7p53k9jgs1nf0mq4gnnh2-tamarin-prover-1.10.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/cx6nfhmx0nm0wsk5j658gp15n36iavh3-tamarin-prover-1.10.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/cx6nfhmx0nm0wsk5j658gp15n36iavh3-tamarin-prover-1.10.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/xnz6bhnfk63rpy8g2z0f2rqg2llsphpq-tamarin-prover-1.10.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/xnz6bhnfk63rpy8g2z0f2rqg2llsphpq-tamarin-prover-1.10.0"
         }
       }
     },

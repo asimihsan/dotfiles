@@ -31,6 +31,7 @@
     "pv@latest",
     "redis@latest",
     "rustic@latest",
+    "tamarin-prover@latest",
     "tmux@latest",
     "tmuxPlugins.better-mouse-mode@latest",
     "tmuxPlugins.resurrect@latest",
