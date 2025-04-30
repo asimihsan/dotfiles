@@ -34,6 +34,12 @@ echo starting...
 
 ensure_restic_sudoers
 
+# TODO REMOVEME
+for tap in aws smithy-lang; do
+  file="/opt/homebrew/Library/Taps/${tap}/homebrew-tap/ConfigProvider/config_provider.rb"
+  sudo perl -0777 -pi -e 's/^(\s*)CONFIG_DIR\s*=/\1CONFIG_DIR ||=/' "$file"
+done
+
 mise cache clear
 mise install
 mise upgrade --yes
