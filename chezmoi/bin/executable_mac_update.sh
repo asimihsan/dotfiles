@@ -65,7 +65,7 @@ devbox global update
 eval "$(devbox global shellenv --recompute)"
 
 sudo softwareupdate --download --all --agree-to-license
-brew update
+brew update --auto-update
 brew upgrade
 
 rustup update stable
@@ -84,6 +84,7 @@ dotnet tool update --global P
 gh extension upgrade gh-copilot
 
 brew bundle install
+brew cleanup --prune=all
 
 ~/bin/copy-to-backup.sh
 
