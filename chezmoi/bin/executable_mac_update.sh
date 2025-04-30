@@ -6,8 +6,33 @@ function cache_sudo_credentials() {
     sudo -v
 }
 
+ensure_restic_sudoers() {
+  local file=/etc/sudoers.d/restic-snapshot
+  local tmp
+  tmp=$(mktemp)
+
+  cat >"$tmp" <<EOF
+# restic snapshot privileges for $USER
+$USER ALL=(root) NOPASSWD: \
+    /usr/bin/tmutil *, \
+    /sbin/mount_apfs *, \
+    /sbin/umount *, \
+    /usr/sbin/diskutil unmount *
+EOF
+
+  # Install only if different or missing
+  if ! sudo test -f "$file" || ! sudo cmp -s "$tmp" "$file"; then
+    sudo install -m 0440 -o root -g wheel "$tmp" "$file"
+    sudo visudo -cf "$file" || { echo "sudoers syntax error"; exit 1; }
+    echo "Updated $file"
+  fi
+  rm -f "$tmp"
+}
+
 cache_sudo_credentials
 echo starting...
+
+ensure_restic_sudoers
 
 mise cache clear
 mise install
@@ -26,13 +51,6 @@ update_dotfiles() {
         echo "Failed to change directory to $dotfiles_dir"
         return 1
     }
-
-    # echo "Updating dotfiles repository..."
-
-    # if ! git town sync; then
-    #     echo "Failed to git town sync"
-    #     return 1
-    # fi
 }
 
 update_dotfiles
@@ -66,6 +84,7 @@ dotnet tool update --global P
 gh extension upgrade gh-copilot
 
 brew bundle install
-xattr -cr /Applications/Chromium.app
 
 ~/bin/copy-to-backup.sh
+
+xattr -cr /Applications/Chromium.app

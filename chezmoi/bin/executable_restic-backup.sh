@@ -458,17 +458,88 @@ init_restic() {
     run_restic init
 }
 
+# ====================================================================
+#  🚩  APFS-snapshot helpers  (macOS only; no-ops elsewhere)
+# ====================================================================
+
+# Keep a fixed mount-point so everything is deterministic
+SNAP_MNT=/tmp/restic-snap
+
+SNAP_MOUNTED=false
+
+sudo_nonint() { sudo -n "$@"; }   # -n = “no password prompt”
+
+create_apfs_snapshot() {
+    [[ "$(uname)" != "Darwin" ]] && return 0    # no-op on Linux
+    local out
+    out=$(sudo_nonint tmutil localsnapshot 2>&1)
+    SNAP_DATE=$(grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{6}' <<<"$out")
+    SNAP_NAME="com.apple.TimeMachine.${SNAP_DATE}.local"
+}
+
+mount_apfs_snapshot() {
+    [[ -z "${SNAP_NAME:-}" ]] && return 0
+    sudo_nonint mkdir -p "$SNAP_MNT"
+    if sudo_nonint mount_apfs -s "$SNAP_NAME" /System/Volumes/Data "$SNAP_MNT"; then
+        SNAP_MOUNTED=true
+    fi
+}
+
+unmount_apfs_snapshot() {
+    [[ "$SNAP_MOUNTED" = false ]] && return 0
+    sudo_nonint umount "$SNAP_MNT" || sudo_nonint diskutil unmount "$SNAP_MNT"
+    sudo_nonint rmdir "$SNAP_MNT"
+    SNAP_MOUNTED=false
+}
+
+delete_apfs_snapshot() {
+    [[ -z "${SNAP_DATE:-}" ]] && return 0
+    sudo_nonint tmutil deletelocalsnapshots "$SNAP_DATE" || true
+}
+
+thin_old_snapshots() {
+    # reclaim until at least 20 GiB is free (tweak to taste)
+    sudo_nonint tmutil thinlocalsnapshots / 20gB 4 2>/dev/null || true
+}
+
+cleanup_snapshot() {
+    [[ "$(uname)" != "Darwin" ]] && return 0    # no-op on Linux
+    unmount_apfs_snapshot   # silently succeeds if not mounted
+    delete_apfs_snapshot    # silently succeeds if no snapshot
+    thin_old_snapshots      # optional “vacuum”
+}
+
+# Fire cleanup on normal exit, Ctrl-C (SIGINT), script error (ERR), or kill
+trap cleanup_snapshot EXIT INT TERM
+# ====================================================================
+
 # Function to perform backup
 do_backup() {
-    echo "Performing backup..."
+    echo "Creating APFS snapshot..."
+    create_apfs_snapshot
+    mount_apfs_snapshot
+
+    local snap_home="$SNAP_MNT$HOME"
+    pushd "$snap_home" >/dev/null
+
+    echo "Running restic backup from snapshot..."
     tag-cache-dirs --root-dir ~/workplace --root-dir ~/Downloads
     run_restic backup \
         --exclude-caches \
         --exclude-file "${SCRIPT_DIR}/restic-excludes" \
         --pack-size 16 \
         --read-concurrency 4 \
-        "${BACKUP_PATHS[@]}"
+        "${BACKUP_PATHS[@]/#\~/$HOME}"
+
+    popd >/dev/null
+
+    echo "Pruning repository..."
     forget_and_prune
+
+    echo "Cleaning up snapshot..."
+    unmount_apfs_snapshot
+    delete_apfs_snapshot
+    thin_old_snapshots
 }
 
 # Function to list snapshots
