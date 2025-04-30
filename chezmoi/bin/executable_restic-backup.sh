@@ -472,7 +472,7 @@ sudo_nonint() { sudo -n "$@"; }   # -n = “no password prompt”
 create_apfs_snapshot() {
     [[ "$(uname)" != "Darwin" ]] && return 0    # no-op on Linux
     local out
-    out=$(sudo_nonint tmutil localsnapshot 2>&1)
+    out=$(sudo_nonint /usr/bin/tmutil localsnapshot 2>&1)
     SNAP_DATE=$(grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{6}' <<<"$out")
     SNAP_NAME="com.apple.TimeMachine.${SNAP_DATE}.local"
 }
@@ -494,12 +494,30 @@ unmount_apfs_snapshot() {
 
 delete_apfs_snapshot() {
     [[ -z "${SNAP_DATE:-}" ]] && return 0
-    sudo_nonint tmutil deletelocalsnapshots "$SNAP_DATE" || true
+    sudo_nonint /usr/bin/tmutil deletelocalsnapshots "$SNAP_DATE" || true
 }
 
 thin_old_snapshots() {
-    # reclaim until at least 20 GiB is free (tweak to taste)
-    sudo_nonint tmutil thinlocalsnapshots / 20gB 4 2>/dev/null || true
+    [[ "$(uname)" != "Darwin" ]] && return 0
+    echo "Thinning old snapshots…"
+    # free plenty of space - 200 GB – with highest urgency
+    sudo_nonint /usr/bin/tmutil thinlocalsnapshots / 200000000000 4 2>/dev/null || true
+}
+
+purge_old_snapshots() {
+    [[ "$(uname)" != "Darwin" ]] && return 0
+    echo "Purging old snapshots…"
+    local latest
+    latest=$(/usr/bin/tmutil listlocalsnapshots / | tail -1)
+    # Drop the prefix - tmutil wants just the timestamp component
+    latest=${latest##*.}
+
+    echo "Purging old snapshots (keeping $latest)…"
+    for snap in $(/usr/bin/tmutil listlocalsnapshots / | sed 1d); do
+        ts=${snap##*.}
+        [[ "$ts" == "$latest" ]] && continue
+        sudo_nonint /usr/bin/tmutil deletelocalsnapshots "$ts"
+    done
 }
 
 cleanup_snapshot() {
@@ -507,6 +525,7 @@ cleanup_snapshot() {
     unmount_apfs_snapshot   # silently succeeds if not mounted
     delete_apfs_snapshot    # silently succeeds if no snapshot
     thin_old_snapshots      # optional “vacuum”
+    purge_old_snapshots     # optional harder “vacuum”
 }
 
 # Fire cleanup on normal exit, Ctrl-C (SIGINT), script error (ERR), or kill
@@ -535,11 +554,6 @@ do_backup() {
 
     echo "Pruning repository..."
     forget_and_prune
-
-    echo "Cleaning up snapshot..."
-    unmount_apfs_snapshot
-    delete_apfs_snapshot
-    thin_old_snapshots
 }
 
 # Function to list snapshots
