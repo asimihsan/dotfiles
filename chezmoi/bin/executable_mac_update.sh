@@ -40,6 +40,12 @@ for tap in aws smithy-lang; do
   sudo perl -0777 -pi -e 's/^(\s*)CONFIG_DIR\s*=/\1CONFIG_DIR ||=/' "$file"
 done
 
+# TODO REMOVEME
+for f in $(brew uses --installed icu4c@76); do
+  brew reinstall $f
+done
+brew uninstall icu4c@76
+
 mise cache clear
 mise install
 mise upgrade --yes
