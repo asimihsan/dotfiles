@@ -10,6 +10,7 @@ email = "ssh@sshemail.ihsan.io"
 
 [git]
 auto-local-bookmarks = true
+push-new-bookmarks = true
 
 [signing]
 behavior = "own"
@@ -44,6 +45,12 @@ merge-tool-edits-conflict-markers = true
 program = "/Users/asimi/Applications/IntelliJ IDEA Ultimate.app/Contents/MacOS/idea"
 merge-args = ["merge", "$left", "$right", "$base", "$output"]
 
+[revset-aliases]
+'closest_bookmark(to)' = 'heads(::to & bookmarks())'
+
+# set all remote bookmarks (commits pushed to remote branches) to be immutable
+'immutable_heads()' = "builtin_immutable_heads() & remote_bookmarks()"
+
 [aliases]
 dds = ["diff", "--tool", "difft-s"]
 ddi = ["diff", "--tool", "difft-i"]
@@ -53,6 +60,7 @@ smb = ["b", "s", "main", "-B"]
 gp = ["git", "push"]
 gf = ["git", "fetch"]
 gpn = ["git", "push", "--allow-new"]
+tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
 
 # Quick view of your current branch
 l = ["log", "-r", "@ | @- | trunk()"]
