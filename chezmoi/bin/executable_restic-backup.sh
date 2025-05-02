@@ -471,15 +471,18 @@ sudo_nonint() { sudo -n "$@"; }   # -n = “no password prompt”
 
 create_apfs_snapshot() {
     [[ "$(uname)" != "Darwin" ]] && return 0    # no-op on Linux
-    local out
-    out=$(sudo_nonint /usr/bin/tmutil localsnapshot 2>&1)
+
+    if ! out=$(sudo_nonint /usr/bin/tmutil localsnapshot 2>&1); then
+        echo "tmutil localsnapshot failed – sudo rule missing?" >&2
+        exit 1
+    fi
     SNAP_DATE=$(grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{6}' <<<"$out")
     SNAP_NAME="com.apple.TimeMachine.${SNAP_DATE}.local"
 }
 
 mount_apfs_snapshot() {
     [[ -z "${SNAP_NAME:-}" ]] && return 0
-    sudo_nonint mkdir -p "$SNAP_MNT"
+    mkdir -p "$SNAP_MNT"
     if sudo_nonint mount_apfs -s "$SNAP_NAME" /System/Volumes/Data "$SNAP_MNT"; then
         SNAP_MOUNTED=true
     fi
@@ -488,7 +491,7 @@ mount_apfs_snapshot() {
 unmount_apfs_snapshot() {
     [[ "$SNAP_MOUNTED" = false ]] && return 0
     sudo_nonint umount "$SNAP_MNT" || sudo_nonint diskutil unmount "$SNAP_MNT"
-    sudo_nonint rmdir "$SNAP_MNT"
+    rmdir "$SNAP_MNT"
     SNAP_MOUNTED=false
 }
 
@@ -536,6 +539,7 @@ trap cleanup_snapshot EXIT INT TERM
 do_backup() {
     echo "Creating APFS snapshot..."
     create_apfs_snapshot
+    echo "Mounting APFS snapshot..."
     mount_apfs_snapshot
 
     local snap_home="$SNAP_MNT$HOME"
