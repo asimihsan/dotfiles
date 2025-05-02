@@ -542,19 +542,19 @@ do_backup() {
     echo "Mounting APFS snapshot..."
     mount_apfs_snapshot
 
-    local snap_home="$SNAP_MNT$HOME"
-    pushd "$snap_home" >/dev/null
+    local snap_prefix="$SNAP_MNT"
+    # convert “~/foo” -> "$SNAP_MNT$HOME/foo"
+    local -a snap_paths=("${BACKUP_PATHS[@]/#\~/$snap_prefix$HOME}")
 
     echo "Running restic backup from snapshot..."
     tag-cache-dirs --root-dir ~/workplace --root-dir ~/Downloads
+    export MISE_DISABLE_TRUST_CHECK=1
     run_restic backup \
         --exclude-caches \
         --exclude-file "${SCRIPT_DIR}/restic-excludes" \
         --pack-size 16 \
         --read-concurrency 4 \
-        "${BACKUP_PATHS[@]/#\~/$HOME}"
-
-    popd >/dev/null
+        "${snap_paths[@]}"
 
     echo "Pruning repository..."
     forget_and_prune
