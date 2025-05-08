@@ -8,42 +8,29 @@
 // command palette
 {
   "features": {
-    "inline_completion_provider": "zed"
+    "edit_prediction_provider": "zed"
   },
-  "assistant": {
+  "agent": {
     "default_model": {
-      "provider": "openai",
-      "model": "o3-mini"
+      "provider": "google",
+      "model": "gemini-2.5-pro-preview-03-25"
     },
     "version": "2"
   },
-  "language_models": {
-    "ollama": {
-      "low_speed_timeout_in_seconds": 600,
-      "available_models": [
-        {
-          "name": "llama3.1:70b",
-          "max_tokens": 32000
-        },
-        {
-          "name": "llama3.1:405b-instruct-q2_K",
-          "max_tokens": 32000
-        }
-      ]
-    }
-  },
   "context_servers": {
-    "sequentialthinking": {
-      "command": {
-        "path": "npx",
-        "args": ["-y", "@modelcontextprotocol/server-sequentialthinking"],
-        "env": {}
-      },
-      "settings": {}
+    "mcp-server-brave-search": {
+      "settings": {
+        "brave_api_key": "BSAXisqav2SADnpS_iaGcw1TKzpdQva"
+      }
+    },
+    "mcp-server-linear": {
+      "settings": {
+        "linear_api_key": "lin_api_CKYp4n7tTNQqCM50ElxUTBFD3NsrspUYvgZcnj3G"
+      }
     }
   },
-  "ui_font_size": 16,
-  "buffer_font_size": 16,
+  "ui_font_size": 20,
+  "buffer_font_size": 20,
   "theme": {
     "mode": "system",
     "light": "One Light",
