@@ -128,8 +128,12 @@ alias ar=/usr/bin/ar
 if [[ -z "$LOGGING_STARTED" ]]; then
     export LOGGING_STARTED=1
     # reap_orphaned_processes
-    record_session
+    # record_session
     rotate_logs
 fi
 
 export EDITOR=vim
+
+zr  () { command zellij run --name "$*"        -- zsh -ic "$*"; }
+zrf () { command zellij run --floating --name "$*" -- zsh -ic "$*"; }
+zri () { command zellij run --in-place --name "$*" -- zsh -ic "$*"; }
