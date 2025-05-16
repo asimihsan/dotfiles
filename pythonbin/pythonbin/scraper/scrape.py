@@ -4,7 +4,7 @@ import pathlib
 from collections import deque
 from urllib.parse import urlparse, urljoin
 
-from boilerpy3 import extractors
+import trafilatura
 from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
 from pydantic import BaseModel
@@ -13,7 +13,6 @@ from pydantic import BaseModel
 class Extractor:
     def __init__(self, doc: str) -> None:
         self.doc = doc
-        self.extractor = extractors.ArticleExtractor()
 
     def extract(self) -> str:
         soup = BeautifulSoup(self.doc, "html5lib")
@@ -26,7 +25,7 @@ class Extractor:
         # re-create the doc string
         doc_fixed: str = soup.prettify()
 
-        return self.extractor.get_content(doc_fixed)
+        return trafilatura.extract(doc_fixed)
 
 
 class PageContent(BaseModel):
@@ -135,7 +134,9 @@ async def main(url: str):
             seen_pages.add(convert_url_to_seen_key(page_url))
 
         if tasks:
-            done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+            done, pending = await asyncio.wait(
+                tasks, return_when=asyncio.FIRST_COMPLETED
+            )
             for task in done:
                 content = await task
                 writer.write(content)

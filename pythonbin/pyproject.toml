@@ -55,6 +55,7 @@ dependencies = [
     "unstructured[all-docs]>=0.16.23",
     "olmocr>=0.1.58",
     "openai>=1.57.0",
+    "trafilatura>=2.0.0",
 ]
 
 [build-system]
