@@ -81,8 +81,8 @@ brew update --auto-update
 brew upgrade
 
 rustup update stable
-cargo binstall --no-confirm lazyjj
-cargo binstall --no-confirm monolith
+cargo binstall --no-confirm lazyjj monolith
+cargo install taplo-cli --locked --features lsp
 
 ~/bin/install-npm-global.sh
 claude update
