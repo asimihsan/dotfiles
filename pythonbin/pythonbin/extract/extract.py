@@ -8,7 +8,7 @@ from typing import Iterator, Optional
 
 # Attempt to import pypdf
 try:
-    from pypdf import PdfReader, PdfWriter
+    from pypdf import Pdf2eader, PdfWriter
     PYPDF_AVAILABLE = True
 except ImportError:
     PYPDF_AVAILABLE = False
@@ -97,7 +97,7 @@ def manage_pdf_page_range(
         if e_page_idx >= num_pages_in_pdf:
             print(f"Warning: end_page {end_page} is out of bounds for {original_pdf_path}. Adjusting to last page: {num_pages_in_pdf}.")
             e_page_idx = num_pages_in_pdf - 1
-        
+
         # This check might seem redundant if CLI validation was perfect, but good for robustness
         # especially after potential adjustments to e_page_idx.
         if s_page_idx > e_page_idx:
@@ -138,10 +138,10 @@ def manage_pdf_page_range(
 def _write_output_to_file(output_text: str, original_input_path: Path) -> None:
     """Writes the extracted text to a file named after the original input path."""
     output_dir = original_input_path.parent
-    
+
     # Ensure output directory exists (it should, if original_input_path is valid)
     # Path(".").parent is Path(".")
-    if not output_dir.exists(): 
+    if not output_dir.exists():
         # This case should be rare for valid inputs.
         # If input is just "file.pdf", parent is "." which exists.
         # If input is "nonexistent_dir/file.pdf", script would fail earlier.
@@ -156,7 +156,7 @@ def _write_output_to_file(output_text: str, original_input_path: Path) -> None:
     # Output file name based on original file name, add .txt extension
     output_filename = f"{original_input_path.name}.txt"
     output_path = output_dir / output_filename
-    
+
     print(f"Writing to {output_path}...")
     try:
         with open(output_path, "w", encoding="utf-8") as f:
@@ -277,7 +277,7 @@ def validate_cli_args(args: argparse.Namespace) -> None:
         if args.start_page > args.end_page:
             print(f"Error: --start-page ({args.start_page}) cannot be greater than --end-page ({args.end_page}).")
             sys.exit(1)
-        
+
         if not PYPDF_AVAILABLE:
             # This is a general warning at startup if page range is requested but pypdf is missing.
             print("Warning: --start-page/--end-page provided, but 'pypdf' library is not installed. Page range will be ignored for PDF files.")
