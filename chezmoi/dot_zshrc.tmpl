@@ -104,6 +104,8 @@ alias cd='z'
 
 eval "$(direnv hook zsh)"
 eval "$(atuin init zsh)"
+# nohup atuin daemon >/dev/null 2>&1 &!
+# disown
 
 . "$HOME/.cargo/env"
 
