@@ -1,0 +1,6 @@
+# uv
+export PATH="$HOME/.local/bin:$PATH"
+
+{{ if eq .chezmoi.hostname "yov3bc" -}}
+export PATH="$HOME/workplace/platform-tools/shell:$PATH"
+{{ end -}}
