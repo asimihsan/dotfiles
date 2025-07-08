@@ -8,20 +8,21 @@ This repo contains dotfiles (configuration files and directories) used for perso
 
 If on Mac:
 
--   Install Homebrew: https://brew.sh/
--   Install some version of Python, using `pyenv` or `anaconda`.
--   Install dotbot: `pip install dotbot`
 -   Clone this repo:
 
 ```
 git clone git@github.com:asimihsan/dotfiles.git ~/.dotfiles
 ```
 
--   Install
+-   Run the setup script
 
 ```
-dotbot --config-file ~/.dotfiles/install.conf.yaml --verbose
+cd ~/.dotfiles
+./mac_setup.sh
 ```
+
+Running `mac_setup.sh` installs Homebrew, mise, and chezmoi if needed and then
+initializes the dotfiles from this repository.
 
 ## License
 
