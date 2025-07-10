@@ -7,6 +7,10 @@ email = "asim.ihsan@level.co"
 {{ if eq .chezmoi.hostname "hlru5i" -}}
 email = "ssh@sshemail.ihsan.io"
 {{ end }}
+{{ if eq .chezmoi.hostname "im9ibk" -}}
+email = "ssh@sshemail.ihsan.io"
+{{ end }}
+
 
 [git]
 auto-local-bookmarks = true
@@ -20,6 +24,9 @@ backend = "ssh"
 key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOdZS3iTbk1bmMq1Oq9kFySUPbfa5bM41dAhH+og89or"
 {{ end -}}
 {{ if eq .chezmoi.hostname "hlru5i" -}}
+key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+6ch0i+pdf+48pQ/S180rtxe9yELTC9w/GYBZoRl89"
+{{ end }}
+{{ if eq .chezmoi.hostname "im9ibk" -}}
 key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+6ch0i+pdf+48pQ/S180rtxe9yELTC9w/GYBZoRl89"
 {{ end }}
 

@@ -22,10 +22,14 @@
 
 set -euo pipefail
 
+SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+pushd "$SCRIPT_DIR" >/dev/null
+trap 'popd >/dev/null' EXIT
+
 # shellcheck disable=SC2059
 fancy_echo() {
   local fmt="$1"; shift
-  printf "$fmt" "$@"
+  printf "$fmt\n" "$@"
 }
 
 keep_sudo_alive() {
@@ -212,14 +216,8 @@ update_system() {
 
 init_chezmoi() {
   install_chezmoi
-  local repo="${DOTFILES_REPO:-https://github.com/asimihsan/dotfiles.git}"
-  if [ ! -d "$HOME/.local/share/chezmoi" ]; then
-    fancy_echo "Initializing dotfiles from $repo"
-    chezmoi init --apply --source=chezmoi "$repo"
-  else
-    fancy_echo "Applying dotfiles"
-    chezmoi apply
-  fi
+  fancy_echo "Initializing chezmoi from $SCRIPT_DIR"
+  chezmoi init --source "$SCRIPT_DIR" --apply
 }
 
 install_gh_copilot() {
