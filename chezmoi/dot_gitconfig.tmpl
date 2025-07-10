@@ -8,6 +8,10 @@ signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOdZS3iTbk1bmMq1Oq9kFySUPbfa5bM
 email = ssh@sshemail.ihsan.io
 signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+6ch0i+pdf+48pQ/S180rtxe9yELTC9w/GYBZoRl89
 {{ end }}
+{{ if eq .chezmoi.hostname "im9ibk" -}}
+email = ssh@sshemail.ihsan.io
+signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+6ch0i+pdf+48pQ/S180rtxe9yELTC9w/GYBZoRl89
+{{ end }}
 
 # https://blog.gitbutler.com/how-git-core-devs-configure-git/
 
@@ -102,11 +106,6 @@ clean = git-lfs clean -- %f
 smudge = git-lfs smudge -- %f
 process = git-lfs filter-process
 required = true
-
-[credential]
-helper = cache --timeout=3600
-helper =
-helper = /usr/local/share/gcm-core/git-credential-manager
 
 [remote "origin"]
 tagopt = --tags

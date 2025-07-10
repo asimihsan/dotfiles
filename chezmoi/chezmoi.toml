@@ -16,7 +16,7 @@ args = ["--diff", "{{ .Destination }}", "{{ .Target }}"]
 command = "meld"
 
 [data]
-sourceDir = "~/.dotfiles/chezmoi"
+sourceDir = "~/workplace/dotfiles/chezmoi"
 
 [age]
 identity = "~/.config/chezmoi/key.txt"

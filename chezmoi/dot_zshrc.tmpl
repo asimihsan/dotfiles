@@ -1,13 +1,19 @@
 # Ensure correct Homebrew completions path for Apple Silicon
 fpath=(/opt/homebrew/share/zsh/site-functions ${fpath:#/usr/local/share/zsh/site-functions})
 fpath+=($HOME/.zsh/completions)
-fpath+=($DEVBOX_GLOBAL_PREFIX/share/zsh/site-functions $DEVBOX_GLOBAL_PREFIX/share/zsh/$ZSH_VERSION/functions $DEVBOX_GLOBAL_PREFIX/share/zsh/vendor-completions)
+
+if command -v devbox >/dev/null 2>&1; then
+    fpath+=($DEVBOX_GLOBAL_PREFIX/share/zsh/site-functions $DEVBOX_GLOBAL_PREFIX/share/zsh/$ZSH_VERSION/functions $DEVBOX_GLOBAL_PREFIX/share/zsh/vendor-completions)
+fi
+
 autoload -U compinit && compinit -u
 
 eval "$(starship init zsh)"
 
 # add devbox bits to zsh
-eval "$(devbox global shellenv)"
+if command -v devbox >/dev/null 2>&1; then
+    eval "$(devbox global shellenv)"
+fi
 
 export PATH="$HOME/.bin:$HOME/bin:$PATH"
 export PATH="/usr/local/bin:$HOME/bin:$PATH"
