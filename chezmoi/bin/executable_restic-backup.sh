@@ -2,8 +2,13 @@
 
 set -euo pipefail
 
-eval "$(devbox global shellenv)"
-eval "$(/opt/homebrew/bin/mise activate bash)"
+if command -v devbox >/dev/null 2>&1; then
+    eval "$(devbox global shellenv)"
+fi
+
+if command -v mise >/dev/null 2>&1; then
+    eval "$(/opt/homebrew/bin/mise activate bash)"
+fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -483,13 +488,16 @@ create_apfs_snapshot() {
 mount_apfs_snapshot() {
     [[ -z "${SNAP_NAME:-}" ]] && return 0
     mkdir -p "$SNAP_MNT"
-    if sudo_nonint mount_apfs -s "$SNAP_NAME" /System/Volumes/Data "$SNAP_MNT"; then
+
+    disk="$(diskutil info -plist /System/Volumes/Data | plutil -extract DeviceNode xml1 -o - - | xmllint --xpath '//string/text()' -)"
+    if sudo_nonint mount_apfs -o ro -s "$SNAP_NAME" "$disk" "$SNAP_MNT"; then
         SNAP_MOUNTED=true
     fi
 }
 
 unmount_apfs_snapshot() {
     [[ "$SNAP_MOUNTED" = false ]] && return 0
+    disk="$(diskutil info -plist /System/Volumes/Data | plutil -extract DeviceNode xml1 -o - - | xmllint --xpath '//string/text()' -)"
     sudo_nonint umount "$SNAP_MNT" || sudo_nonint diskutil unmount "$SNAP_MNT"
     rmdir "$SNAP_MNT"
     SNAP_MOUNTED=false
@@ -547,7 +555,11 @@ do_backup() {
     local -a snap_paths=("${BACKUP_PATHS[@]/#\~/$snap_prefix$HOME}")
 
     echo "Running restic backup from snapshot..."
-    tag-cache-dirs --root-dir ~/workplace --root-dir ~/Downloads
+
+    if command -v tag-cache-dirs >/dev/null 2>&1; then
+        tag-cache-dirs --root-dir ~/workplace --root-dir ~/Downloads
+    fi
+
     export MISE_DISABLE_TRUST_CHECK=1
     run_restic backup \
         --exclude-caches \
