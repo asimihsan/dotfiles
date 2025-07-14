@@ -162,6 +162,11 @@ update_mise() {
   mise prune --yes
 }
 
+install_awscli() {
+  mise install awscli ref:$(mise latest awscli 2)
+  mise use -g awscli@$(mise latest awscli 2)
+}
+
 update_rust() {
   if command_exists rustup; then
     rustup update stable
@@ -275,6 +280,7 @@ main() {
   init_chezmoi
   ensure_restic_sudoers
   update_homebrew
+  install_awscli
   update_mise
   update_rust
   update_system

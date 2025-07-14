@@ -1,3 +1,4 @@
+brew "awscli"
 brew "chrony"
 brew "coreutils"
 brew "delta"
