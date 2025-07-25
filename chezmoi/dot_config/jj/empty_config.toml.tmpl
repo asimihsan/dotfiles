@@ -1,7 +1,7 @@
 [user]
 name = "Asim Ihsan"
 
-{{ if eq .chezmoi.hostname "yov3bc" -}}
+{{ if eq .chezmoi.hostname "yov3bc" "okzf68" -}}
 email = "asim.ihsan@level.co"
 {{ end -}}
 {{ if eq .chezmoi.hostname "hlru5i" -}}
@@ -20,7 +20,7 @@ push-new-bookmarks = true
 behavior = "own"
 backend = "ssh"
 
-{{ if eq .chezmoi.hostname "yov3bc" -}}
+{{ if eq .chezmoi.hostname "yov3bc" "okzf68" -}}
 key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOdZS3iTbk1bmMq1Oq9kFySUPbfa5bM41dAhH+og89or"
 {{ end -}}
 {{ if eq .chezmoi.hostname "hlru5i" -}}
@@ -85,7 +85,7 @@ l = ["log", "-r", "@ | @- | trunk()"]
 li = ["log", "-r", "@ | immutable_heads() | trunk()"]
 
 # View all your visible branches
-{{ if eq .chezmoi.hostname "yov3bc" -}}
+{{ if eq .chezmoi.hostname "yov3bc" "okzf68" -}}
 mine = ["log", "-r", "author('asim.ihsan@level.co') & visible_heads()"]
 {{ end -}}
 {{ if eq .chezmoi.hostname "hlru5i" -}}
@@ -93,7 +93,7 @@ mine = ["log", "-r", "author('ssh@sshemail.ihsan.io') & visible_heads()"]
 {{ end }}
 
 # View your open branches plus trunk()
-{{ if eq .chezmoi.hostname "yov3bc" -}}
+{{ if eq .chezmoi.hostname "yov3bc" "okzf68" -}}
 work = ["log", "-r", "@ | (author('asim.ihsan@level.co') & (visible_heads())) | trunk()"]
 {{ end -}}
 {{ if eq .chezmoi.hostname "hlru5i" -}}

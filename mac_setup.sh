@@ -266,7 +266,7 @@ main() {
     CURRENT_HOST=$(scutil --get ComputerName 2>/dev/null || hostname)
     case "$CURRENT_HOST" in
       hlru5i|im9ibk) PROFILE="personal" ;;
-      yov3bc)        PROFILE="work"     ;;
+      yov3bc|okzf68) PROFILE="work"     ;;
       *)             PROFILE="default"  ;;
     esac
   fi
