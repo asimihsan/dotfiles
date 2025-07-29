@@ -3,7 +3,5 @@ export PATH="$HOME/.local/bin:$PATH"
 
 {{ if eq .chezmoi.hostname "yov3bc" "okzf68" -}}
 export PATH="$HOME/workplace/platform-tools/shell:$PATH"
-{{ end -}}
-{{ if eq .chezmoi.hostname "okzf68" -}}
-export PATH="$HOME/workplace/platform-tools/shell:$PATH"
+export PATH="/opt/homebrew/opt/postgresql@13/bin:$PATH"
 {{ end -}}
