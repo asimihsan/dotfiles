@@ -232,6 +232,68 @@ install_gh_copilot() {
   fi
 }
 
+mac_system_setup() {
+  fancy_echo "Setting up macOS system..."
+
+  # 3 is default hibernate mode; copy RAM to hibernation file but keeps RAM powered on.
+  # 25 is the most aggressive mode; copy RAM to hibernation file and power off RAM.
+  sudo pmset -a hibernatemode 25
+
+  # After 1800 seconds (30 minutes), the system will go into standby mode, which is
+  # actually hibernation! (This does not work at least on Mac M1)
+  # sudo pmset -a standbydelay 1800
+
+  # Disable Power Nap, which keeps networking alive.
+  sudo pmset -a powernap 0
+
+  # Show hidden files in Finder
+  defaults write com.apple.Finder AppleShowAllFiles -bool true
+
+  # Show all file extensions in Finder
+  defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+  # Show the path bath and status bar in Finder
+  defaults write com.apple.finder ShowPathbar -bool true
+  defaults write com.apple.finder ShowStatusBar -bool true
+
+  # Use list view and search the current folder by default
+  defaults write com.apple.Finder FXPreferredViewStyle -string "Nlsv"
+  defaults write com.apple.Finder FXDefaultSearchScope -string "SCcf"
+
+  # Unhide the Library folder
+  chflags nohidden ~/Library
+
+  # Show the full POSIX path in Finder window titles
+  defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+
+  # Show the ~/Downloads folder in the sidebar
+  defaults write com.apple.finder ShowRecentTags -bool false
+  defaults write com.apple.finder ShowSidebar -bool true
+
+  # Change screenshot save location
+  mkdir -p ~/Pictures/Screenshots
+  defaults write com.apple.screencapture location ~/Pictures/Screenshots
+  killall SystemUIServer || true
+
+  # Always show scroll bars
+  defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
+
+  # Enable tap‑to‑click and two‑finger right‑click
+  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+  defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
+
+  # Increase keyboard repeat speed
+  defaults write -g InitialKeyRepeat -int 10
+  defaults write -g KeyRepeat -int 1
+
+  # Turn off automatic spelling correction and capitalisation
+  defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+  defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+
+  # Restart Finder
+  killall Finder || true
+}
+
 main() {
   # Parse CLI flags early
   local PROFILE=""
@@ -273,6 +335,7 @@ main() {
 
   run_profile_tasks "$PROFILE"
 
+  mac_system_setup
   install_pragmasevka_font
   install_mise
   install_gh_copilot
