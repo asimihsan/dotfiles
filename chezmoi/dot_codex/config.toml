@@ -1,5 +1,9 @@
 file_opener = "cursor"
 
+[mcp_servers.context7]
+args = ["-y", "@upstash/context7-mcp"]
+command = "npx"
+
 [profiles.o3]
 model = "o3"
 model_provider = "openai"
