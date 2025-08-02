@@ -1,0 +1,19 @@
+file_opener = "cursor"
+
+[profiles.o3]
+model = "o3"
+model_provider = "openai"
+model_reasoning_effort = "high"
+model_reasoning_summary = "detailed"
+
+[profiles.o3-pro]
+model = "o3-pro"
+model_provider = "openai"
+model_reasoning_effort = "high"
+model_reasoning_summary = "detailed"
+
+[profiles.o4-mini]
+model = "o4-mini"
+model_provider = "openai"
+model_reasoning_effort = "high"
+model_reasoning_summary = "detailed"
