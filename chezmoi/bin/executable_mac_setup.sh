@@ -237,7 +237,7 @@ mac_system_setup() {
 
   # 3 is default hibernate mode; copy RAM to hibernation file but keeps RAM powered on.
   # 25 is the most aggressive mode; copy RAM to hibernation file and power off RAM.
-  sudo pmset -a hibernatemode 25
+  sudo pmset -a hibernatemode 3
 
   # After 1800 seconds (30 minutes), the system will go into standby mode, which is
   # actually hibernation! (This does not work at least on Mac M1)
