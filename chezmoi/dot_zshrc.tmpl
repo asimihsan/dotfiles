@@ -8,7 +8,21 @@ fi
 
 autoload -U compinit && compinit -u
 
+# -----------------------------------------------------------------------------
+#   Load all the things.
+# -----------------------------------------------------------------------------
+. "$HOME/.cargo/env"
+. $HOME/bin/logging.sh
+[[ -s "/Users/asimi/.gvm/scripts/gvm" ]] && source "/Users/asimi/.gvm/scripts/gvm"
+eval "$(atuin init zsh)"
+eval "$(direnv hook zsh)"
+eval "$(gh copilot alias -- zsh)"
 eval "$(starship init zsh)"
+eval "$(zoxide init zsh)"
+source <(fzf --zsh)
+source <(jj util completion zsh)
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+# -----------------------------------------------------------------------------
 
 # add devbox bits to zsh
 if command -v devbox >/dev/null 2>&1; then
@@ -17,8 +31,6 @@ fi
 
 export PATH="$HOME/.bin:$HOME/bin:$PATH"
 export PATH="/usr/local/bin:$HOME/bin:$PATH"
-
-source <(fzf --zsh)
 
 export ANDROID_NDK=/opt/homebrew/share/android-ndk
 export ANDROID_NDK_HOME=/opt/homebrew/share/android-ndk
@@ -49,11 +61,7 @@ autoload -U +X bashcompinit && bashcompinit
 # Better history
 # bindkey -s '^e' "hishtory export | tac | awk '!a[\$0]++' | tac | fzf --scheme=history --tac --no-sort --preview 'echo {}' --preview-window down:5:wrap --bind '?:toggle-preview'^M"
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
-
-[[ -s "/Users/asimi/.gvm/scripts/gvm" ]] && source "/Users/asimi/.gvm/scripts/gvm"
 
 export PATH="${PATH}":/Users/asimi/Library/Application\ Support/JetBrains/Toolbox/scripts/
 export PATH=$PATH:$(go env GOPATH)/bin
@@ -100,20 +108,14 @@ alias ls="gls --color"
 alias du="dust"
 alias pmc='coyote test'
 alias zstd=$(brew --prefix zstd)/bin/zstd
-eval "$(gh copilot alias -- zsh)"
 alias vim=nvim
 alias lg='GIT_CONFIG_GLOBAL=~/.gitconfig-lazygit lazygit'
 
 export _ZO_RESOLVE_SYMLINKS=1  # resolve symlinks
-eval "$(zoxide init zsh)"
 alias cd='z'
 
-eval "$(direnv hook zsh)"
-eval "$(atuin init zsh)"
 # nohup atuin daemon >/dev/null 2>&1 &!
 # disown
-
-. "$HOME/.cargo/env"
 
 export PATH="$PATH:/Users/asimi/.dotnet/tools"
 
@@ -123,8 +125,6 @@ export LDFLAGS="-L/opt/homebrew/opt/libiconv/lib"
 export CPPFLAGS="-I/opt/homebrew/opt/libiconv/include"
 
 alias ar=/usr/bin/ar
-
-. $HOME/bin/logging.sh
 
 if [[ -z "$LOGGING_STARTED" ]]; then
     export LOGGING_STARTED=1
