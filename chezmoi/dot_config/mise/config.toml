@@ -28,7 +28,7 @@
 1password = "latest"
 age = "latest"
 aws-vault = "latest"
-awscli = "2.28.0"
+awscli = "2.28.16"
 bun = "latest"
 cargo-binstall = "latest"
 chezmoi = "latest"
@@ -39,6 +39,8 @@ dotnet = "latest"
 duckdb = "latest"
 dust = "latest"
 fd = "latest"
+ffmpeg = "latest"
+flutter = "latest"
 fzf = "latest"
 gh = "latest"
 go = "prefix:1.24"
@@ -68,14 +70,10 @@ starship = "latest"
 tmux = "latest"
 uv = "latest"
 yq = "latest"
+yt-dlp = "latest"
 zellij = "latest"
 zoxide = "latest"
 
-{{ if eq .chezmoi.hostname "hlru5i" }}
-ffmpeg = "latest"
-flutter = "latest"
-yt-dlp = "latest"
-{{ end }}
 
 [settings]
 experimental = true
