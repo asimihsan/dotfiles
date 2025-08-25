@@ -294,6 +294,15 @@ mac_system_setup() {
   killall Finder || true
 }
 
+update_cursor_agent() {
+  fancy_echo "Updating Cursor agent..."
+  if command -v cursor-agent >/dev/null 2>&1; then
+    cursor-agent update
+  else
+    fancy_echo "Cursor agent not installed."
+  fi
+}
+
 main() {
   # Parse CLI flags early
   local PROFILE=""
@@ -347,6 +356,7 @@ main() {
   update_mise
   update_rust
   update_system
+  update_cursor_agent
   fancy_echo "Mac setup/update complete for profile '$PROFILE'."
 }
 
