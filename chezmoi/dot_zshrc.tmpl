@@ -14,7 +14,6 @@ autoload -U compinit && compinit -u
 . "$HOME/.cargo/env"
 . $HOME/bin/logging.sh
 [[ -s "/Users/asimi/.gvm/scripts/gvm" ]] && source "/Users/asimi/.gvm/scripts/gvm"
-eval "$(atuin init zsh)"
 eval "$(direnv hook zsh)"
 eval "$(gh copilot alias -- zsh)"
 eval "$(starship init zsh)"
@@ -138,3 +137,5 @@ export EDITOR=vim
 zr  () { command zellij run --name "$*"        -- zsh -ic "$*"; }
 zrf () { command zellij run --floating --name "$*" -- zsh -ic "$*"; }
 zri () { command zellij run --in-place --name "$*" -- zsh -ic "$*"; }
+
+eval "$(atuin init zsh)"
