@@ -6,3 +6,30 @@ export PATH="$PATH:/Users/asimi/Library/Application Support/JetBrains/Toolbox/sc
 export PATH="$PATH:$HOME/go/bin"
 
 eval "$(mise activate zsh)"
+
+# Optional: devbox global env (make available to all subshells)
+if command -v devbox >/dev/null 2>&1; then
+    eval "$(devbox global shellenv)"
+fi
+
+# Language/SDK homes
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export ANDROID_NDK="/opt/homebrew/share/android-ndk"
+export ANDROID_NDK_HOME="$ANDROID_NDK"
+export NDK_HOME="$ANDROID_NDK_HOME"
+
+# JAVA_HOME needs a command
+export JAVA_HOME="$($HOME/bin/set-java-home.sh)"
+
+# Misc global env
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
+
+# One-time PATH augments (in addition to brew's PATH)
+export PATH="$PATH:$HOME/.pub-cache/bin"
+export PATH="$PATH:/Users/asimi/.local/bin:/Users/asimi/bin:/Users/asimi/.dotnet/tools"
+
+# Things that depend on HOMEBREW_PREFIX
+export PLANTUML_JAR="${HOMEBREW_PREFIX}/opt/plantuml/libexec/plantuml.jar"
+
+# Colors (computed once per login)
+export LS_COLORS="$(vivid generate molokai)"

@@ -1,17 +1,15 @@
-# Ensure correct Homebrew completions path for Apple Silicon
+##### Completions (set fpath before compinit)
 fpath=(/opt/homebrew/share/zsh/site-functions ${fpath:#/usr/local/share/zsh/site-functions})
-fpath+=($HOME/.zsh/completions)
-
+fpath+=("$HOME/.zsh/completions")
 if command -v devbox >/dev/null 2>&1; then
     fpath+=($DEVBOX_GLOBAL_PREFIX/share/zsh/site-functions $DEVBOX_GLOBAL_PREFIX/share/zsh/$ZSH_VERSION/functions $DEVBOX_GLOBAL_PREFIX/share/zsh/vendor-completions)
 fi
 
 autoload -U compinit && compinit -u
+autoload -U +X bashcompinit && bashcompinit
 
-# -----------------------------------------------------------------------------
-#   Load all the things.
-# -----------------------------------------------------------------------------
-. "$HOME/.cargo/env"
+##### Interactive hooks / prompt / widgets
+. "$HOME/.cargo/env" 2>/dev/null || true
 . $HOME/bin/logging.sh
 [[ -s "/Users/asimi/.gvm/scripts/gvm" ]] && source "/Users/asimi/.gvm/scripts/gvm"
 eval "$(direnv hook zsh)"
@@ -21,87 +19,35 @@ eval "$(zoxide init zsh)"
 source <(fzf --zsh)
 source <(jj util completion zsh)
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-# -----------------------------------------------------------------------------
 
-# add devbox bits to zsh
-if command -v devbox >/dev/null 2>&1; then
-    eval "$(devbox global shellenv)"
+##### Interactive-only PATH tweaks
+export PATH="$HOME/.bin:$HOME/bin:/usr/local/bin:$PATH"
+
+##### Homebrew tool paths using HOMEBREW_PREFIX
+if [[ -n ${HOMEBREW_PREFIX-} ]]; then
+    export PATH="${HOMEBREW_PREFIX}/opt/sqlite/bin:$PATH"
+    export PATH="$PATH:${HOMEBREW_PREFIX}/opt/tidy-html5/bin"
+    export PATH="${HOMEBREW_PREFIX}/opt/protobuf/bin:$PATH"
+    export PATH="/opt/homebrew/opt/protobuf@3/bin:$PATH"
 fi
 
-export PATH="$HOME/.bin:$HOME/bin:$PATH"
-export PATH="/usr/local/bin:$HOME/bin:$PATH"
+##### Build flags
+export LDFLAGS="-L/opt/homebrew/opt/libiconv/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/libiconv/include"
 
-export ANDROID_NDK=/opt/homebrew/share/android-ndk
-export ANDROID_NDK_HOME=/opt/homebrew/share/android-ndk
-export NDK_HOME="$ANDROID_NDK_HOME"
-
-export ANDROID_HOME=$HOME/Library/Android/sdk
-
-# export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-# export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
-# export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
-
-export JAVA_HOME=$($HOME/bin/set-java-home.sh)
-# export GRAALVM_HOME="/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.3.0/Contents/Home"
-# export PATH="${PATH}":"${GRAALVM_HOME}"/bin
-# export PATH=$HOME/.emacs.d/bin:"$PATH"
-
-# brew install coreutils
-
-# brew install vivid
-export LS_COLORS="$(vivid generate molokai)"
-
-autoload -U +X bashcompinit && bashcompinit
-
-# Hishtory Config:
-# export PATH="$PATH:/Users/asimi/.hishtory"
-# source /Users/asimi/.hishtory/config.zsh
-
-# Better history
-# bindkey -s '^e' "hishtory export | tac | awk '!a[\$0]++' | tac | fzf --scheme=history --tac --no-sort --preview 'echo {}' --preview-window down:5:wrap --bind '?:toggle-preview'^M"
-
-export DOTNET_CLI_TELEMETRY_OPTOUT=1
-
-export PATH="${PATH}":/Users/asimi/Library/Application\ Support/JetBrains/Toolbox/scripts/
-export PATH=$PATH:$(go env GOPATH)/bin
-
-export PATH="$PATH":"$HOME/.pub-cache/bin"
-export PATH=$PATH:/Users/asimi/.local/bin:/Users/asimi/bin
-
-# -----------------------------------------------------------------------------
-#   Homebrew paths.
-# -----------------------------------------------------------------------------
-# Get the Homebrew base installation directory once
-brew_prefix=$(brew --prefix)
-
-# Update PATH for sqlite, tidy-html5, poetry, and protobuf
-export PATH="${brew_prefix}/opt/sqlite/bin:$PATH"
-export PATH="$PATH:${brew_prefix}/opt/tidy-html5/bin"
-export PATH="${brew_prefix}/opt/protobuf/bin:$PATH"
-
-# Set PLANTUML_JAR
-export PLANTUML_JAR="${brew_prefix}/opt/plantuml/libexec/plantuml.jar"
-# -----------------------------------------------------------------------------
-
-# -----------------------------------------------------------------------------
-#  Secrets from 1Password.
-# -----------------------------------------------------------------------------
-# Define a function to load a secret from 1Password and export it as an environment variable
+##### Secrets helpers
 load_secret() {
     local secret_path=$1
     local var_name=$2
     export "$var_name"="$(op read --account my.1password.com "op://$secret_path")"
 }
 
-# Define a function to load all secrets
 load_all_secrets() {
     eval "$(manage_secrets.py)"
     echo "All secrets have been loaded."
 }
 
-# You can now call `load_all_secrets` manually whenever you need to populate the environment variables
-# -----------------------------------------------------------------------------
-
+##### Aliases & helpers
 alias ll='eza -lh --git'
 alias ls="gls --color"
 alias du="dust"
@@ -109,33 +55,24 @@ alias pmc='coyote test'
 alias zstd=$(brew --prefix zstd)/bin/zstd
 alias vim=nvim
 alias lg='GIT_CONFIG_GLOBAL=~/.gitconfig-lazygit lazygit'
-
-export _ZO_RESOLVE_SYMLINKS=1  # resolve symlinks
-alias cd='z'
-
-# nohup atuin daemon >/dev/null 2>&1 &!
-# disown
-
-export PATH="$PATH:/Users/asimi/.dotnet/tools"
-
-export PATH="/opt/homebrew/opt/protobuf@3/bin:$PATH"
-
-export LDFLAGS="-L/opt/homebrew/opt/libiconv/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/libiconv/include"
-
 alias ar=/usr/bin/ar
 
+export _ZO_RESOLVE_SYMLINKS=1
+alias cd='z'
+
+##### Session logging
 if [[ -z "$LOGGING_STARTED" ]]; then
     export LOGGING_STARTED=1
-    # reap_orphaned_processes
-    # record_session
     rotate_logs
 fi
 
-export EDITOR=vim
-
+##### Zellij helpers
 zr  () { command zellij run --name "$*"        -- zsh -ic "$*"; }
 zrf () { command zellij run --floating --name "$*" -- zsh -ic "$*"; }
 zri () { command zellij run --in-place --name "$*" -- zsh -ic "$*"; }
 
+##### Atuin last to own Ctrl-R
 eval "$(atuin init zsh)"
+bindkey -M emacs '^R' _atuin_search_widget
+bindkey -M viins '^R' _atuin_search_widget
+bindkey -M vicmd '^R' _atuin_search_widget
