@@ -8,21 +8,11 @@ export PATH="$PATH:/Users/asimi/Library/Application Support/JetBrains/Toolbox/sc
 
 export PATH="$PATH:$HOME/go/bin"
 
-# ---- MISE: shims now; full env when you first cd ----
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 
-autoload -Uz add-zsh-hook
-_mise_lazy_loaded=0
-_mise_lazy_init() {
-  (( _mise_lazy_loaded )) && return
-  _mise_lazy_loaded=1
-  command -v mise >/dev/null || return
-  eval "$(mise hook-env -s zsh)" >/dev/null 2>&1
-  eval "$(zoxide init zsh)" >/dev/null 2>&1
-  eval "$(gh copilot alias -- zsh)" >/dev/null 2>&1
-  alias cd='z'
-}
-add-zsh-hook chpwd _mise_lazy_init
+eval "$(zoxide init zsh)" >/dev/null 2>&1
+eval "$(gh copilot alias -- zsh)" >/dev/null 2>&1
+alias cd='z'
 
 # Devbox global env (cache)
 if command -v devbox >/dev/null 2>&1; then

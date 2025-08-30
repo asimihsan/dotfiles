@@ -1,6 +1,34 @@
 # interactive only
 [[ -o interactive ]] || return
 
+autoload -Uz add-zsh-hook
+typeset -g _mise_applied=0
+
+_mise_has_cfg() {
+  local d=$PWD
+  while [[ $d != / ]]; do
+    [[ -e "$d/.mise.toml" || -e "$d/.tool-versions" || -e "$d/.rtx.toml" ]] && return 0
+    d=${d:h}
+  done
+  return 1
+}
+
+_mise_apply() {
+  command -v mise >/dev/null || return 0
+  eval "$(mise hook-env -s zsh)"
+  rehash
+  _mise_applied=1
+}
+
+_mise_on_chpwd() {
+  _mise_has_cfg || return 0
+  _mise_applied=0
+  _mise_apply
+}
+
+add-zsh-hook chpwd _mise_on_chpwd
+_mise_on_chpwd
+
 # completions (use a cache file; skip security scan if perms are clean)
 ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-${ZSH_VERSION}"
 autoload -Uz compinit
@@ -11,12 +39,7 @@ compinit -C -d "$ZSH_COMPDUMP"
 ##### Interactive hooks / prompt / widgets
 . "$HOME/.cargo/env" 2>/dev/null || true
 
-# fzf (no subshell)
-hb=${HOMEBREW_PREFIX:-/opt/homebrew}
-if [[ -r "$hb/opt/fzf/shell/completion.zsh" ]]; then
-  source "$hb/opt/fzf/shell/completion.zsh"
-  source "$hb/opt/fzf/shell/key-bindings.zsh"
-fi
+source <(fzf --zsh)
 
 if command -v jj >/dev/null; then
   _jjc="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/jj_completion.zsh"
@@ -69,15 +92,6 @@ zr  () { command zellij run --name "$*"        -- zsh -ic "$*"; }
 zrf () { command zellij run --floating --name "$*" -- zsh -ic "$*"; }
 zri () { command zellij run --in-place --name "$*" -- zsh -ic "$*"; }
 
-# ---- Atuin: load only when you hit Ctrl-R ----
-_atuin_lazy() {
-  unfunction _atuin_lazy
-  eval "$(atuin init zsh)"
-  zle _atuin_search_widget
-}
-zle -N _atuin_lazy
-bindkey -M emacs '^R' _atuin_lazy
-bindkey -M viins '^R' _atuin_lazy
-bindkey -M vicmd '^R' _atuin_lazy
+eval "$(atuin init zsh)"
 
 command -v starship >/dev/null && eval "$(starship init zsh)"
