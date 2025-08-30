@@ -1,15 +1,31 @@
-eval "$(/opt/homebrew/bin/brew shellenv)"
+export HOMEBREW_PREFIX=/opt/homebrew
+export PATH="$HOMEBREW_PREFIX/bin:$HOMEBREW_PREFIX/sbin:$PATH"
+export MANPATH="$HOMEBREW_PREFIX/share/man:${MANPATH:-}"
+export INFOPATH="$HOMEBREW_PREFIX/share/info:${INFOPATH:-}"
 
 # Added by Toolbox App
 export PATH="$PATH:/Users/asimi/Library/Application Support/JetBrains/Toolbox/scripts"
 
 export PATH="$PATH:$HOME/go/bin"
 
-eval "$(mise activate zsh)"
+# ---- MISE: shims now; full env when you first cd ----
+export PATH="$HOME/.local/share/mise/shims:$PATH"
 
-# Optional: devbox global env (make available to all subshells)
+autoload -Uz add-zsh-hook
+_mise_lazy_loaded=0
+_mise_lazy_init() {
+  (( _mise_lazy_loaded )) && return
+  _mise_lazy_loaded=1
+  command -v mise >/dev/null || return
+  eval "$(mise hook-env -s zsh)" >/dev/null 2>&1
+}
+add-zsh-hook chpwd _mise_lazy_init
+
+# Devbox global env (cache)
 if command -v devbox >/dev/null 2>&1; then
-    eval "$(devbox global shellenv)"
+  _devbox_env="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/devbox_global_env.zsh"
+  [[ -r $_devbox_env ]] || devbox global shellenv >| "$_devbox_env"
+  source "$_devbox_env"
 fi
 
 # Language/SDK homes
@@ -18,8 +34,15 @@ export ANDROID_NDK="/opt/homebrew/share/android-ndk"
 export ANDROID_NDK_HOME="$ANDROID_NDK"
 export NDK_HOME="$ANDROID_NDK_HOME"
 
-# JAVA_HOME needs a command
-export JAVA_HOME="$($HOME/bin/set-java-home.sh)"
+# JAVA_HOME: compute once per login and cache for new shells
+_java_cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/java_home"
+if [[ -r $_java_cache ]]; then
+  export JAVA_HOME="$(<$_java_cache)"
+else
+  export JAVA_HOME="$($HOME/bin/set-java-home.sh)"
+  mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+  print -r -- "$JAVA_HOME" >| "$_java_cache" 2>/dev/null || true
+fi
 
 # Misc global env
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
@@ -31,5 +54,12 @@ export PATH="$PATH:/Users/asimi/.local/bin:/Users/asimi/bin:/Users/asimi/.dotnet
 # Things that depend on HOMEBREW_PREFIX
 export PLANTUML_JAR="${HOMEBREW_PREFIX}/opt/plantuml/libexec/plantuml.jar"
 
-# Colors (computed once per login)
-export LS_COLORS="$(vivid generate molokai)"
+# LS_COLORS: cache vivid output
+_ls_cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/ls_colors"
+if [[ -r $_ls_cache ]]; then
+  export LS_COLORS="$(<$_ls_cache)"
+else
+  export LS_COLORS="$(vivid generate molokai)"
+  mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+  print -r -- "$LS_COLORS" >| "$_ls_cache" 2>/dev/null || true
+fi

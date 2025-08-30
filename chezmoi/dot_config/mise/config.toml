@@ -12,6 +12,7 @@
 "npm:task-master-ai" = "latest"
 "pipx:aider-chat" = "latest"
 "pipx:copier" = "latest"
+"pipx:ipython" = "latest"
 "pipx:llm" = "latest"
 "pipx:marker-pdf[full]" = "latest"
 "pipx:parquet-tools" = "latest"

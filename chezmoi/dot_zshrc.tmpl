@@ -1,24 +1,45 @@
-##### Completions (set fpath before compinit)
-fpath=(/opt/homebrew/share/zsh/site-functions ${fpath:#/usr/local/share/zsh/site-functions})
-fpath+=("$HOME/.zsh/completions")
-if command -v devbox >/dev/null 2>&1; then
-    fpath+=($DEVBOX_GLOBAL_PREFIX/share/zsh/site-functions $DEVBOX_GLOBAL_PREFIX/share/zsh/$ZSH_VERSION/functions $DEVBOX_GLOBAL_PREFIX/share/zsh/vendor-completions)
-fi
+zmodload zsh/datetime 2>/dev/null
+typeset -F _rc_start=${EPOCHREALTIME:-$SECONDS}
 
-autoload -U compinit && compinit -u
-autoload -U +X bashcompinit && bashcompinit
+# interactive only
+[[ -o interactive ]] || return
+
+# completions (use a cache file; skip security scan if perms are clean)
+ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-${ZSH_VERSION}"
+autoload -Uz compinit
+mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+compinit -C -d "$ZSH_COMPDUMP"
+[[ -r "$ZSH_COMPDUMP" ]] && zcompile "$ZSH_COMPDUMP" 2>/dev/null
 
 ##### Interactive hooks / prompt / widgets
 . "$HOME/.cargo/env" 2>/dev/null || true
 . $HOME/bin/logging.sh
 [[ -s "/Users/asimi/.gvm/scripts/gvm" ]] && source "/Users/asimi/.gvm/scripts/gvm"
 eval "$(direnv hook zsh)"
-eval "$(gh copilot alias -- zsh)"
-eval "$(starship init zsh)"
+
+if command -v gh >/dev/null; then
+  gh() {
+    unfunction gh
+    eval "$(gh copilot alias -- zsh)" 2>/dev/null || true
+    command gh "$@"
+  }
+fi
+
 eval "$(zoxide init zsh)"
-source <(fzf --zsh)
-source <(jj util completion zsh)
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# fzf (no subshell)
+hb=${HOMEBREW_PREFIX:-/opt/homebrew}
+if [[ -r "$hb/opt/fzf/shell/completion.zsh" ]]; then
+  source "$hb/opt/fzf/shell/completion.zsh"
+  source "$hb/opt/fzf/shell/key-bindings.zsh"
+fi
+
+if command -v jj >/dev/null; then
+  _jjc="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/jj_completion.zsh"
+  mkdir -p "${XDG_CACHE_HOME:-$HOME/.cache}/zsh"
+  [[ -r $_jjc ]] || jj util completion zsh >| "$_jjc" 2>/dev/null
+  source "$_jjc"
+fi
 
 ##### Interactive-only PATH tweaks
 export PATH="$HOME/.bin:$HOME/bin:/usr/local/bin:$PATH"
@@ -52,7 +73,7 @@ alias ll='eza -lh --git'
 alias ls="gls --color"
 alias du="dust"
 alias pmc='coyote test'
-alias zstd=$(brew --prefix zstd)/bin/zstd
+alias zstd=/opt/homebrew/opt/zstd/bin/zstd
 alias vim=nvim
 alias lg='GIT_CONFIG_GLOBAL=~/.gitconfig-lazygit lazygit'
 alias ar=/usr/bin/ar
@@ -71,8 +92,18 @@ zr  () { command zellij run --name "$*"        -- zsh -ic "$*"; }
 zrf () { command zellij run --floating --name "$*" -- zsh -ic "$*"; }
 zri () { command zellij run --in-place --name "$*" -- zsh -ic "$*"; }
 
-##### Atuin last to own Ctrl-R
-eval "$(atuin init zsh)"
-bindkey -M emacs '^R' _atuin_search_widget
-bindkey -M viins '^R' _atuin_search_widget
-bindkey -M vicmd '^R' _atuin_search_widget
+# ---- Atuin: load only when you hit Ctrl-R ----
+_atuin_lazy() {
+  unfunction _atuin_lazy
+  eval "$(atuin init zsh)"
+  zle _atuin_search_widget
+}
+zle -N _atuin_lazy
+bindkey -M emacs '^R' _atuin_lazy
+bindkey -M viins '^R' _atuin_lazy
+bindkey -M vicmd '^R' _atuin_lazy
+
+command -v starship >/dev/null && eval "$(starship init zsh)"
+
+typeset -F _rc_end=${EPOCHREALTIME:-$SECONDS}
+printf 'Total rc time: %.3fs\n' "$((_rc_end - _rc_start))" >&2
