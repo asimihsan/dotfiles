@@ -18,6 +18,9 @@ _mise_lazy_init() {
   _mise_lazy_loaded=1
   command -v mise >/dev/null || return
   eval "$(mise hook-env -s zsh)" >/dev/null 2>&1
+  eval "$(zoxide init zsh)" >/dev/null 2>&1
+  eval "$(gh copilot alias -- zsh)" >/dev/null 2>&1
+  alias cd='z'
 }
 add-zsh-hook chpwd _mise_lazy_init
 

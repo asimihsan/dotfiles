@@ -1,6 +1,3 @@
-zmodload zsh/datetime 2>/dev/null
-typeset -F _rc_start=${EPOCHREALTIME:-$SECONDS}
-
 # interactive only
 [[ -o interactive ]] || return
 
@@ -13,19 +10,6 @@ compinit -C -d "$ZSH_COMPDUMP"
 
 ##### Interactive hooks / prompt / widgets
 . "$HOME/.cargo/env" 2>/dev/null || true
-. $HOME/bin/logging.sh
-[[ -s "/Users/asimi/.gvm/scripts/gvm" ]] && source "/Users/asimi/.gvm/scripts/gvm"
-eval "$(direnv hook zsh)"
-
-if command -v gh >/dev/null; then
-  gh() {
-    unfunction gh
-    eval "$(gh copilot alias -- zsh)" 2>/dev/null || true
-    command gh "$@"
-  }
-fi
-
-eval "$(zoxide init zsh)"
 
 # fzf (no subshell)
 hb=${HOMEBREW_PREFIX:-/opt/homebrew}
@@ -79,13 +63,6 @@ alias lg='GIT_CONFIG_GLOBAL=~/.gitconfig-lazygit lazygit'
 alias ar=/usr/bin/ar
 
 export _ZO_RESOLVE_SYMLINKS=1
-alias cd='z'
-
-##### Session logging
-if [[ -z "$LOGGING_STARTED" ]]; then
-    export LOGGING_STARTED=1
-    rotate_logs
-fi
 
 ##### Zellij helpers
 zr  () { command zellij run --name "$*"        -- zsh -ic "$*"; }
@@ -104,6 +81,3 @@ bindkey -M viins '^R' _atuin_lazy
 bindkey -M vicmd '^R' _atuin_lazy
 
 command -v starship >/dev/null && eval "$(starship init zsh)"
-
-typeset -F _rc_end=${EPOCHREALTIME:-$SECONDS}
-printf 'Total rc time: %.3fs\n' "$((_rc_end - _rc_start))" >&2
