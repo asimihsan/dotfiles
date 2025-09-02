@@ -44,7 +44,7 @@ keep_sudo_alive() {
   SUDO_REFRESH_PID=$!
 
   # Clean-up on exit or interruption
-  trap 'kill $SUDO_REFRESH_PID || true' EXIT
+  trap 'kill $SUDO_REFRESH_PID 2>/dev/null || true' EXIT
 }
 
 command_exists() {
