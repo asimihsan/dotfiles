@@ -14,4 +14,4 @@ format = "[ $path ]($style)"
 [character]
 # Use a simple arrow for the prompt.
 success_symbol = "[➜](bold green)"
-error_symbol = "[➜](bold red)"
+error_symbol   = "[➜](bold red)"

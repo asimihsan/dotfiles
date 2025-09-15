@@ -99,3 +99,46 @@ if command -v cursor-agent >/dev/null; then
 fi
 
 command -v starship >/dev/null && eval "$(starship init zsh)"
+
+##### ZLE keybindings (navigation & editing)
+# 1) Choose ONE default keymap
+bindkey -e         # Emacs-style (Ctrl-A/E, etc.)
+# bindkey -v       # (or) Vi-style
+
+# 2) Make the essentials work in BOTH emacs & vi-insert modes
+for km in emacs viins; do
+  bindkey -M $km '^A' beginning-of-line          # Ctrl-A → start
+  bindkey -M $km '^E' end-of-line                # Ctrl-E → end
+  bindkey -M $km '^K' kill-line                  # Ctrl-K → kill to end
+  bindkey -M $km '^U' backward-kill-line         # Ctrl-U → kill to start
+  bindkey -M $km '^W' backward-kill-word         # Ctrl-W → delete word left
+  bindkey -M $km '^[d' kill-word                 # Alt-D → delete word right
+  bindkey -M $km '^[b' backward-word             # Alt-B → move word left
+  bindkey -M $km '^[f' forward-word              # Alt-F → move word right
+  bindkey -M $km '^Y' yank                       # Ctrl-Y → paste/yank
+  bindkey -M $km '^P' up-line-or-history         # Ctrl-P → prev history
+  bindkey -M $km '^N' down-line-or-history       # Ctrl-N → next history
+done
+
+# Treat / . - _ as word boundaries so Alt-B/F hop nicely across paths
+WORDCHARS='*?[]~=&;!#$%^(){}<>'
+
+# Free Ctrl-S (some terminals use it for flow control)
+stty -ixon 2>/dev/null || true
+
+# Optional: make Home/End and Ctrl-←/→ work across common macOS terminals
+bindkey '\e[H'  beginning-of-line
+bindkey '\e[F'  end-of-line
+bindkey '\eOH'  beginning-of-line
+bindkey '\eOF'  end-of-line
+bindkey '\e[1;5D' backward-word   # Ctrl-Left
+bindkey '\e[1;5C' forward-word    # Ctrl-Right
+bindkey '\e[5D'   backward-word   # some terms
+bindkey '\e[5C'   forward-word    # some terms
+
+# Optional: quick "edit current command in $EDITOR"
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey -M emacs '^X^E' edit-command-line
+bindkey -M viins '^[e' edit-command-line
+bindkey -M vicmd 'v'   edit-command-line
