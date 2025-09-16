@@ -1,6 +1,11 @@
 # interactive only
 [[ -o interactive ]] || return
 
+# VS Code env-resolver fast path: skip heavy init
+if [[ -n ${VSCODE_RESOLVING_ENVIRONMENT-} ]]; then
+  return 0
+fi
+
 autoload -Uz add-zsh-hook
 typeset -g _mise_applied=0
 
