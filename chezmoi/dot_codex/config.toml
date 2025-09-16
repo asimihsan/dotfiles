@@ -1,23 +1,11 @@
 file_opener = "cursor"
+approval_policy = "untrusted"
+sandbox_mode = "workspace-write"
 
 [mcp_servers.context7]
 args = ["-y", "@upstash/context7-mcp"]
 command = "npx"
 
-[profiles.o3]
-model = "o3"
+[profiles.gpt-5]
+model = "gpt-5-codex"
 model_provider = "openai"
-model_reasoning_effort = "high"
-model_reasoning_summary = "detailed"
-
-[profiles.o3-pro]
-model = "o3-pro"
-model_provider = "openai"
-model_reasoning_effort = "high"
-model_reasoning_summary = "detailed"
-
-[profiles.o4-mini]
-model = "o4-mini"
-model_provider = "openai"
-model_reasoning_effort = "high"
-model_reasoning_summary = "detailed"
