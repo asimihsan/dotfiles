@@ -1,10 +1,14 @@
 file_opener = "cursor"
-approval_policy = "untrusted"
+approval_policy = "on-failure"
 sandbox_mode = "workspace-write"
 
 [mcp_servers.context7]
 args = ["-y", "@upstash/context7-mcp"]
 command = "npx"
+
+[mcp_servers.gopls]
+args = ["mcp"]
+command = "gopls"
 
 [profiles.gpt-5]
 model = "gpt-5-codex"
