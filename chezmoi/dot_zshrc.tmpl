@@ -103,9 +103,9 @@ zri () { command zellij run --in-place --name "$*" -- zsh -ic "$*"; }
 
 eval "$(atuin init zsh)"
 
-if command -v cursor-agent >/dev/null; then
-  eval "$(cursor-agent shell-integration zsh)"
-fi
+#if command -v cursor-agent >/dev/null; then
+#  eval "$(cursor-agent shell-integration zsh)"
+#fi
 
 command -v starship >/dev/null && eval "$(starship init zsh)"
 
