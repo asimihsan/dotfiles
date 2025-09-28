@@ -6,9 +6,9 @@ if [[ -n ${VSCODE_RESOLVING_ENVIRONMENT-} ]]; then
   return 0
 fi
 
-if [[ -n ${INTELLIJ_ENVIRONMENT_READER-} ]]; then
-  return 0
-fi
+# if [[ -n ${INTELLIJ_ENVIRONMENT_READER-} ]]; then
+#   return 0
+# fi
 
 autoload -Uz add-zsh-hook
 typeset -g _mise_applied=0
