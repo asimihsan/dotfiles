@@ -24,8 +24,10 @@
 "cargo:atuin" = "latest"
 "cargo:code2prompt" = "latest"
 "cargo:eza" = "latest"
+"cargo:git-delta" = "latest"
 "cargo:https://github.com/terhechte/cursor-rust-tools" = "latest"
 "cargo:lstr" = "latest"
+"cargo:mergiraf" = "latest"
 
 1password = "latest"
 age = "latest"
