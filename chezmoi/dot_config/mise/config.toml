@@ -68,7 +68,7 @@ rclone = "latest"
 restic = "latest"
 ripgrep = "latest"
 ruby = "prefix:3.4"
-"rust" = { version = "prefix:1.89", components = "rust-docs,rustfmt,clippy,rust-analyzer" }
+"rust" = { version = "prefix:1.90", components = "rust-docs,rustfmt,clippy,rust-analyzer" }
 shellcheck = "latest"
 starship = "latest"
 tmux = "latest"
