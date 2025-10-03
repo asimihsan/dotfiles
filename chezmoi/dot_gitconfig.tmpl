@@ -62,7 +62,7 @@ signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+6ch0i+pdf+48pQ/S180rtxe9yELT
         # untrackedCache = true
 [merge]
         # (just 'diff3' if git version < 2.3)
-        # conflictstyle = zdiff3 
+        # conflictstyle = zdiff3
 [pull]
         # rebase = true
 
@@ -110,9 +110,6 @@ required = true
 [remote "origin"]
 tagopt = --tags
 
-[diff]
-# external = difft
-
 [oh-my-zsh]
 hide-status = 1
 
@@ -126,10 +123,18 @@ program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 gpgsign = true
 template = /Users/asimi/.gitmessage
 
+[diff]
+external = /usr/bin/env DFT_PARSE_ERROR_LIMIT=100 difft
+
 [core]
 autocrlf = false
 editor = nvim
-# pager = delta
+pager = less -R
+
+[pager]
+    diff = less -R
+    log  = less -R
+    show = less -R
 
 [interactive]
 # diffFilter = delta --color-only
