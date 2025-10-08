@@ -15,6 +15,15 @@ command = "rust-analyzer-mcp"
 command = "uvx"
 args = ["mcp-server-fetch"]
 
+[mcp_servers.aws-api]
+command = "uvx"
+args = ["awslabs.aws-api-mcp-server@latest"]
+env = { "AWS_REGION": "us-west-2" }
+
+[mcp_servers.aws_docs]
+command = "uvx"
+args = ["fastmcp", "run", "https://knowledge-mcp.global.api.aws"]
+
 [tools]
 web_search = true
 
