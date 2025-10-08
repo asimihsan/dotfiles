@@ -1,11 +1,20 @@
 file_opener = "cursor"
 approval_policy = "on-failure"
 sandbox_mode = "workspace-write"
+model = "gpt-5-codex"
+model_reasoning_effort = "high"
 
 [mcp_servers.context7]
 args = ["-y", "@upstash/context7-mcp"]
 command = "npx"
 
-[profiles.gpt-5]
-model = "gpt-5-codex"
-model_provider = "openai"
+[mcp_servers.rust-analyzer-mcp]
+command = "rust-analyzer-mcp"
+
+[mcp_servers.fetch]
+command = "uvx"
+args = ["mcp-server-fetch"]
+
+[tools]
+web_search = true
+
