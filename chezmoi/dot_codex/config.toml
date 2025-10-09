@@ -22,5 +22,17 @@ env = { "AWS_REGION"="us-west-2" }
 command = "uvx"
 args = ["fastmcp", "run", "https://knowledge-mcp.global.api.aws"]
 
+[mcp_servers.go-language-server]
+command = "mcp-language-server"
+args = ["--workspace", ".", "--lsp", "gopls"]
+
+[mcp_servers.rust-language-server]
+command = "mcp-language-server"
+args = ["--workspace", ".", "--lsp", "rust-analyzer"]
+
+[mcp_servers.python-language-server]
+command = "mcp-language-server"
+args = ["--workspace", ".", "--lsp", "pyright-langserver", "--", "--stdio"]
+
 [tools]
 web_search = true
