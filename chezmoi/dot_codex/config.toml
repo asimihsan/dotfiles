@@ -19,7 +19,7 @@ args = ["mcp-server-fetch"]
 [mcp_servers.aws-api]
 command = "uvx"
 args = ["awslabs.aws-api-mcp-server@latest"]
-env = { "AWS_REGION": "us-west-2" }
+env = { "AWS_REGION"="us-west-2" }
 
 [mcp_servers.aws_docs]
 command = "uvx"
