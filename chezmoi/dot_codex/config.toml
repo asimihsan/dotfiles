@@ -6,11 +6,8 @@ model_reasoning_effort = "high"
 experimental_use_rmcp_client = true
 
 [mcp_servers.context7]
-args = ["-y", "@upstash/context7-mcp"]
 command = "npx"
-
-[mcp_servers.rust-analyzer-mcp]
-command = "rust-analyzer-mcp"
+args = ["-y", "@upstash/context7-mcp"]
 
 [mcp_servers.fetch]
 command = "uvx"
