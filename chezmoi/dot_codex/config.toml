@@ -32,7 +32,7 @@ args = ["--workspace", ".", "--lsp", "rust-analyzer"]
 
 [mcp_servers.python-language-server]
 command = "mcp-language-server"
-args = ["--workspace", ".", "--lsp", "pyright-langserver", "--", "--stdio"]
+args = ["--workspace", ".", "--lsp", "uv", "--", "run", "basedpyright-langserver", "--stdio"]
 
 [tools]
 web_search = true
