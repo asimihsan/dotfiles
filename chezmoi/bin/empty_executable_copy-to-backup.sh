@@ -5,12 +5,9 @@ set -euo pipefail
 # chezmoi add --encrypt ~/.claude.json
 chezmoi add --template ~/.zshrc
 
-if command -v devbox &> /dev/null; then
-    chezmoi re-add "$(devbox global path)"/devbox.json
-    chezmoi re-add "$(devbox global path)"/devbox.lock
-fi
-
 # chezmoi re-add ~/.claude.json
+chezmoi re-add ~/.zprofile
+chezmoi re-add ~/.zshenv
 chezmoi re-add ~/.config/karabiner/karabiner.json
 chezmoi re-add ~/.config/kitty/kitty.conf
 chezmoi re-add ~/.config/mise/config.toml
