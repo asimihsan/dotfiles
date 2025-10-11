@@ -12,13 +12,6 @@ export PATH="$HOME/.local/share/mise/shims:$PATH"
 
 eval "$(gh copilot alias -- zsh)" >/dev/null 2>&1
 
-# Devbox global env (cache)
-if command -v devbox >/dev/null 2>&1; then
-  _devbox_env="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/devbox_global_env.zsh"
-  [[ -r $_devbox_env ]] || devbox global shellenv >| "$_devbox_env"
-  source "$_devbox_env"
-fi
-
 # Language/SDK homes
 export ANDROID_HOME="$HOME/Library/Android/sdk"
 export ANDROID_NDK="/opt/homebrew/share/android-ndk"
