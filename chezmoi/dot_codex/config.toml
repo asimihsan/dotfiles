@@ -34,5 +34,9 @@ args = ["--workspace", ".", "--lsp", "rust-analyzer"]
 command = "mcp-language-server"
 args = ["--workspace", ".", "--lsp", "uv", "--", "run", "basedpyright-langserver", "--stdio"]
 
+[mcp_servers.linear]
+command = "npx"
+args = ["-y", "mcp-remote", "https://mcp.linear.app/sse"]
+
 [tools]
 web_search = true
