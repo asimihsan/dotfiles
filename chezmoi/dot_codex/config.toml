@@ -4,6 +4,7 @@ sandbox_mode = "workspace-write"
 model = "gpt-5-codex"
 model_reasoning_effort = "high"
 experimental_use_rmcp_client = true
+tool_timeout_sec = 600
 
 [mcp_servers.context7]
 command = "npx"
