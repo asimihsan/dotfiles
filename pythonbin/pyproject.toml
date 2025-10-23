@@ -22,7 +22,6 @@ dependencies = [
     "ipdb>=0.13.13",
     "jira>=3.8.0",
     "jupyter>=1.0.0",
-    "librosa>=0.10.2.post1",
     "litellm>=1.43.19",
     "markdown-it-py>=3.0.0",
     "markdown>=3.7",

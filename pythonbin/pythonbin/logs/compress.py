@@ -117,7 +117,7 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument(
         "--compression-level",
         type=int,
-        default=zstd.MAX_COMPRESSION_LEVEL,
+        default=7,
         required=False,
         help="Zstandard compression level.",
     )
