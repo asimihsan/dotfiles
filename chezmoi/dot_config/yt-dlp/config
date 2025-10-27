@@ -1,0 +1,29 @@
+# ---- Paths & naming
+-P ~/Movies/YT
+-o "%(playlist_title|Playlist)s/%(playlist_index>03)d - %(title).200B [%(id)s].%(ext)s"
+
+# ---- Robustness for big playlists
+--download-archive ~/.local/share/yt-dlp/archive.txt
+-w                           # don't overwrite existing files
+-R infinite                  # retry forever
+--retry-sleep exp=1:60       # exponential backoff between retries
+-N 8                         # download multiple HLS/DASH fragments concurrently
+--skip-unavailable-fragments
+
+# ---- Quality default (safe ‘best’ + smart container)
+-f "bv*+ba/b"
+--merge-output-format mp4/mkv
+
+# ---- Metadata, chapters, art, and subs (optional but nice)
+--embed-metadata             # also embeds chapters unless disabled
+--embed-chapters
+--embed-thumbnail
+--write-subs
+--write-auto-subs
+--sub-langs "en.*,-live_chat"
+--sub-format "srt/best"
+--embed-subs
+
+# ---- Clean playback (SponsorBlock). Comment these if you want the raw video.
+--sponsorblock-remove sponsor,intro,outro,selfpromo,interaction
+
