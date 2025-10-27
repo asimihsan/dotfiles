@@ -1,11 +1,8 @@
 [tools]
 "github:yt-dlp/yt-dlp" = "latest"
 "go:github.com/asimihsan/mcp-language-server" = "latest"
-"go:github.com/incu6us/goimports-reviser/v3" = "latest"
-"go:github.com/segmentio/golines" = "latest"
 "go:golang.org/x/tools/gopls" = "latest"
 "go:golang.org/x/vuln/cmd/govulncheck" = "latest"
-"go:mvdan.cc/gofumpt" = "latest"
 "npm:@anthropic-ai/claude-code" = "latest"
 "npm:@google/gemini-cli" = "latest"
 "npm:@marp-team/marp-cli" = "latest"
