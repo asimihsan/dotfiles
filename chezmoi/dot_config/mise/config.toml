@@ -30,7 +30,7 @@
 1password = "latest"
 age = "latest"
 aws-vault = "latest"
-awscli = "2.31.18"
+awscli = "2.31.23"
 bun = "latest"
 cargo-binstall = "latest"
 chezmoi = "latest"
