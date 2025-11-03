@@ -23,12 +23,6 @@ sso_region=us-east-2
 sso_account_id=167205424669
 sso_role_name=EKSEngineeringAccess_prod
 
-[profile platform-dev]
-sso_start_url=https://d-9a671990ce.awsapps.com/start
-sso_region=us-east-2
-sso_account_id=905418337205
-sso_role_name=AdministratorAccess
-
 [profile level-consumer-main]
 sso_start_url=https://d-9a671990ce.awsapps.com/start
 sso_region=us-east-2
@@ -52,6 +46,29 @@ sso_start_url=https://d-9a671990ce.awsapps.com/start
 sso_region=us-east-2
 sso_account_id=905418337205
 sso_role_name=RoleAssumeOnly
+
+[sso-session level]
+sso_start_url = https://d-9a671990ce.awsapps.com/start/#
+sso_region = us-east-2
+sso_registration_scopes = sso:account:access
+
+[profile platform-dev]
+sso_session = level
+sso_account_id = 905418337205
+sso_role_name = AdministratorAccess
+region = us-west-2
+
+[profile platform-stage]
+sso_session = level
+sso_account_id = 339713005884
+sso_role_name = AdministratorAccess
+region = us-west-2
+
+[profile consumer-waf-logs]
+sso_session = level
+sso_account_id = 658822051532
+sso_role_name = ViewOnlyLevelWafAclLogs
+region = us-west-2
 
 {{ else if eq .chezmoi.hostname "hlru5i" -}}
 [profile retail-admin]
