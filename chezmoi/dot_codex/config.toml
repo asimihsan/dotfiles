@@ -44,5 +44,7 @@ url = "https://mcp.linear.app/mcp"
 url = "https://api.githubcopilot.com/mcp/"
 bearer_token_env_var = "GITHUB_LEVELSERVER_PAT"
 
-[tools]
-web_search = true
+[features]
+rmcp_client = true
+web_search_request = true
+
