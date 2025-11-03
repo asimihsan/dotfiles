@@ -3,6 +3,9 @@ export PATH="$HOME/.local/bin:$PATH"
 
 export EDITOR=vim
 
+export AWS_ASSUME_ROLE_TTL=4h
+export AWS_CHAINED_SESSION_TOKEN_TTL=4h
+
 {{ if eq .chezmoi.hostname "yov3bc" "okzf68" -}}
 export PATH="$HOME/workplace/platform-tools/shell:$PATH"
 export PATH="/opt/homebrew/opt/postgresql@13/bin:$PATH"

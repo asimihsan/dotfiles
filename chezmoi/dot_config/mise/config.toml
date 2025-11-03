@@ -79,8 +79,12 @@ yt-dlp = "latest"
 zellij = "latest"
 zoxide = "latest"
 
+[env]
+AWS_ASSUME_ROLE_TTL = "4h"
+AWS_CHAINED_SESSION_TOKEN_TTL = "4h"
 
 [settings]
 experimental = true
 idiomatic_version_file_enable_tools = ["python", "rust"]
 npm.bun = true
+auto_install = false
