@@ -167,16 +167,6 @@ install_awscli() {
   mise use -g awscli@$(mise latest awscli 2)
 }
 
-update_rust() {
-  if command_exists rustup; then
-    rustup update stable
-  fi
-  if command_exists cargo; then
-    cargo binstall --no-confirm lazyjj monolith || true
-    cargo install taplo-cli --locked --features lsp || true
-  fi
-}
-
 install_pragmasevka_font() {
   local font_dir="$HOME/Library/Fonts"
 
@@ -354,7 +344,6 @@ main() {
   update_homebrew
   install_awscli
   update_mise
-  update_rust
   update_system
   update_cursor_agent
   fancy_echo "Mac setup/update complete for profile '$PROFILE'."
