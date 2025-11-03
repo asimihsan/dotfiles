@@ -1,7 +1,6 @@
 file_opener = "cursor"
 approval_policy = "on-failure"
 sandbox_mode = "workspace-write"
-experimental_use_rmcp_client = true
 tool_timeout_sec = 600
 
 model = "gpt-5-codex"
