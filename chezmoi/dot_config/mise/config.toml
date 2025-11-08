@@ -78,6 +78,7 @@ yq = "latest"
 yt-dlp = "latest"
 zellij = "latest"
 zoxide = "latest"
+"gem:fpm" = "latest"
 
 [env]
 AWS_ASSUME_ROLE_TTL = "4h"
