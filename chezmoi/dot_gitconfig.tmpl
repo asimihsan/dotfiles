@@ -49,7 +49,7 @@ signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK+6ch0i+pdf+48pQ/S180rtxe9yELT
         enabled = true
         autoupdate = true
 [core]
-        excludesfile = ~/.gitignore
+        excludesfile = ~/.gitignore_global
 [rebase]
         autoSquash = true
         autoStash = true
@@ -123,8 +123,8 @@ program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 gpgsign = true
 template = /Users/asimi/.gitmessage
 
-[diff]
-external = /usr/bin/env DFT_PARSE_ERROR_LIMIT=100 difft
+#[diff]
+#external = /usr/bin/env DFT_PARSE_ERROR_LIMIT=100 difft
 
 [core]
 autocrlf = false
