@@ -58,11 +58,27 @@ sso_account_id = 905418337205
 sso_role_name = AdministratorAccess
 region = us-west-2
 
+[profile platform-dev-role]
+region = us-west-2
+role_arn = arn:aws:iam::905418337205:role/dev-tps-signals-e2e-audit-role
+source_profile = platform-dev
+
 [profile platform-stage]
 sso_session = level
 sso_account_id = 339713005884
 sso_role_name = AdministratorAccess
 region = us-west-2
+
+[profile platform-prod-sso]
+sso_session = level
+sso_account_id = 891377356712
+sso_role_name = ReadOnlyAccessSignalsPipeline
+region = us-west-2
+
+[profile platform-prod]
+region = us-west-2
+role_arn = arn:aws:iam::891377356712:role/prod-tps-signals-e2e-audit-role
+source_profile = platform-prod-sso
 
 [profile consumer-waf-logs]
 sso_session = level
