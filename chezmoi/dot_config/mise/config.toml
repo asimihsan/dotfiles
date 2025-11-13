@@ -7,6 +7,7 @@
 "npm:@google/gemini-cli" = "latest"
 "npm:@marp-team/marp-cli" = "latest"
 "npm:@openai/codex" = "latest"
+"npm:vibe-kanban" = "latest"
 "pipx:aider-chat" = "latest"
 "pipx:copier" = "latest"
 "pipx:ipython" = "latest"
