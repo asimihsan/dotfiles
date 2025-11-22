@@ -37,7 +37,7 @@ args = ["--workspace", ".", "--lsp", "rust-analyzer"]
 command = "mcp-language-server"
 args = ["--workspace", ".", "--lsp", "uv", "--", "run", "basedpyright-langserver", "--stdio"]
 
-{{- if eq .chezmoi.hostname "okzf68" -}}
+{{ if eq .chezmoi.hostname "okzf68" -}}
 [mcp_servers.linear]
 url = "https://mcp.linear.app/mcp"
 

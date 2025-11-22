@@ -90,3 +90,8 @@ experimental = true
 idiomatic_version_file_enable_tools = ["python", "rust"]
 npm.bun = true
 auto_install = false
+
+[hooks]
+postinstall = [
+    "~/bin/fix-mise-awscli.sh"
+]
