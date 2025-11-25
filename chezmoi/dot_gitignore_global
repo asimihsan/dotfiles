@@ -1,0 +1,16 @@
+# Editor / IDE workspaces
+*.code-workspace
+.vscode/
+
+# macOS cruft
+.DS_Store
+
+# Logs
+*.log
+
+# Node modules, Python venvs, etc. (if relevant)
+node_modules/
+.venv/
+
+**/llm/*.md
+**/.claude/settings.local.json
