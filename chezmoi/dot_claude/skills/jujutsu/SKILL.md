@@ -100,6 +100,14 @@ jj squash
 jj squash -r <rev>
 ```
 
+Do not include "Generated with Claude Code" in the commit message.
+
+Remember, after doing `jj describe` to describe a change, you need to create a new change with `jj new` to create a new change on top so that at the end there is no changes left. Another way to do this is to run `jj new && jj tug && jj gp`, this will:
+
+- Create a new change on top of the current change
+- Tug the top bookmark (branch) to the previous change
+- Push that bookmark to the remote repository
+
 ## Splitting Changes
 
 Split separates a revision into two. By default interactive; provide paths for non-interactive.
