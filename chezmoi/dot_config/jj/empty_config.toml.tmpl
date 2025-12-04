@@ -11,10 +11,11 @@ email = "ssh@sshemail.ihsan.io"
 email = "ssh@sshemail.ihsan.io"
 {{ end }}
 
-
 [git]
 auto-local-bookmarks = true
-push-new-bookmarks = true
+
+[remotes.origin]
+auto-track-bookmarks = 'glob:*'
 
 [signing]
 behavior = "own"
