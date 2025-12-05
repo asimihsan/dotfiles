@@ -188,3 +188,149 @@ The role/profile must have:
 - `s3:DeleteObject` on verified Parquet bucket (for `--parquet-uri` mode)
 - `s3:ListBucket` on raw bucket (for `--s3-prefix` mode)
 - `sqs:SendMessage` on the redrive queue
+
+## Full Bulk Redrive Workflow
+
+When performing a bulk redrive (e.g., after a parser bug fix), follow these steps:
+
+### Step 1: Delete Existing Parquet Data
+
+Use the `s3_bulk_delete` tool for fast deletion (~100x faster than `aws s3 rm`):
+
+```bash
+cd ~/workplace/platform-tools
+
+# Dry run first to see what would be deleted
+python -m platform_tools.s3_bulk_delete --env stage --all-types --dry-run
+
+# Delete all telemetry types
+python -m platform_tools.s3_bulk_delete --env stage --all-types
+
+# Or delete specific type only
+python -m platform_tools.s3_bulk_delete --env stage --type lock
+```
+
+The tool uses DeleteObjects API (1000 objects/batch) with parallelism, achieving ~1000-2000 objects/second vs ~10-20 objects/second with `aws s3 rm --recursive`.
+
+**Environment shortcuts:**
+- `--env dev|stage|prod`: Uses predefined bucket and profile
+- `--type lock|bridge|video_doorbell`: Delete specific type
+- `--all-types`: Delete all three types
+- `--workers N`: Parallel workers (default: 8)
+
+### Step 2: Run MSCK REPAIR TABLE (After Deletion)
+
+Sync Glue partitions to reflect the deletions:
+
+```bash
+# Lock table
+aws --profile platform-stage --region us-west-2 athena start-query-execution \
+  --work-group "stage-tps-telemetry-human-wg" \
+  --query-execution-context Catalog=AwsDataCatalog,Database=telemetry-parser-db \
+  --query-string "MSCK REPAIR TABLE telemetry_lock_flat"
+
+# Bridge table
+aws --profile platform-stage --region us-west-2 athena start-query-execution \
+  --work-group "stage-tps-telemetry-human-wg" \
+  --query-execution-context Catalog=AwsDataCatalog,Database=telemetry-parser-db \
+  --query-string "MSCK REPAIR TABLE telemetry_bridge_flat"
+
+# Video doorbell table
+aws --profile platform-stage --region us-west-2 athena start-query-execution \
+  --work-group "stage-tps-telemetry-human-wg" \
+  --query-execution-context Catalog=AwsDataCatalog,Database=telemetry-parser-db \
+  --query-string "MSCK REPAIR TABLE telemetry_video_doorbell_flat"
+```
+
+### Step 3: Verify Queue is Empty
+
+```bash
+aws --profile platform-stage --region us-west-2 sqs get-queue-attributes \
+  --queue-url https://sqs.us-west-2.amazonaws.com/339713005884/telemetry-processing-redrive-queue \
+  --attribute-names ApproximateNumberOfMessages ApproximateNumberOfMessagesNotVisible
+```
+
+### Step 4: Run the Redrive
+
+```bash
+cd ~/workplace/platform-tools
+
+# Redrive each day with queue monitoring
+for day in 28 29 30; do
+  echo "Redriving Nov $day..."
+  AWS_PROFILE=platform-stage go run ./cmd/telemetry-redrive \
+    --env stage \
+    --s3-prefix "s3://stage-signal-data-lake-raw/raw/json_telemetry/year=2025/month=11/day=$day/" \
+    --no-assume-role \
+    --monitor --max-queue-visible 500
+done
+```
+
+The `--monitor --max-queue-visible 500` flags pause sending when queue depth exceeds 500, preventing Lambda throttling.
+
+### Step 5: Wait for Processing to Complete
+
+**IMPORTANT**: After redrive finishes, wait for queue to stay at 0 for **1-2 minutes** before verification. Lambda may have in-flight invocations.
+
+```bash
+# Monitor until both values stay at 0
+watch -n 10 'aws --profile platform-stage --region us-west-2 sqs get-queue-attributes \
+  --queue-url https://sqs.us-west-2.amazonaws.com/339713005884/telemetry-processing-redrive-queue \
+  --attribute-names ApproximateNumberOfMessages ApproximateNumberOfMessagesNotVisible \
+  --query "Attributes" --output table'
+```
+
+Also check DLQ for errors:
+
+```bash
+aws --profile platform-stage --region us-west-2 sqs get-queue-attributes \
+  --queue-url https://sqs.us-west-2.amazonaws.com/339713005884/telemetry-processing-redrive-queue-dlq \
+  --attribute-names ApproximateNumberOfMessages
+```
+
+### Step 6: Run MSCK REPAIR TABLE (After Redrive)
+
+**CRITICAL**: Run MSCK REPAIR again after Lambda writes new Parquet files. Athena will show 0 rows until this is done!
+
+```bash
+# Same commands as Step 2 - run for all three tables
+aws --profile platform-stage --region us-west-2 athena start-query-execution \
+  --work-group "stage-tps-telemetry-human-wg" \
+  --query-execution-context Catalog=AwsDataCatalog,Database=telemetry-parser-db \
+  --query-string "MSCK REPAIR TABLE telemetry_lock_flat"
+
+# ... repeat for bridge and video_doorbell
+```
+
+### Step 7: Verify Results
+
+Use `telemetry_verify` with Athena backend (recommended for stage/prod):
+
+```bash
+cd ~/workplace/platform-tools
+
+# Check for at-least-once duplicates (the bug we're fixing)
+uv run python -m platform_tools.telemetry_verify \
+  --env stage --date 2025-11-28 --all-tables --use-athena --check-duplicates -v
+
+# Standard verification (Parquet vs Postgres counts)
+uv run python -m platform_tools.telemetry_verify \
+  --env stage --date 2025-11-28 --all-tables --use-athena -v
+
+# Assertion data quality check
+uv run python -m platform_tools.telemetry_verify \
+  --env stage --date 2025-11-28 --use-athena --check-assertion-quality -v
+```
+
+**Expected results after successful redrive:**
+- 0 at-least-once duplicates (same event_id appearing multiple times)
+- Parquet unique counts = Postgres counts
+- Fan-out duplicates (different ordinals, same batch) are expected and OK
+
+## Environment-Specific Resources
+
+| Env | Account | Verified Bucket | Workgroup |
+|-----|---------|-----------------|-----------|
+| dev | 905418337205 | `dev-verified-parquet-v2-df1e4600` | `dev-tps-telemetry-human-wg` |
+| stage | 339713005884 | `stage-verified-parquet-v2-c2408546` | `stage-tps-telemetry-human-wg` |
+| prod | 891377356712 | `prod-verified-parquet-v2-8b99b916` | `prod-tps-telemetry-signals_e2e-wg` |
