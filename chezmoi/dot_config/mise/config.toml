@@ -8,6 +8,7 @@
 "npm:@kimuson/claude-code-viewer" = "latest"
 "npm:@marp-team/marp-cli" = "latest"
 "npm:@openai/codex" = "latest"
+"npm:linearis" = "latest"
 "npm:vibe-kanban" = "latest"
 "pipx:aider-chat" = "latest"
 "pipx:copier" = "latest"
