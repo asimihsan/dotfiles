@@ -48,7 +48,7 @@ aws --profile platform-prod --region us-west-2 \
 aws --profile platform-prod --region us-west-2 \
   glue get-table \
     --database-name telemetry-parser-db \
-    --name telemetry_lock \
+    --name telemetry_lock_flat \
     --query 'Table.StorageDescriptor.{Location:Location,InputFormat:InputFormat,OutputFormat:OutputFormat,SerdeInfo:SerdeInfo.Name,Columns:Columns}' \
   | jq .
 ```
@@ -62,8 +62,8 @@ QUERY_EXECUTION_ID=$(
   aws --profile platform-prod --region us-west-2 athena start-query-execution \
     --work-group "prod-tps-telemetry-signals_e2e-wg" \
     --query-execution-context Catalog=AwsDataCatalog,Database=telemetry-parser-db \
-    --query-string "SELECT * FROM telemetry_lock
-                    WHERE day='2025-11-09'
+    --query-string "SELECT * FROM telemetry_lock_flat
+                    WHERE day=DATE '2025-11-09'
                       AND hour='02'
                     LIMIT 10" \
   | jq -r '.QueryExecutionId'
@@ -109,8 +109,8 @@ aws --profile platform-prod --region us-west-2 \
 Use the `$path` pseudo-column to query specific files. Note shell escaping:
 
 ```bash
---query-string "SELECT * FROM telemetry_lock
-                WHERE day='2025-11-09'
+--query-string "SELECT * FROM telemetry_lock_flat
+                WHERE day=DATE '2025-11-09'
                   AND hour='02'
                   AND \"\$path\" LIKE '%lock_2025_11_09_02__h=bdf9fcbe979b.parquet%'
                 LIMIT 10"
@@ -137,8 +137,8 @@ AWS_PROFILE=platform-prod uv run python scripts/reset_dbt_environment.py \
 
 ## Partition Columns
 
-Tables in `telemetry-parser-db` are typically partitioned by:
-- `day` (string format: 'YYYY-MM-DD')
+Tables in `telemetry-parser-db` are partitioned by:
+- `day` (DATE type, use `DATE 'YYYY-MM-DD'` syntax)
 - `hour` (string format: '00'-'23')
 
 Always include partition predicates to avoid full table scans.
