@@ -8,42 +8,42 @@ model_reasoning_effort = "high"
 model_reasoning_summary = "detailed" # auto, concise, detailed
 model_verbosity = "high" # low, medium, high
 
-[mcp_servers.context7]
-command = "npx"
-args = ["-y", "@upstash/context7-mcp"]
+# [mcp_servers.context7]
+# command = "npx"
+# args = ["-y", "@upstash/context7-mcp"]
 
 [mcp_servers.fetch]
 command = "uvx"
 args = ["mcp-server-fetch"]
 
-[mcp_servers.aws-api]
-command = "uvx"
-args = ["awslabs.aws-api-mcp-server@latest"]
-env = { "AWS_REGION"="us-west-2" }
+# [mcp_servers.aws-api]
+# command = "uvx"
+# args = ["awslabs.aws-api-mcp-server@latest"]
+# env = { "AWS_REGION"="us-west-2" }
 
-[mcp_servers.aws_docs]
-command = "uvx"
-args = ["fastmcp", "run", "https://knowledge-mcp.global.api.aws"]
+# [mcp_servers.aws_docs]
+# command = "uvx"
+# args = ["fastmcp", "run", "https://knowledge-mcp.global.api.aws"]
 
-[mcp_servers.go-language-server]
-command = "mcp-language-server"
-args = ["--workspace", ".", "--lsp", "gopls"]
+# [mcp_servers.go-language-server]
+# command = "mcp-language-server"
+# args = ["--workspace", ".", "--lsp", "gopls"]
 
-[mcp_servers.rust-language-server]
-command = "mcp-language-server"
-args = ["--workspace", ".", "--lsp", "rust-analyzer"]
+# [mcp_servers.rust-language-server]
+# command = "mcp-language-server"
+# args = ["--workspace", ".", "--lsp", "rust-analyzer"]
 
-[mcp_servers.python-language-server]
-command = "mcp-language-server"
-args = ["--workspace", ".", "--lsp", "uv", "--", "run", "basedpyright-langserver", "--stdio"]
+# [mcp_servers.python-language-server]
+# command = "mcp-language-server"
+# args = ["--workspace", ".", "--lsp", "uv", "--", "run", "basedpyright-langserver", "--stdio"]
 
 {{ if eq .chezmoi.hostname "okzf68" -}}
-[mcp_servers.linear]
-url = "https://mcp.linear.app/mcp"
+# [mcp_servers.linear]
+# url = "https://mcp.linear.app/mcp"
 
-[mcp_servers.github]
-url = "https://api.githubcopilot.com/mcp/"
-bearer_token_env_var = "GITHUB_LEVELSERVER_PAT"
+# [mcp_servers.github]
+# url = "https://api.githubcopilot.com/mcp/"
+# bearer_token_env_var = "GITHUB_LEVELSERVER_PAT"
 {{- end }}
 
 [features]
