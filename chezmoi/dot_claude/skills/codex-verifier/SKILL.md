@@ -18,6 +18,18 @@ codex login status
 
 If not installed: `npm i -g @openai/codex` or `brew install codex`
 
+## Context Efficiency
+
+**Critical**: Codex streams verbose progress to stderr and only the final message to stdout. Always redirect stderr to /dev/null to avoid polluting Claude's context with intermediate reasoning, file reads, and tool calls.
+
+```bash
+# CORRECT - captures only final message
+codex exec -s read-only "Your prompt" 2>/dev/null
+
+# WRONG - captures entire trajectory (all reasoning, file reads, commands)
+codex exec -s read-only --json "Your prompt"
+```
+
 ## Core Use Cases
 
 ### 1. Verification / Second Opinion
@@ -26,7 +38,7 @@ Cross-check Claude's analysis or assumptions with an independent model:
 
 ```bash
 codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
-  "Verify this assumption: [ASSUMPTION]. Review the codebase and confirm or refute with evidence."
+  "Verify this assumption: [ASSUMPTION]. Review the codebase and confirm or refute with evidence." 2>/dev/null
 ```
 
 ### 2. Exploration / Discovery
@@ -35,7 +47,7 @@ Explore unfamiliar code or patterns:
 
 ```bash
 codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
-  "Analyze the authentication flow in this codebase. Trace from login endpoint to session storage."
+  "Analyze the authentication flow in this codebase. Trace from login endpoint to session storage." 2>/dev/null
 ```
 
 ### 3. Architectural Analysis
@@ -43,9 +55,8 @@ codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals
 Get independent architectural assessment:
 
 ```bash
-codex exec -s read-only --json --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
-  "Review the architecture and identify potential bottlenecks or anti-patterns." \
-  | jq '.[] | select(.type == "message") | .content'
+codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
+  "Review the architecture and identify potential bottlenecks or anti-patterns." 2>/dev/null
 ```
 
 ### 4. Test Coverage Validation
@@ -54,34 +65,27 @@ Verify test coverage assumptions:
 
 ```bash
 codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
-  "Analyze test coverage for the payment module. Identify untested edge cases."
+  "Analyze test coverage for the payment module. Identify untested edge cases." 2>/dev/null
 ```
 
 ## Command Patterns
 
-### Read-Only Analysis (Default for Verification)
+### Basic Pattern (Recommended)
 
-Always use `-s read-only` for verification tasks to prevent mutations:
+Always use `-s read-only` for verification tasks and redirect stderr:
 
 ```bash
-codex exec -s read-only "PROMPT"
+codex exec -s read-only "PROMPT" 2>/dev/null
 ```
 
-### JSON Output for Parsing
+### Output to File
 
-When you need structured output for further processing:
-
-```bash
-codex exec -s read-only --json "PROMPT" 2>/dev/null | \
-  jq -r '.[] | select(.type == "message") | .content'
-```
-
-### Output to File for Review
-
-Save analysis for comparison:
+When you need to preserve the analysis for later reference:
 
 ```bash
-codex exec -s read-only -o /tmp/codex-analysis.md "PROMPT"
+codex exec -s read-only -o /tmp/codex-analysis.md \
+  "PROMPT" 2>/dev/null
+cat /tmp/codex-analysis.md
 ```
 
 ### Specific Directory Analysis
@@ -89,7 +93,8 @@ codex exec -s read-only -o /tmp/codex-analysis.md "PROMPT"
 Target a specific subdirectory:
 
 ```bash
-codex exec -s read-only -C ./src/auth "Analyze security patterns in this module"
+codex exec -s read-only -C ./src/auth \
+  "Analyze security patterns in this module" 2>/dev/null
 ```
 
 ### Model Selection
@@ -102,14 +107,16 @@ Choose reasoning depth based on task complexity:
 | `gpt-5.1-codex-max` | Deep architectural analysis, complex verification |
 | `gpt-5` | General reasoning tasks |
 
+Default is `gpt-5.1-codex` if `--model` is omitted.
+
 ## Verification Workflow
 
 When asked to verify an assumption or get a second opinion:
 
 1. **Formulate the verification prompt** - Be specific about what to verify
-2. **Choose appropriate model** - Use `gpt-5.1-codex` for most tasks
+2. **Choose appropriate model** - Use `gpt-5.1-codex` for most tasks, `gpt-5.1-codex-max` for complex analysis
 3. **Use read-only mode** - Always `-s read-only` for verification
-4. **Capture output** - Use `--json` or `-o` for structured capture
+4. **Redirect stderr** - Always `2>/dev/null` to avoid context bloat
 5. **Synthesize results** - Compare Codex analysis with Claude's analysis
 6. **Report discrepancies** - Highlight any differences in conclusions
 
@@ -121,7 +128,7 @@ When asked to verify an assumption or get a second opinion:
 codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
   "Review the function 'processPayment' in src/payments.ts. \
    Verify it handles: (1) network failures, (2) duplicate submissions, (3) partial failures. \
-   Report any gaps."
+   Report any gaps." 2>/dev/null
 ```
 
 ### Verify Performance Assumptions
@@ -129,15 +136,15 @@ codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals
 ```bash
 codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
   "Analyze the database query in src/queries/users.ts. \
-   Is it O(n) or O(n^2)? Identify any N+1 query patterns."
+   Is it O(n) or O(n^2)? Identify any N+1 query patterns." 2>/dev/null
 ```
 
 ### Verify Security Posture
 
 ```bash
-codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox-max \
+codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
   "Security audit: Review authentication and authorization in this codebase. \
-   Check for: SQL injection, XSS, CSRF, insecure defaults, hardcoded secrets."
+   Check for: SQL injection, XSS, CSRF, insecure defaults, hardcoded secrets." 2>/dev/null
 ```
 
 ### Verify Migration Safety
@@ -145,26 +152,7 @@ codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals
 ```bash
 codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
   "Review the database migration in migrations/2025_add_index.sql. \
-   Is it safe to run on a 10M row table in production? Estimate lock duration."
-```
-
-## Output Processing
-
-### Extract Final Message Only
-
-```bash
-OUTPUT=$(codex exec -s read-only --json "PROMPT" 2>/dev/null)
-FINAL=$(echo "$OUTPUT" | jq -r '[.[] | select(.type == "message")] | last | .content')
-echo "$FINAL"
-```
-
-### Compare Two Analyses
-
-```bash
-# Get Claude's analysis (already in context)
-# Get Codex's analysis
-codex exec -s read-only -o /tmp/codex-view.md "Analyze the auth module"
-# Now compare both in Claude's response
+   Is it safe to run on a 10M row table in production? Estimate lock duration." 2>/dev/null
 ```
 
 ## Error Handling
