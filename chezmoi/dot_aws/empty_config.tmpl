@@ -75,6 +75,12 @@ sso_account_id = 891377356712
 sso_role_name = ReadOnlyAccessSignalsPipeline
 region = us-west-2
 
+[profile platform-prod-aurora-sso]
+sso_session = level
+sso_account_id = 891377356712
+sso_role_name = ReadOnlyAccessAuroraCloudWatch
+region = us-west-2
+
 [profile platform-prod]
 region = us-west-2
 role_arn = arn:aws:iam::891377356712:role/prod-tps-signals-e2e-audit-role

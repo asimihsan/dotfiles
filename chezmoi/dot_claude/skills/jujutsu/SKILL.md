@@ -30,7 +30,6 @@ Jujutsu is a Git-compatible VCS. Key differences from Git:
 | Commit (describe + new) | `jj commit -m "message"` |
 | Edit historical change | `jj edit <rev>` |
 | Split change | `jj split` (interactive) or `jj split <paths>` |
-| Squash into parent | `jj squash` |
 | Abandon change | `jj abandon` |
 | Undo last operation | `jj undo` |
 
@@ -92,15 +91,11 @@ jj commit -m "Finished feature"
 
 # Edit a historical change (descendants auto-rebase)
 jj edit <rev>
-
-# Squash current change into parent
-jj squash
-
-# Squash specific revision into its parent
-jj squash -r <rev>
 ```
 
 Do not include "Generated with Claude Code" in the commit message.
+
+Remember `jj squash` is an interactive command, try to avoid it and it is OK to have code in separate changes. If you need to squash first consult `jj squash --help` for more information.
 
 Remember, after doing `jj describe` to describe a change, you need to create a new change with `jj new` to create a new change on top so that at the end there is no changes left. Another way to do this is to run `jj new && jj tug && jj gp`, this will:
 
