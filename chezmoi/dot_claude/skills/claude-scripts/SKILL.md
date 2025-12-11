@@ -61,6 +61,28 @@ Text search with optional regex:
 - `json` - JSON array
 - `jsonl` - Line-delimited JSON
 
+### Full Path (`--full-path`)
+Show complete file paths without abbreviation:
+```bash
+claude-scripts search --pattern "error" --full-path
+```
+
+### Context Lines (`-C` / `--context`)
+Show N entries before and after each match (like grep -C):
+```bash
+claude-scripts search --pattern "deploy" -C 2      # 2 entries before/after
+claude-scripts search --tool Bash --pattern "git" -C 1
+```
+
+Note: Context mode only works with `--format text` and requires `--pattern` or `--tool`.
+
+### Summary Mode (`--summary`)
+Show which conversations have matches and counts instead of individual results:
+```bash
+claude-scripts search --pattern "error" --summary
+claude-scripts search --tool Bash --summary --format json
+```
+
 ## Common Workflows
 
 ```bash
@@ -75,4 +97,13 @@ claude-scripts search --project myproject --format json > conv.json
 
 # Search specific conversation file
 claude-scripts search --file ~/.claude/projects/-Users-me-project/session.jsonl --tool Read
+
+# Find which conversations discussed a PR
+claude-scripts search --pattern "PR-1234" --summary
+
+# See context around errors
+claude-scripts search --pattern "error" --type tool_result -C 2
+
+# Full audit of MCP tool usage with file paths
+claude-scripts search --tool "mcp__*" --full-path --summary
 ```
