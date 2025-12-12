@@ -20,7 +20,7 @@ codex exec --help
 Use `mktemp` to avoid output file collisions. Always redirect stderr to avoid polluting context with intermediate reasoning.
 
 ```bash
-OUTPUT_FILE=$(mktemp /tmp/codex-XXXXXX.md)
+OUTPUT_FILE=$(mktemp /tmp/codex-XXXXXX)
 codex exec --full-auto -o "$OUTPUT_FILE" "Your verification prompt here" 2>/dev/null
 cat "$OUTPUT_FILE"
 ```
