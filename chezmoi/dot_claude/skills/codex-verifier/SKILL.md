@@ -37,7 +37,7 @@ codex exec --json "Your prompt"
 Cross-check Claude's analysis or assumptions with an independent model:
 
 ```bash
-codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Verify this assumption: [ASSUMPTION]. Review the codebase and confirm or refute with evidence." 2>/dev/null
 ```
 
@@ -46,7 +46,7 @@ codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-b
 Explore unfamiliar code or patterns:
 
 ```bash
-codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Analyze the authentication flow in this codebase. Trace from login endpoint to session storage." 2>/dev/null
 ```
 
@@ -55,7 +55,7 @@ codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-b
 Get independent architectural assessment:
 
 ```bash
-codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Review the architecture and identify potential bottlenecks or anti-patterns." 2>/dev/null
 ```
 
@@ -64,7 +64,7 @@ codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-b
 Verify test coverage assumptions:
 
 ```bash
-codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Analyze test coverage for the payment module. Identify untested edge cases." 2>/dev/null
 ```
 
@@ -125,7 +125,7 @@ When asked to verify an assumption or get a second opinion:
 ### Verify Code Correctness
 
 ```bash
-codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Review the function 'processPayment' in src/payments.ts. \
    Verify it handles: (1) network failures, (2) duplicate submissions, (3) partial failures. \
    Report any gaps." 2>/dev/null
@@ -134,7 +134,7 @@ codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-b
 ### Verify Performance Assumptions
 
 ```bash
-codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Analyze the database query in src/queries/users.ts. \
    Is it O(n) or O(n^2)? Identify any N+1 query patterns." 2>/dev/null
 ```
@@ -142,7 +142,7 @@ codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-b
 ### Verify Security Posture
 
 ```bash
-codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Security audit: Review authentication and authorization in this codebase. \
    Check for: SQL injection, XSS, CSRF, insecure defaults, hardcoded secrets." 2>/dev/null
 ```
@@ -150,7 +150,7 @@ codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-b
 ### Verify Migration Safety
 
 ```bash
-codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Review the database migration in migrations/2025_add_index.sql. \
    Is it safe to run on a 10M row table in production? Estimate lock duration." 2>/dev/null
 ```
