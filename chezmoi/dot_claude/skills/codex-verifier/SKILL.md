@@ -7,6 +7,8 @@ description: Use OpenAI Codex CLI as a second-opinion agent for verification, ex
 
 This skill enables Claude Code to delegate verification, analysis, and exploration tasks to OpenAI's Codex CLI as a second-opinion agent.
 
+Increase command timeout to 15 minutes when using Codex CLI.
+
 ## Prerequisites
 
 Verify Codex CLI is installed and authenticated:
@@ -24,10 +26,10 @@ If not installed: `npm i -g @openai/codex` or `brew install codex`
 
 ```bash
 # CORRECT - captures only final message
-codex exec "Your prompt" 2>/dev/null
+codex --ask-for-approval never --sandbox workspace-write exec "Your prompt" 2>/dev/null
 
 # WRONG - captures entire trajectory (all reasoning, file reads, commands)
-codex exec --json "Your prompt"
+codex --ask-for-approval never --sandbox workspace-write exec --json "Your prompt"
 ```
 
 ## Core Use Cases
@@ -37,7 +39,7 @@ codex exec --json "Your prompt"
 Cross-check Claude's analysis or assumptions with an independent model:
 
 ```bash
-codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
   "Verify this assumption: [ASSUMPTION]. Review the codebase and confirm or refute with evidence." 2>/dev/null
 ```
 
@@ -46,7 +48,7 @@ codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approv
 Explore unfamiliar code or patterns:
 
 ```bash
-codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
   "Analyze the authentication flow in this codebase. Trace from login endpoint to session storage." 2>/dev/null
 ```
 
@@ -55,7 +57,7 @@ codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approv
 Get independent architectural assessment:
 
 ```bash
-codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
   "Review the architecture and identify potential bottlenecks or anti-patterns." 2>/dev/null
 ```
 
@@ -64,7 +66,7 @@ codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approv
 Verify test coverage assumptions:
 
 ```bash
-codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
   "Analyze test coverage for the payment module. Identify untested edge cases." 2>/dev/null
 ```
 
@@ -75,7 +77,7 @@ codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approv
 Always use ` for verification tasks and redirect stderr:
 
 ```bash
-codex exec "PROMPT" 2>/dev/null
+codex --ask-for-approval never --sandbox workspace-write exec "PROMPT" 2>/dev/null
 ```
 
 ### Output to File
@@ -83,7 +85,7 @@ codex exec "PROMPT" 2>/dev/null
 When you need to preserve the analysis for later reference:
 
 ```bash
-codex exec -o /tmp/codex-analysis.md \
+codex --ask-for-approval never --sandbox workspace-write exec -o /tmp/codex-analysis.md \
   "PROMPT" 2>/dev/null
 cat /tmp/codex-analysis.md
 ```
@@ -93,7 +95,7 @@ cat /tmp/codex-analysis.md
 Target a specific subdirectory:
 
 ```bash
-codex exec -C ./src/auth \
+codex --ask-for-approval never --sandbox workspace-write exec --config ./src/auth \
   "Analyze security patterns in this module" 2>/dev/null
 ```
 
@@ -125,7 +127,7 @@ When asked to verify an assumption or get a second opinion:
 ### Verify Code Correctness
 
 ```bash
-codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
   "Review the function 'processPayment' in src/payments.ts. \
    Verify it handles: (1) network failures, (2) duplicate submissions, (3) partial failures. \
    Report any gaps." 2>/dev/null
@@ -134,7 +136,7 @@ codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approv
 ### Verify Performance Assumptions
 
 ```bash
-codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
   "Analyze the database query in src/queries/users.ts. \
    Is it O(n) or O(n^2)? Identify any N+1 query patterns." 2>/dev/null
 ```
@@ -142,7 +144,7 @@ codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approv
 ### Verify Security Posture
 
 ```bash
-codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
   "Security audit: Review authentication and authorization in this codebase. \
    Check for: SQL injection, XSS, CSRF, insecure defaults, hardcoded secrets." 2>/dev/null
 ```
@@ -150,7 +152,7 @@ codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approv
 ### Verify Migration Safety
 
 ```bash
-codex exec --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
+codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
   "Review the database migration in migrations/2025_add_index.sql. \
    Is it safe to run on a 10M row table in production? Estimate lock duration." 2>/dev/null
 ```
