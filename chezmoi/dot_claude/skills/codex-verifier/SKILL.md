@@ -42,7 +42,7 @@ codex --ask-for-approval never --sandbox workspace-write exec --json "Your promp
 Cross-check Claude's analysis or assumptions with an independent model:
 
 ```bash
-codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
+codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=high' \
   "Verify this assumption: [ASSUMPTION]. Review the codebase and confirm or refute with evidence." 2>/dev/null
 ```
 
@@ -51,7 +51,7 @@ codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --
 Explore unfamiliar code or patterns:
 
 ```bash
-codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
+codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=high' \
   "Analyze the authentication flow in this codebase. Trace from login endpoint to session storage." 2>/dev/null
 ```
 
@@ -60,7 +60,7 @@ codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --
 Get independent architectural assessment:
 
 ```bash
-codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
+codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=high' \
   "Review the architecture and identify potential bottlenecks or anti-patterns." 2>/dev/null
 ```
 
@@ -69,7 +69,7 @@ codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --
 Verify test coverage assumptions:
 
 ```bash
-codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
+codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=high' \
   "Analyze test coverage for the payment module. Identify untested edge cases." 2>/dev/null
 ```
 
