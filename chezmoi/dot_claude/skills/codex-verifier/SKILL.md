@@ -9,6 +9,10 @@ This skill enables Claude Code to delegate verification, analysis, and explorati
 
 Increase command timeout to 15 minutes when using Codex CLI.
 
+Run `codex` in the background and use `sleep 60` polling to check if it's done.
+
+Use `-o`/`--output-last-message` to write the final message to a file in addition to stdout redirection.
+
 ## Prerequisites
 
 Verify Codex CLI is installed and authenticated:
@@ -30,7 +34,6 @@ codex --ask-for-approval never --sandbox workspace-write exec "Your prompt" 2>/d
 
 # WRONG - captures entire trajectory (all reasoning, file reads, commands)
 codex --ask-for-approval never --sandbox workspace-write exec --json "Your prompt"
-```
 
 ## Core Use Cases
 
@@ -82,7 +85,7 @@ codex --ask-for-approval never --sandbox workspace-write exec "PROMPT" 2>/dev/nu
 
 ### Output to File
 
-When you need to preserve the analysis for later reference:
+`-o`/`--output-last-message` writes the final message to a file in addition to stdout redirection. This is useful when you need to preserve the analysis for later reference.
 
 ```bash
 codex --ask-for-approval never --sandbox workspace-write exec -o /tmp/codex-analysis.md \
@@ -98,86 +101,3 @@ Target a specific subdirectory:
 codex --ask-for-approval never --sandbox workspace-write exec --config ./src/auth \
   "Analyze security patterns in this module" 2>/dev/null
 ```
-
-### Model Selection
-
-Choose reasoning depth based on task complexity:
-
-| Model | Use Case |
-|-------|----------|
-| `gpt-5.1-codex` | Fast analysis, simple verification |
-| `gpt-5.1-codex-max` | Deep architectural analysis, complex verification |
-| `gpt-5.2` | General reasoning tasks |
-
-Default is `gpt-5.2` if `--model` is omitted.
-
-## Verification Workflow
-
-When asked to verify an assumption or get a second opinion:
-
-1. **Formulate the verification prompt** - Be specific about what to verify
-2. **Choose appropriate model** - Use `gpt-5.2` for most tasks, or `gpt-5.1-codex-max` for writing code.
-3. **Use read-only mode** - Always ` for verification
-4. **Redirect stderr** - Always `2>/dev/null` to avoid context bloat
-5. **Synthesize results** - Compare Codex analysis with Claude's analysis
-6. **Report discrepancies** - Highlight any differences in conclusions
-
-## Example Verification Prompts
-
-### Verify Code Correctness
-
-```bash
-codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
-  "Review the function 'processPayment' in src/payments.ts. \
-   Verify it handles: (1) network failures, (2) duplicate submissions, (3) partial failures. \
-   Report any gaps." 2>/dev/null
-```
-
-### Verify Performance Assumptions
-
-```bash
-codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
-  "Analyze the database query in src/queries/users.ts. \
-   Is it O(n) or O(n^2)? Identify any N+1 query patterns." 2>/dev/null
-```
-
-### Verify Security Posture
-
-```bash
-codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
-  "Security audit: Review authentication and authorization in this codebase. \
-   Check for: SQL injection, XSS, CSRF, insecure defaults, hardcoded secrets." 2>/dev/null
-```
-
-### Verify Migration Safety
-
-```bash
-codex --ask-for-approval never --sandbox workspace-write exec --model gpt-5.2 --config 'model_reasoning_effort=xhigh' \
-  "Review the database migration in migrations/2025_add_index.sql. \
-   Is it safe to run on a 10M row table in production? Estimate lock duration." 2>/dev/null
-```
-
-## Error Handling
-
-If Codex CLI fails:
-
-1. Check authentication: `codex login status`
-2. Check network connectivity
-3. Verify API quota/rate limits
-4. Fall back to Claude-only analysis with explicit caveat
-
-## When to Use This Skill
-
-- User asks to "verify", "double-check", or "cross-check" something
-- User wants a "second opinion" on analysis
-- User asks to "have Codex/GPT-5 look at" something
-- User wants to "explore" or "discover" patterns in unfamiliar code
-- User asks for independent architectural review
-- User wants to validate assumptions before making changes
-
-## When NOT to Use This Skill
-
-- Simple questions that do not benefit from verification
-- Tasks requiring file modifications (use standard Codex skill instead)
-- Real-time/interactive debugging sessions
-- When user has not set up Codex CLI
