@@ -1,6 +1,6 @@
 ---
 name: codex-verifier
-description: Use OpenAI Codex CLI as a second-opinion agent for verification, exploration, and analysis tasks. Invoke when the user asks to verify assumptions, get a second opinion, cross-check analysis, explore alternatives, or use Codex/GPT-5 for read-only analysis. Triggers on phrases like "verify with codex", "get a second opinion", "cross-check", "have codex analyze", "explore with gpt-5".
+description: Use OpenAI Codex CLI as a second-opinion agent for verification, exploration, and analysis tasks. Invoke when the user asks to verify assumptions, get a second opinion, cross-check analysis, explore alternatives, or use Codex for read-only analysis. Triggers on phrases like "verify with codex", "get a second opinion", "cross-check", "have codex analyze", "explore with codex".
 ---
 
 # Codex Verifier
@@ -24,10 +24,10 @@ If not installed: `npm i -g @openai/codex` or `brew install codex`
 
 ```bash
 # CORRECT - captures only final message
-codex exec -s read-only "Your prompt" 2>/dev/null
+codex exec "Your prompt" 2>/dev/null
 
 # WRONG - captures entire trajectory (all reasoning, file reads, commands)
-codex exec -s read-only --json "Your prompt"
+codex exec --json "Your prompt"
 ```
 
 ## Core Use Cases
@@ -37,7 +37,7 @@ codex exec -s read-only --json "Your prompt"
 Cross-check Claude's analysis or assumptions with an independent model:
 
 ```bash
-codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
+codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Verify this assumption: [ASSUMPTION]. Review the codebase and confirm or refute with evidence." 2>/dev/null
 ```
 
@@ -46,7 +46,7 @@ codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals
 Explore unfamiliar code or patterns:
 
 ```bash
-codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
+codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Analyze the authentication flow in this codebase. Trace from login endpoint to session storage." 2>/dev/null
 ```
 
@@ -55,7 +55,7 @@ codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals
 Get independent architectural assessment:
 
 ```bash
-codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
+codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Review the architecture and identify potential bottlenecks or anti-patterns." 2>/dev/null
 ```
 
@@ -64,7 +64,7 @@ codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals
 Verify test coverage assumptions:
 
 ```bash
-codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
+codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Analyze test coverage for the payment module. Identify untested edge cases." 2>/dev/null
 ```
 
@@ -72,10 +72,10 @@ codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals
 
 ### Basic Pattern (Recommended)
 
-Always use `-s read-only` for verification tasks and redirect stderr:
+Always use ` for verification tasks and redirect stderr:
 
 ```bash
-codex exec -s read-only "PROMPT" 2>/dev/null
+codex exec "PROMPT" 2>/dev/null
 ```
 
 ### Output to File
@@ -83,7 +83,7 @@ codex exec -s read-only "PROMPT" 2>/dev/null
 When you need to preserve the analysis for later reference:
 
 ```bash
-codex exec -s read-only -o /tmp/codex-analysis.md \
+codex exec -o /tmp/codex-analysis.md \
   "PROMPT" 2>/dev/null
 cat /tmp/codex-analysis.md
 ```
@@ -93,7 +93,7 @@ cat /tmp/codex-analysis.md
 Target a specific subdirectory:
 
 ```bash
-codex exec -s read-only -C ./src/auth \
+codex exec -C ./src/auth \
   "Analyze security patterns in this module" 2>/dev/null
 ```
 
@@ -105,17 +105,17 @@ Choose reasoning depth based on task complexity:
 |-------|----------|
 | `gpt-5.1-codex` | Fast analysis, simple verification |
 | `gpt-5.1-codex-max` | Deep architectural analysis, complex verification |
-| `gpt-5` | General reasoning tasks |
+| `gpt-5.2` | General reasoning tasks |
 
-Default is `gpt-5.1-codex` if `--model` is omitted.
+Default is `gpt-5.2` if `--model` is omitted.
 
 ## Verification Workflow
 
 When asked to verify an assumption or get a second opinion:
 
 1. **Formulate the verification prompt** - Be specific about what to verify
-2. **Choose appropriate model** - Use `gpt-5.1-codex` for most tasks, `gpt-5.1-codex-max` for complex analysis
-3. **Use read-only mode** - Always `-s read-only` for verification
+2. **Choose appropriate model** - Use `gpt-5.2` for most tasks, or `gpt-5.1-codex-max` for writing code.
+3. **Use read-only mode** - Always ` for verification
 4. **Redirect stderr** - Always `2>/dev/null` to avoid context bloat
 5. **Synthesize results** - Compare Codex analysis with Claude's analysis
 6. **Report discrepancies** - Highlight any differences in conclusions
@@ -125,7 +125,7 @@ When asked to verify an assumption or get a second opinion:
 ### Verify Code Correctness
 
 ```bash
-codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
+codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Review the function 'processPayment' in src/payments.ts. \
    Verify it handles: (1) network failures, (2) duplicate submissions, (3) partial failures. \
    Report any gaps." 2>/dev/null
@@ -134,7 +134,7 @@ codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals
 ### Verify Performance Assumptions
 
 ```bash
-codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
+codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Analyze the database query in src/queries/users.ts. \
    Is it O(n) or O(n^2)? Identify any N+1 query patterns." 2>/dev/null
 ```
@@ -142,7 +142,7 @@ codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals
 ### Verify Security Posture
 
 ```bash
-codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
+codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Security audit: Review authentication and authorization in this codebase. \
    Check for: SQL injection, XSS, CSRF, insecure defaults, hardcoded secrets." 2>/dev/null
 ```
@@ -150,7 +150,7 @@ codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals
 ### Verify Migration Safety
 
 ```bash
-codex exec -s read-only --model gpt-5.1-codex-max --dangerously-bypass-approvals-and-sandbox \
+codex exec --full-auto --model gpt-5.2 -c reasoning.effort=xhigh --dangerously-bypass-approvals-and-sandbox \
   "Review the database migration in migrations/2025_add_index.sql. \
    Is it safe to run on a 10M row table in production? Estimate lock duration." 2>/dev/null
 ```
