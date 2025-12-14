@@ -239,6 +239,16 @@ let mul_u8 (x y:uint8) : uint8 = x *^ y
 
 ## Resources
 
-- Low* paper and tutorial
-- Karamel documentation
-- HACL* as example codebase
+- **KaRaMeL Book**: Comprehensive user manual and documentation
+  - [Introduction.rst](../karamel-book/Introduction.rst) - Getting started with Low* and KaRaMeL
+  - [Core.rst](../karamel-book/Core.rst) - Low* language features and subset
+  - [Setup.rst](../karamel-book/Setup.rst) - Project structure and build systems
+  - [Libraries.rst](../karamel-book/Libraries.rst) - LowStar library reference
+  - [BufferLibraries.rst](../karamel-book/BufferLibraries.rst) - Buffer and memory libraries
+  - [DataStructures.rst](../karamel-book/DataStructures.rst) - Data structure examples
+  - [AdvancedTopics.rst](../karamel-book/AdvancedTopics.rst) - Bundling, visibility, modularity
+  - [tutorial/](../karamel-book/tutorial/) - Complete bignum tutorial with specs, implementation, and C tests
+- **Example Code in Book**:
+  - [LinkedList4.fst](../karamel-book/LinkedList4.fst) - Verified linked list
+  - [RingBuffer.fst](../karamel-book/RingBuffer.fst) - Verified ring buffer
+- HACL* as example codebase (production cryptographic library)

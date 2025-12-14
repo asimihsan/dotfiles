@@ -332,6 +332,7 @@ For C code generation, see [references/lowstar-karamel.md](references/lowstar-ka
   fstar.exe --codegen krml MyModule.fst  # Generates .krml
   krml -skip-compilation MyModule.krml   # Generates .c/.h
   ```
+- Book: "The KaRaMeL User Manual" - see [karamel-book/](karamel-book/) for comprehensive documentation
 
 ### [TRACK] Pulse/Steel Concurrency
 For concurrent verified code, see [references/pulse-steel.md](references/pulse-steel.md):
@@ -377,6 +378,12 @@ For proof automation, see [references/tactics-meta.md](references/tactics-meta.m
   - [book/part5/](book/part5/) - Metaprogramming and tactics
   - [book/pulse/](book/pulse/) - Pulse DSL for separation logic
   - [book/under_the_hood/](book/under_the_hood/) - SMT encoding details
+- Karamel Book: "The KaRaMeL User Manual" - see [karamel-book/](karamel-book/) directory:
+  - [karamel-book/Introduction.rst](karamel-book/Introduction.rst) - Low* and KaRaMeL overview
+  - [karamel-book/Core.rst](karamel-book/Core.rst) - Low* language features
+  - [karamel-book/Setup.rst](karamel-book/Setup.rst) - Project setup and build systems
+  - [karamel-book/Libraries.rst](karamel-book/Libraries.rst) - Core Low* libraries
+  - [karamel-book/tutorial/](karamel-book/tutorial/) - Complete bignum tutorial project
 - Examples: F* repository `examples/` directory (34 categories)
 - Online: https://fstar-lang.org/
 - Help: `fstar.exe --help`
