@@ -17,7 +17,7 @@ codex exec --help
 
 ## Command Pattern
 
-Use `mktemp` to avoid output file collisions. Always redirect stderr to avoid polluting context with intermediate reasoning.
+Use `mktemp` to avoid output file collisions. Always redirect stderr to avoid polluting context with intermediate reasoning. Run `codex` in the background with a 15-minute timeout. Do not stop waiting for codex if it takes a long time.
 
 ```bash
 OUTPUT_FILE=$(mktemp /tmp/codex-XXXXXX)
@@ -25,4 +25,4 @@ codex exec --full-auto -o "$OUTPUT_FILE" "Your verification prompt here" 2>/dev/
 cat "$OUTPUT_FILE"
 ```
 
-Run in background with 15-minute timeout for long analyses.
+
