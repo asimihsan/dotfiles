@@ -17,6 +17,8 @@ codex exec --help
 
 ## Command Pattern
 
+Remember that the prompt should contain all necessary context for the task at hand; filepaths, code snippets, previously run commands, the path to the plan you are currently working on, etc.
+
 Use `mktemp` to avoid output file collisions. Always redirect stderr to avoid polluting context with intermediate reasoning. Run `codex` in the background with a 15-minute timeout. Do not stop waiting for codex if it takes a long time.
 
 ```bash
