@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eu
+
+src="${HOME}/.claude/skills"
+dst="${HOME}/.codex/skills"
+
+# Codex skips symlinks, so ensure dst is a real directory.
+if [ -L "$dst" ]; then
+  rm -f "$dst"
+fi
+mkdir -p "$dst"
+
+# Mirror src -> dst. Drop --delete if you want Codex-only extras to survive.
+rsync -a --delete \
+  --exclude ".DS_Store" \
+  "${src}/" "${dst}/"
