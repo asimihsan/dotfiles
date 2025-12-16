@@ -387,3 +387,5 @@ For proof automation, see [references/tactics-meta.md](references/tactics-meta.m
 - Examples: F* repository `examples/` directory (34 categories)
 - Online: https://fstar-lang.org/
 - Help: `fstar.exe --help`
+- Code examples: `~/Downloads/fstar_references`
+
