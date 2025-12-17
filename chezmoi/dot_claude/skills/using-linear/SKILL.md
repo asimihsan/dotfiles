@@ -13,8 +13,6 @@ If it's not clear which project a new ticket belongs to, stop and ask the user. 
 
 ## Working on issues
 
-When you work on or make changes to a ticket, you must add your label to it. You'll find your label in the ENV var `AGENTS_CONSTRUCTION_KIT__LINEAR_LABEL`. If that ENV var is empty, stop and ask me.
-
 The return values of the `issues` commands contain an `embeds` array which holds the URLs of the screenshots, documents, etc. that are part of the ticket description. If a ticket or comment contains such embeds, fetch and view them as well. Use local caching when needed.
 
 ## Updating tickets
