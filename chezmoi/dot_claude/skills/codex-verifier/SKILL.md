@@ -23,7 +23,7 @@ Use `mktemp` to avoid output file collisions. Always redirect stderr to avoid po
 
 ```bash
 OUTPUT_FILE=$(mktemp /tmp/codex-XXXXXX)
-codex exec --dangerously-bypass-approvals-and-sandbox -o "$OUTPUT_FILE" "Your verification prompt here" 2>/dev/null
+codex exec --model gpt-5.2 --dangerously-bypass-approvals-and-sandbox -o "$OUTPUT_FILE" "Your verification prompt here" 2>/dev/null
 cat "$OUTPUT_FILE"
 ```
 
