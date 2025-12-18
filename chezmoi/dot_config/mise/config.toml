@@ -24,6 +24,7 @@
 
 "cargo:asciinema" = "latest"
 "cargo:atuin" = "latest"
+"cargo:ck-search" = "latest"
 "cargo:eza" = "latest"
 "cargo:git-delta" = "latest"
 "cargo:https://github.com/terhechte/cursor-rust-tools" = "latest"
