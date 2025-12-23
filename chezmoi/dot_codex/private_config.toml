@@ -37,19 +37,19 @@ args = ["mcp-server-fetch"]
 # command = "mcp-language-server"
 # args = ["--workspace", ".", "--lsp", "uv", "--", "run", "basedpyright-langserver", "--stdio"]
 
-{{ if eq .chezmoi.hostname "okzf68" -}}
 # [mcp_servers.linear]
 # url = "https://mcp.linear.app/mcp"
 
 # [mcp_servers.github]
 # url = "https://api.githubcopilot.com/mcp/"
 # bearer_token_env_var = "GITHUB_LEVELSERVER_PAT"
-{{- end }}
 
 [features]
 rmcp_client = true
 web_search_request = true
 skills = true
+unified_exec = true
+shell_snapshot = true
 
 [notice]
 hide_gpt5_1_migration_prompt = true
