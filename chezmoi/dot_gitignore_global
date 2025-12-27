@@ -12,5 +12,4 @@
 node_modules/
 .venv/
 
-**/llm/*.md
 **/.claude/settings.local.json
