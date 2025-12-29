@@ -38,7 +38,7 @@
 1password = "latest"
 age = "latest"
 aws-vault = "latest"
-awscli = { version = "2.32.21", symlink_bins = "true" }
+awscli = { version = "2.32.24", symlink_bins = "true" }
 bun = "latest"
 cargo-binstall = "latest"
 chezmoi = "latest"
