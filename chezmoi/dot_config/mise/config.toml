@@ -75,6 +75,7 @@ ripgrep = "latest"
 ruby = "prefix:3.4"
 "rust" = { version = "prefix:1.91", components = "rust-docs,rustfmt,clippy,rust-analyzer" }
 shellcheck = "latest"
+shfmt = "latest"
 starship = "latest"
 terraform = "latest"
 uv = "latest"

@@ -8,8 +8,10 @@ description: Automate and inspect GitHub Actions runs with the asim-utilities Py
 ## Overview
 Use the `asim-utilities` repo to manage GitHub Actions runs via a typed Python library and the `gh-actions-runs` CLI. This skill covers common workflows (trigger/watch, list failures, download logs/artifacts), configuration, and where to modify the code.
 
+Before using the CLI in a session, run `gh-actions-runs --help` once to refresh flags and subcommands.
+
 ## Quick start (CLI)
-- Set auth: `GITHUB_TOKEN` or `GH_TOKEN` in the environment.
+- Set auth: `GITHUB_TOKEN` or `GH_TOKEN` in the environment (or rely on `gh auth token`).
 - Run against current repo (auto-detects `origin`), or pass `--repo owner/name`.
 - Default output root: `~/.cache/gh-actions-runs` (override with `--output`).
 
@@ -24,6 +26,9 @@ Common commands:
   - `gh-actions-runs failures --limit 10`
 - Download logs + artifacts for a run:
   - `gh-actions-runs download 123456`
+- Download latest completed run for a PR (number or URL):
+  - `gh-actions-runs pr-download --repo owner/name --pr 1234`
+  - `gh-actions-runs pr-download --pr https://github.com/owner/repo/pull/1234`
 
 ## Workflow: Trigger + watch
 1. Dispatch workflow (`trigger` or `watch` without `--run-id`).
@@ -41,12 +46,12 @@ Common commands:
 - `--format json`: machine-readable output for scripting.
 
 ## Code map
-- Library: `src/asim_utilities/github_actions/`
+- Library: `src/utilities/github_actions/`
   - `client.py`: GitHub REST API client
   - `runs.py`: high-level run operations
   - `models.py`: typed dataclasses
   - `utils.py`: helpers (token, repo parsing, XDG cache paths)
-- CLI: `src/asim_utilities/github_actions/cli.py`
+- CLI: `src/utilities/github_actions/cli.py`
 
 ## Installation notes
 - `gh-actions-runs` entry point is installed via editable install and linked into `~/bin`.
