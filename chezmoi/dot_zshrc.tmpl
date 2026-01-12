@@ -12,33 +12,7 @@ if [[ -n ${INTELLIJ_ENVIRONMENT_READER-} ]]; then
   return 0
 fi
 
-autoload -Uz add-zsh-hook
-typeset -g _mise_applied=0
-
-_mise_has_cfg() {
-  local d=$PWD
-  while [[ $d != / ]]; do
-    [[ -e "$d/.mise.toml" || -e "$d/.tool-versions" || -e "$d/.rtx.toml" ]] && return 0
-    d=${d:h}
-  done
-  return 1
-}
-
-_mise_apply() {
-  command -v mise >/dev/null || return 0
-  eval "$(mise hook-env -s zsh)"
-  rehash
-  _mise_applied=1
-}
-
-_mise_on_chpwd() {
-  _mise_has_cfg || return 0
-  _mise_applied=0
-  _mise_apply
-}
-
-add-zsh-hook chpwd _mise_on_chpwd
-_mise_on_chpwd
+eval "$(mise activate zsh)"
 
 # completions (use a cache file; skip security scan if perms are clean)
 ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-${ZSH_VERSION}"

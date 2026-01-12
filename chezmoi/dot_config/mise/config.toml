@@ -27,7 +27,7 @@
 "cargo:ck-search" = "latest"
 "cargo:eza" = "latest"
 "cargo:git-delta" = "latest"
-"cargo:https://github.com/terhechte/cursor-rust-tools" = "latest"
+"cargo:https://github.com/LucioFranco/jj-spr" = "latest"
 "cargo:lazyjj" = "latest"
 "cargo:lstr" = "latest"
 "cargo:mergiraf" = "latest"
