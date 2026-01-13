@@ -80,14 +80,15 @@ edit-args = ["-c", '''
 'immutable_heads()' = "builtin_immutable_heads() & remote_bookmarks()"
 
 [aliases]
-dds = ["diff", "--tool", "difft-s"]
 ddi = ["diff", "--tool", "difft-i"]
+dds = ["diff", "--tool", "difft-s"]
 di = ["diff", "--tool", "idea"]
+gf = ["git", "fetch"]
+gp = ["git", "push"]
+gpn = ["git", "push", "--allow-new"]
 sm = ["b", "s", "main"]
 smb = ["b", "s", "main", "-B"]
-gp = ["git", "push"]
-gf = ["git", "fetch"]
-gpn = ["git", "push", "--allow-new"]
+spr = ["util", "exec", "--", "jj-spr"]
 tug = ["bookmark", "move", "--from", "closest_bookmark(@-)", "--to", "@-"]
 
 # jj pc -> run pre-commit on the working copy
