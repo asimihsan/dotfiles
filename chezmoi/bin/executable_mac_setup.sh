@@ -24,7 +24,16 @@ set -euo pipefail
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 pushd "$SCRIPT_DIR" >/dev/null
-trap 'popd >/dev/null' EXIT
+
+cleanup() {
+  # Always restore the original directory and stop the sudo refresh loop (if any).
+  popd >/dev/null 2>&1 || true
+  if [[ -n "${SUDO_REFRESH_PID:-}" ]]; then
+    kill "$SUDO_REFRESH_PID" >/dev/null 2>&1 || true
+  fi
+}
+
+trap cleanup EXIT
 
 # shellcheck disable=SC2059
 fancy_echo() {
@@ -42,13 +51,64 @@ keep_sudo_alive() {
     sleep 60
   done &
   SUDO_REFRESH_PID=$!
-
-  # Clean-up on exit or interruption
-  trap 'kill $SUDO_REFRESH_PID 2>/dev/null || true' EXIT
 }
 
 command_exists() {
   command -v "$1" >/dev/null 2>&1
+}
+
+ensure_limit_maxfiles_launchdaemon() {
+  # Persist launchd maxfiles across reboot by installing a LaunchDaemon that runs at boot.
+  # This is separate from sysctl kernel limits.
+  local soft="$1"
+  local hard="$2"
+  local plist_path="/Library/LaunchDaemons/limit.maxfiles.plist"
+  local tmp
+
+  tmp=$(mktemp)
+  cat >"$tmp" <<EOF_PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>limit.maxfiles</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/bin/launchctl</string>
+      <string>limit</string>
+      <string>maxfiles</string>
+      <string>${soft}</string>
+      <string>${hard}</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>ServiceIPC</key>
+    <false/>
+  </dict>
+</plist>
+EOF_PLIST
+
+  if ! sudo test -f "$plist_path" || ! sudo cmp -s "$tmp" "$plist_path"; then
+    sudo install -m 0644 -o root -g wheel "$tmp" "$plist_path"
+    fancy_echo "Updated %s" "$plist_path"
+  else
+    fancy_echo "%s already up to date." "$plist_path"
+  fi
+
+  rm -f "$tmp"
+
+  # Reload job (modern launchctl). If this fails (older macOS), try the legacy load command.
+  if sudo launchctl print system/limit.maxfiles >/dev/null 2>&1; then
+    sudo launchctl bootout system "$plist_path" >/dev/null 2>&1 || true
+  fi
+
+  sudo launchctl bootstrap system "$plist_path" >/dev/null 2>&1 \
+    || sudo launchctl load -w "$plist_path" >/dev/null 2>&1 \
+    || true
+
+  sudo launchctl enable system/limit.maxfiles >/dev/null 2>&1 || true
+  sudo launchctl kickstart -k system/limit.maxfiles >/dev/null 2>&1 || true
 }
 
 usage() {
@@ -224,6 +284,13 @@ install_gh_copilot() {
 
 mac_system_setup() {
   fancy_echo "Setting up macOS system..."
+
+  sudo sysctl -w kern.maxfiles=524288
+  sudo sysctl -w kern.maxfilesperproc=262144
+
+  # set launchd per-process soft/hard (use numbers, not "unlimited")
+  sudo launchctl limit maxfiles 262144 524288
+  ensure_limit_maxfiles_launchdaemon 262144 524288
 
   # 3 is default hibernate mode; copy RAM to hibernation file but keeps RAM powered on.
   # 25 is the most aggressive mode; copy RAM to hibernation file and power off RAM.
