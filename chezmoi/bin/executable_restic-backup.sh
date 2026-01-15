@@ -7,7 +7,7 @@ if command -v devbox >/dev/null 2>&1; then
 fi
 
 if command -v mise >/dev/null 2>&1; then
-    eval "$(/opt/homebrew/bin/mise activate bash)"
+    eval "$(mise activate bash)"
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -32,6 +32,23 @@ fi
 if [[ -n "$ORIGINAL_PASSWORD_COMMAND" ]]; then
     PASSWORD_COMMAND="$ORIGINAL_PASSWORD_COMMAND"
 fi
+
+expand_password_command() {
+    # Restic executes the command without shell expansion, so replace common env vars here.
+    PASSWORD_COMMAND="${PASSWORD_COMMAND//\$USER/$USER}"
+    PASSWORD_COMMAND="${PASSWORD_COMMAND//\${USER}/$USER}"
+    PASSWORD_COMMAND="${PASSWORD_COMMAND//\$HOME/$HOME}"
+    PASSWORD_COMMAND="${PASSWORD_COMMAND//\${HOME}/$HOME}"
+}
+
+validate_config() {
+    if [[ -z "${ALIAS_REMOTE:-}" ]]; then
+        error "ALIAS_REMOTE is not set. Check restic-config.sh or export ALIAS_REMOTE."
+    fi
+    if [[ -z "${PASSWORD_COMMAND:-}" ]]; then
+        error "PASSWORD_COMMAND is not set. Check restic-config.sh or export PASSWORD_COMMAND."
+    fi
+}
 
 error() {
     echo "Error: $1" >&2
@@ -424,7 +441,7 @@ cmd_list() {
 }
 
 cmd_prune() {
-    forget_and_prune
+    forget_and_prune "$@"
 }
 
 cmd_unlock() {
@@ -736,6 +753,9 @@ main() {
 
     local command="$1"
     shift
+
+    expand_password_command
+    validate_config
 
     case "$command" in
     setup)

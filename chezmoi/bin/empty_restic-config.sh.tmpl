@@ -8,19 +8,19 @@ DROPBOX_REMOTE="dropbox"
 {{ if eq .chezmoi.hostname "yov3bc" }}
 ALIAS_REMOTE="dropbox-alias-backup-yov3bc"
 DROPBOX_PATH="/Asim Ihsan/Apps/restic-backup-yov3bc-202407"
-PASSWORD_COMMAND='security find-generic-password -a "$USER" -s restic-repo-main -w'
+PASSWORD_COMMAND='security find-generic-password -a "{{ .chezmoi.username }}" -s restic-repo-main -w "{{ .chezmoi.homeDir }}/Library/Keychains/login.keychain-db"'
 {{ else if eq .chezmoi.hostname "okzf68" }}
 ALIAS_REMOTE="dropbox-alias-backup-okzf68"
 DROPBOX_PATH="/Asim Ihsan/Apps/restic-backup-okzf68-202507"
-PASSWORD_COMMAND='security find-generic-password -a "$USER" -s restic-repo-main -w'
+PASSWORD_COMMAND='security find-generic-password -a "{{ .chezmoi.username }}" -s restic-repo-main -w "{{ .chezmoi.homeDir }}/Library/Keychains/login.keychain-db"'
 {{ else if eq .chezmoi.hostname "hlru5i" }}
 ALIAS_REMOTE="dropbox-alias-backup-hlru5i"
 DROPBOX_PATH="/Asim Ihsan/Apps/restic-backup-hlru5i-202407"
-PASSWORD_COMMAND='security find-generic-password -a "$USER" -s restic-repo-main -w'
+PASSWORD_COMMAND='security find-generic-password -a "{{ .chezmoi.username }}" -s restic-repo-main -w "{{ .chezmoi.homeDir }}/Library/Keychains/login.keychain-db"'
 {{ else if eq .chezmoi.hostname "im9ibk" }}
 ALIAS_REMOTE="dropbox-alias-backup-im9ibk"
 DROPBOX_PATH="/Asim Ihsan/Apps/restic-backup-im9ibk-202507"
-PASSWORD_COMMAND='security find-generic-password -a "$USER" -s restic-repo-main -w'
+PASSWORD_COMMAND='security find-generic-password -a "{{ .chezmoi.username }}" -s restic-repo-main -w "{{ .chezmoi.homeDir }}/Library/Keychains/login.keychain-db"'
 {{ end }}
 
 # Backup paths

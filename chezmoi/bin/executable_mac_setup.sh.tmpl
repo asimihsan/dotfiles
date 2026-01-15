@@ -11,9 +11,10 @@
 #   -h                Show this help and exit
 #
 # Examples:
-#   sudo ./mac_setup.sh -n hlru5i        # First-time on new personal laptop
+#   ./mac_setup.sh -n hlru5i             # First-time on new personal laptop
 #   ./mac_setup.sh                       # Regular update (auto profile)
 #   ./mac_setup.sh -p work               # Force work profile
+#   sudo ./mac_setup.sh --hostname-only hlru5i
 #
 # The script is safe to run multiple times; each step is idempotent.
 
@@ -21,6 +22,12 @@
 #   --hostname-only NEWNAME   Only set hostnames and exit. Must be run with sudo.
 
 set -euo pipefail
+
+if [[ ${EUID:-$(id -u)} -eq 0 && ${1:-} != "--hostname-only" ]]; then
+  echo "Error: Do not run this script as root. Re-run without sudo." >&2
+  echo "Use --hostname-only with sudo if you only need to set hostnames." >&2
+  exit 1
+fi
 
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 pushd "$SCRIPT_DIR" >/dev/null
@@ -116,7 +123,7 @@ usage() {
 Usage: $0 [-p profile] [-n new_hostname] [--hostname-only NEWNAME]
   -p profile        Override auto-detected profile (e.g. personal, work)
   -n new_hostname   Set macOS ComputerName/HostName/LocalHostName first
-  --hostname-only NEWNAME   Only set the hostnames and exit
+  --hostname-only NEWNAME   Only set the hostnames and exit (requires sudo)
 USAGE
 }
 
@@ -158,6 +165,8 @@ install_homebrew() {
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     if [ -x /opt/homebrew/bin/brew ]; then
       eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [ -x /usr/local/bin/brew ]; then
+      eval "$(/usr/local/bin/brew shellenv)"
     fi
   else
     fancy_echo "Homebrew already installed."
@@ -170,6 +179,26 @@ install_mise() {
     brew install mise
   else
     fancy_echo "mise already installed."
+  fi
+  eval "$(mise activate bash)" || true
+}
+
+install_1password_cli() {
+  if ! command_exists op; then
+    fancy_echo "Installing 1Password CLI via mise..."
+    mise use -g 1password
+  else
+    fancy_echo "1Password CLI already installed."
+  fi
+  eval "$(mise activate bash)" || true
+}
+
+install_gh_cli() {
+  if ! command_exists gh; then
+    fancy_echo "Installing GitHub CLI via mise..."
+    mise use -g gh
+  else
+    fancy_echo "GitHub CLI already installed."
   fi
   eval "$(mise activate bash)" || true
 }
@@ -207,19 +236,20 @@ EOF_SUDO
 ensure_restic_keychain_password() {
   local service="restic-repo-main"
   local account="$USER"
-  local op_password_path=""
+  local keychain="${RESTIC_KEYCHAIN_PATH:-$HOME/Library/Keychains/login.keychain-db}"
+  local op_password_path="${RESTIC_SECRET_PATH:-}"
 
 {{ if eq .chezmoi.hostname "yov3bc" }}
-  op_password_path="op://Private/restic-backup-yov3bc-202407 backup password/password"
+  op_password_path="${op_password_path:-op://Private/restic-backup-yov3bc-202407 backup password/password}"
 {{ else if eq .chezmoi.hostname "okzf68" }}
-  op_password_path="op://Private/restic-backup-okzf68-202507 backup password/password"
+  op_password_path="${op_password_path:-op://Private/restic-backup-okzf68-202507 backup password/password}"
 {{ else if eq .chezmoi.hostname "hlru5i" }}
-  op_password_path="op://Private/restic-backup-hlru5i-202407 backup password/password"
+  op_password_path="${op_password_path:-op://Private/restic-backup-hlru5i-202407 backup password/password}"
 {{ else if eq .chezmoi.hostname "im9ibk" }}
-  op_password_path="op://Private/restic-backup-im9ibk-202507 backup password/password"
+  op_password_path="${op_password_path:-op://Private/restic-backup-im9ibk-202507 backup password/password}"
 {{ end }}
 
-  if security find-generic-password -a "$account" -s "$service" -w >/dev/null 2>&1 \
+  if security find-generic-password -a "$account" -s "$service" "$keychain" >/dev/null 2>&1 \
     && [[ "${RESTIC_KEYCHAIN_FORCE_UPDATE:-0}" != "1" ]]; then
     fancy_echo "Restic keychain item already exists (%s)." "$service"
     return
@@ -251,7 +281,9 @@ ensure_restic_keychain_password() {
     exit 1
   fi
 
-  security add-generic-password -a "$account" -s "$service" -w "$restic_pass" -U >/dev/null
+  security add-generic-password -a "$account" -s "$service" -w "$restic_pass" -U \
+    -T /usr/bin/security \
+    "$keychain" >/dev/null
 }
 
 update_homebrew() {
@@ -436,8 +468,6 @@ main() {
     set_hostnames "$NEW_HOSTNAME"
   fi
 
-  keep_sudo_alive
-
   # Auto-detect profile from current hostname if not provided
   if [[ -z "$PROFILE" ]]; then
     local CURRENT_HOST
@@ -451,14 +481,19 @@ main() {
 
   run_profile_tasks "$PROFILE"
 
-  mac_system_setup
-  install_pragmasevka_font
-  install_mise
-  install_gh_copilot
+  keep_sudo_alive
+
   install_homebrew
+  install_mise
+  install_1password_cli
+  install_gh_cli
+  install_gh_copilot
   init_chezmoi
   ensure_restic_keychain_password
   ensure_restic_sudoers
+
+  mac_system_setup
+  install_pragmasevka_font
   update_homebrew
   install_awscli
   update_mise
@@ -473,10 +508,13 @@ if [[ ${1:-} == "--hostname-only" ]]; then
     echo "Usage: $0 --hostname-only NEWNAME" >&2
     exit 1
   fi
+  if [[ ${EUID:-$(id -u)} -ne 0 ]]; then
+    echo "Error: --hostname-only must be run with sudo." >&2
+    exit 1
+  fi
   keep_sudo_alive
   set_hostnames "$2"
   exit 0
 fi
 
 main "$@"
-
