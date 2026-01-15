@@ -204,6 +204,56 @@ EOF_SUDO
   rm -f "$tmp"
 }
 
+ensure_restic_keychain_password() {
+  local service="restic-repo-main"
+  local account="$USER"
+  local op_password_path=""
+
+{{ if eq .chezmoi.hostname "yov3bc" }}
+  op_password_path="op://Private/restic-backup-yov3bc-202407 backup password/password"
+{{ else if eq .chezmoi.hostname "okzf68" }}
+  op_password_path="op://Private/restic-backup-okzf68-202507 backup password/password"
+{{ else if eq .chezmoi.hostname "hlru5i" }}
+  op_password_path="op://Private/restic-backup-hlru5i-202407 backup password/password"
+{{ else if eq .chezmoi.hostname "im9ibk" }}
+  op_password_path="op://Private/restic-backup-im9ibk-202507 backup password/password"
+{{ end }}
+
+  if security find-generic-password -a "$account" -s "$service" -w >/dev/null 2>&1 \
+    && [[ "${RESTIC_KEYCHAIN_FORCE_UPDATE:-0}" != "1" ]]; then
+    fancy_echo "Restic keychain item already exists (%s)." "$service"
+    return
+  fi
+
+  if [[ "${RESTIC_KEYCHAIN_FORCE_UPDATE:-0}" == "1" ]]; then
+    fancy_echo "Updating restic keychain item (%s)..." "$service"
+  else
+    fancy_echo "Adding restic keychain item (%s)..." "$service"
+  fi
+
+  if ! command_exists op; then
+    echo "Error: 1Password CLI (op) not found; cannot fetch restic password." >&2
+    exit 1
+  fi
+
+  if [[ -z "$op_password_path" ]]; then
+    echo "Error: 1Password password path not configured for this host." >&2
+    exit 1
+  fi
+
+  local restic_pass=""
+  if ! restic_pass=$(op read "$op_password_path"); then
+    echo "Error: failed to read restic password from 1Password." >&2
+    exit 1
+  fi
+  if [[ -z "$restic_pass" ]]; then
+    echo "Error: restic password from 1Password is empty." >&2
+    exit 1
+  fi
+
+  security add-generic-password -a "$account" -s "$service" -w "$restic_pass" -U >/dev/null
+}
+
 update_homebrew() {
   brew update --auto-update
 
@@ -407,6 +457,7 @@ main() {
   install_gh_copilot
   install_homebrew
   init_chezmoi
+  ensure_restic_keychain_password
   ensure_restic_sudoers
   update_homebrew
   install_awscli
