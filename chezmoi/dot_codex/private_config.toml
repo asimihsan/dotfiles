@@ -3,7 +3,7 @@ approval_policy = "on-failure"
 sandbox_mode = "workspace-write"
 tool_timeout_sec = 600
 
-model = "gpt-5.2-codex"
+model = "gpt-5.2"
 model_reasoning_effort = "xhigh"
 model_reasoning_summary = "detailed" # auto, concise, detailed
 model_verbosity = "high" # low, medium, high
@@ -50,6 +50,7 @@ web_search_request = true
 skills = true
 unified_exec = true
 shell_snapshot = true
+steer = true
 
 [notice]
 hide_gpt5_1_migration_prompt = true
