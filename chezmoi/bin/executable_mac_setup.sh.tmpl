@@ -357,13 +357,6 @@ init_chezmoi() {
   chezmoi init --source "$SCRIPT_DIR" --apply
 }
 
-install_gh_copilot() {
-  gh extension install github/gh-copilot --force
-  if ! gh auth status >/dev/null 2>&1; then
-    gh auth login --git-protocol=https
-  fi
-}
-
 mac_system_setup() {
   fancy_echo "Setting up macOS system..."
 
@@ -487,7 +480,6 @@ main() {
   install_mise
   install_1password_cli
   install_gh_cli
-  install_gh_copilot
   init_chezmoi
   ensure_restic_keychain_password
   ensure_restic_sudoers
