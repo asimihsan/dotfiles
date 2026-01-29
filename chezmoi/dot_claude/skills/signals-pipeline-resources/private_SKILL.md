@@ -118,6 +118,9 @@ aws --profile platform-dev --region us-west-2 events list-rules --name-prefix de
 ```
 
 ## Athena workgroups
+
+Prefer using `{env}-tps-telemetry-signals_e2e-wg` for ad-hoc queries.
+
 - {env}-tps-telemetry-human-wg (ad-hoc)
 - {env}-tps-telemetry-dbt-wg (dbt writes; overrides disabled)
 - {env}-tps-telemetry-signals_e2e-wg (human verification)
