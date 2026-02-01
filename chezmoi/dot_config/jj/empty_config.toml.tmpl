@@ -1,3 +1,5 @@
+# For aliases see: https://www.lysator.liu.se/~axl/jj-aliases/
+
 [user]
 name = "Asim Ihsan"
 
@@ -126,3 +128,7 @@ work = ["log", "-r", "connected(@ | trunk() | my_bookmarks())"]
 
 # See the path between your working copy and master
 path = ["log", "-r", "@ | trunk() | remote_bookmarks('main') | remote_bookmarks('master')"]
+
+blame = ["file", "annotate"]
+
+difft = ["diff", "--tool", "difft"]
