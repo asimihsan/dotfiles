@@ -34,15 +34,15 @@ The repo includes a default `signals-logs.toml` with environment mappings.
 
 Use `--no-assume-role` if you want to rely on ambient credentials (AWS_PROFILE, IMDS, etc.).
 
-### Prod fallback (signals-e2e audit role)
+### Prod note (SSO + human workgroup)
 
-If `AWS_PROFILE=platform-prod` resolves to `prod-tps-signals-e2e-audit-role`, the default `platform-prod-signals-pipeline-viewer` assume-role + `prod-tps-telemetry-human-wg` will fail with `AccessDenied`. Use the signals-e2e workgroup and override the output location:
+Ensure your profile can assume `prod-tps-signals-human-ro-role` (via the `ReadOnlyAccessSignalsPipeline` permission set). The legacy `prod-tps-signals-e2e-audit-role` does not have access to the human workgroup/output location.
 
 ```bash
 AWS_PROFILE=platform-prod AWS_REGION=us-west-2 \
   go run ./cmd/loglens --no-assume-role --env prod \
-  --workgroup prod-tps-telemetry-signals_e2e-wg \
-  --output-location s3://prod-athena-query-results-19303e8d/signals-e2e/ \
+  --workgroup prod-tps-telemetry-human-wg \
+  --output-location s3://prod-athena-query-results-19303e8d/manual/ \
   logs --day 2026-02-03 --service seti-server --severity error --limit 20 --output json
 ```
 
