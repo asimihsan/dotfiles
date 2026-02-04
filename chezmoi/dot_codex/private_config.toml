@@ -8,6 +8,7 @@ model_reasoning_effort = "xhigh"
 model_reasoning_summary = "detailed" # auto, concise, detailed
 model_verbosity = "high" # low, medium, high
 web_search = "live"
+personality = "pragmatic"
 
 # [mcp_servers.context7]
 # command = "npx"
@@ -51,6 +52,7 @@ skills = true
 unified_exec = true
 shell_snapshot = true
 steer = true
+apps = true
 
 [notice]
 hide_gpt5_1_migration_prompt = true

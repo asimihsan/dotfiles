@@ -11,6 +11,7 @@ description: Query signals pipeline OTLP logs via the loglens Athena-backed CLI.
 - Run from repo: `go run ./cmd/loglens ...` (or use `build/loglens` if already built).
 - Confirm environments: `loglens envs`.
 - Run a bounded query (required): `--day`/`--hour` or `--since`/`--until`.
+- Prod note: if `AWS_PROFILE=platform-prod` resolves to `prod-tps-signals-e2e-audit-role`, you must add `--no-assume-role` and override `--workgroup` + `--output-location` to the signals-e2e workgroup (see example below). The default `platform-prod-signals-pipeline-viewer` assume role + `prod-tps-telemetry-human-wg` will fail with `AccessDenied` for that profile.
 
 Example:
 
@@ -18,6 +19,16 @@ Example:
 AWS_PROFILE=platform-dev AWS_REGION=us-west-2 \
   go run ./cmd/loglens --no-assume-role --env dev logs \
   --day 2026-01-06 --service push-server --severity error --limit 20 --output json
+```
+
+Prod example (signals-e2e workgroup):
+
+```bash
+AWS_PROFILE=platform-prod AWS_REGION=us-west-2 \
+  go run ./cmd/loglens --no-assume-role --env prod \
+  --workgroup prod-tps-telemetry-signals_e2e-wg \
+  --output-location s3://prod-athena-query-results-19303e8d/signals-e2e/ \
+  logs --day 2026-02-03 --service seti-server --severity error --limit 20 --output json
 ```
 
 ## Core workflows
@@ -74,7 +85,7 @@ loglens schema --env dev --table flat
   - `telemetry-parser-db.telemetry_otlp_logs_flat` (fresh, not deduped)
   - `telemetry_alerts_{env}.int_otlp_logs_compacted_daily` (compacted + deduped)
 - If you need direct Athena access or Glue catalog exploration, use the `$athena-queries` skill as an alternative.
-- Prod is expected to work the same way, but **as of 2026-01-12** there is no data in prod.
+- Prod has data; always include `day`/`hour` predicates and prefer the signals-e2e workgroup if using the `platform-prod` profile.
 
 ## References
 

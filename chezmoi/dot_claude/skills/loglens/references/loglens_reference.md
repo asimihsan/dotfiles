@@ -34,11 +34,23 @@ The repo includes a default `signals-logs.toml` with environment mappings.
 
 Use `--no-assume-role` if you want to rely on ambient credentials (AWS_PROFILE, IMDS, etc.).
 
+### Prod fallback (signals-e2e audit role)
+
+If `AWS_PROFILE=platform-prod` resolves to `prod-tps-signals-e2e-audit-role`, the default `platform-prod-signals-pipeline-viewer` assume-role + `prod-tps-telemetry-human-wg` will fail with `AccessDenied`. Use the signals-e2e workgroup and override the output location:
+
+```bash
+AWS_PROFILE=platform-prod AWS_REGION=us-west-2 \
+  go run ./cmd/loglens --no-assume-role --env prod \
+  --workgroup prod-tps-telemetry-signals_e2e-wg \
+  --output-location s3://prod-athena-query-results-19303e8d/signals-e2e/ \
+  logs --day 2026-02-03 --service seti-server --severity error --limit 20 --output json
+```
+
 ## Table notes
 
 - **Compacted table**: de-duplicated hourly rollups.
 - **Flat table**: freshest data, not deduped. Column names are more verbose (payload_*/attributes paths).
-- Partitioning uses `day` (DATE) and `hour` (string).
+ - Partitioning uses `day` (DATE) and `hour` (int in compacted tables).
 
 ## Example commands
 
