@@ -18,6 +18,15 @@ Use this skill to run `gh` safely and consistently with mandatory help/auth chec
 3. Execute the command with explicit flags; avoid guessing.
 4. For destructive actions (merge, delete, close), confirm with the user before running.
 
+## Writing PR/Issue Bodies And Comments (Required)
+- Whenever posting a PR description, PR comment, issue description, or issue comment, **do not** inline the body text.
+- First write the content to a file using a heredoc, then pass the file to `gh` (e.g., `--body-file`).
+- Ensure all bodies/comments are Markdown with clear logical structure: short intro, headings, and concise lists. Avoid walls of text.
+- Always prefix the body with a first, standalone paragraph: `(This is from an LLM)`
+- Recommended pattern:
+  - Create: `cat <<'EOF' > /tmp/gh-body.md ... EOF`
+  - Use: `gh pr create ... --body-file /tmp/gh-body.md` or `gh pr comment <pr> --body-file /tmp/gh-body.md`
+
 ## Typical Tasks (High-Level Sketch)
 
 ### Repo + Auth

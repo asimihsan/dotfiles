@@ -23,6 +23,12 @@ When updating a ticket with a progress report that is more than just a checkbox 
 
 General rule: The ticket description is the starting point for planning. But when work is ongoing, I want to be able to retrace our steps by looking at the ticket and its comments.
 
+## Writing Ticket Bodies And Comments (Required)
+- Whenever posting a ticket description or comment, **do not** inline the body text.
+- First write the content to a file using a heredoc, then pass the file to `linearis` as needed.
+- Always prefix the body with a first, standalone paragraph: `(This is from an LLM)`
+- Ensure all bodies/comments are Markdown with clear logical structure: short intro, headings, and concise lists. Avoid walls of text.
+
 ## Eagerness
 
 Never declare "Implementation Complete!" in a ticket unless explicitly told so.
