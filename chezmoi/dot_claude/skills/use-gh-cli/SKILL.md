@@ -16,7 +16,6 @@ Use this skill to run `gh` safely and consistently with mandatory help/auth chec
 1. Confirm repository context. Prefer running inside the repo. If not, use `-R OWNER/REPO`.
 2. Run the command-group help and verify flags.
 3. Execute the command with explicit flags; avoid guessing.
-4. For destructive actions (merge, delete, close), confirm with the user before running.
 
 ## Writing PR/Issue Bodies And Comments (Required)
 - Whenever posting a PR description, PR comment, issue description, or issue comment, **do not** inline the body text.
