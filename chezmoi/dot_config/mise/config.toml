@@ -87,6 +87,7 @@ zoxide = "latest"
 [env]
 AWS_ASSUME_ROLE_TTL = "4h"
 AWS_CHAINED_SESSION_TOKEN_TTL = "4h"
+RUSTC_WRAPPER = "sccache"
 
 [settings]
 experimental = true
