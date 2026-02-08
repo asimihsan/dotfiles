@@ -37,7 +37,7 @@
 
 1password = "latest"
 age = "latest"
-awscli = { version = "2.33.16", symlink_bins = "true" }
+awscli = { version = "2.33.17", symlink_bins = "true" }
 bun = "latest"
 cargo-binstall = "latest"
 chezmoi = "latest"
