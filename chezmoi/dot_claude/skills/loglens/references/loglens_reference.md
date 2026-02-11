@@ -1,5 +1,7 @@
 # Loglens Reference
 
+To use loglens the working directory is `~/workplace/platform-tools/`.
+
 ## Config loading order
 
 1. `--config /path/to/signals-logs.toml`
@@ -36,7 +38,7 @@ Use `--no-assume-role` if you want to rely on ambient credentials (AWS_PROFILE, 
 
 ### Prod note (SSO + human workgroup)
 
-Ensure your profile can assume `prod-tps-signals-human-ro-role` (via the `ReadOnlyAccessSignalsPipeline` permission set). The legacy `prod-tps-signals-e2e-audit-role` does not have access to the human workgroup/output location.
+Ensure your profile can assume `prod-tps-signals-human-ro-role` (via the `ReadOnlyAccessSignalsPipeline` permission set).
 
 ```bash
 AWS_PROFILE=platform-prod AWS_REGION=us-west-2 \

@@ -7,6 +7,8 @@ description: Query signals pipeline OTLP logs via the loglens Athena-backed CLI.
 
 ## Quick start
 
+To use loglens the working directory is `~/workplace/platform-tools/`.
+
 - Ensure AWS credentials for the target environment. If you are using AWS_PROFILE/SSO credentials directly, add `--no-assume-role`.
 - Run from repo: `go run ./cmd/loglens ...` (or use `build/loglens` if already built).
 - Confirm environments: `loglens envs`.
