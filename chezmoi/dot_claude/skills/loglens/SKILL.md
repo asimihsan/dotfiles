@@ -61,7 +61,7 @@ Use `loglens query` for schema inspection or complex SQL. Prefer explicit databa
 
 ```bash
 loglens query --env dev \
-  --sql "SELECT event_ts, service_name, severity, body FROM telemetry_alerts_dev.int_otlp_logs_compacted_daily WHERE day=DATE '2026-01-06' AND hour=23 LIMIT 20" \
+  --sql "SELECT event_ts, service_name, severity, body FROM telemetry_alerts_dev.int_otlp_logs_compacted_daily_v2 WHERE day=DATE '2026-01-06' AND hour=23 LIMIT 20" \
   --output json
 ```
 
@@ -83,7 +83,7 @@ loglens schema --env dev --table flat
 - Loglens queries **AWS Glue tables via Athena**.
 - Tables:
   - `telemetry-parser-db.telemetry_otlp_logs_flat` (fresh, not deduped)
-  - `telemetry_alerts_{env}.int_otlp_logs_compacted_daily` (compacted + deduped)
+  - `telemetry_alerts_{env}.int_otlp_logs_compacted_daily_v2` (compacted + deduped)
 - If you need direct Athena access or Glue catalog exploration, use the `$athena-queries` skill as an alternative.
 - Prod has data; always include `day`/`hour` predicates and use the human workgroup.
 

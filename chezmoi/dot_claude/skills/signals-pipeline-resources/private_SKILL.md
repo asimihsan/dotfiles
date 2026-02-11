@@ -12,6 +12,15 @@ description: |
 3) verified S3 -> telemetry-registry-queue -> DynamoDB registry + Glue partitions (EventBridge reconciler)
 4) Athena/Glue -> dbt Iceberg tables in *-signal-data-lake-dbt/dbt/data
 
+## Related repositories
+- ~/workplace/telemetry-parser-service-iac (Terraform infra)
+- ~/workplace/telemetry-parser-service (parser + registry Lambda)
+- ~/workplace/signals-pipeline-dbt (dbt models / Iceberg maintenance)
+- ~/workplace/signals-pipeline-ingester (ingest app)
+- ~/workplace/platform-tools (telemetry-redrive, telemetry-verify)
+- ~/workplace/bixby-rs (telemetry schema / parquet FFI)
+- ~/workplace/llm/signals-pipeline/*.md (architecture + investigation notes)
+
 ## AWS accounts and profiles
 
 | Environment | Account ID   | AWS Profile    |
@@ -119,11 +128,11 @@ aws --profile platform-dev --region us-west-2 events list-rules --name-prefix de
 
 ## Athena workgroups
 
-Prefer using `{env}-tps-telemetry-signals_e2e-wg` for ad-hoc queries.
+Prefer using `{env}-tps-telemetry-human-wg` for ad-hoc queries.
 
 - {env}-tps-telemetry-human-wg (ad-hoc)
 - {env}-tps-telemetry-dbt-wg (dbt writes; overrides disabled)
-- {env}-tps-telemetry-signals_e2e-wg (human verification)
+- {env}-tps-telemetry-human-wg (human verification)
 - {env}-tps-telemetry-registry-wg (registry maintenance)
 - {env}-tps-telemetry-s3_inventory-wg (inventory/debug)
 
@@ -148,10 +157,10 @@ Tables in telemetry-parser-db (this is a Hive table where "verified" data is sto
 - telemetry_otlp_logs_flat
 
 "Compacted" tables in telemetry_alerts_{env} (this is where verified data is de-duplicated and stored in Iceberg table):
-- int_lock_compacted_daily
-- int_bridge_compacted_daily
-- int_video_doorbell_compacted_daily
-- int_otlp_logs_compacted_daily
+- int_lock_compacted_daily_kind
+- int_bridge_compacted_daily_kind
+- int_video_doorbell_compacted_daily_kind
+- int_otlp_logs_compacted_daily_v2
 
 Discovery:
 ```bash
@@ -223,12 +232,3 @@ Registry DDB count (rough):
 aws --profile platform-dev --region us-west-2 dynamodb scan \
   --table-name dev-tps-telemetry-file-registry-v2 --select COUNT
 ```
-
-## Related repositories
-- ~/workplace/telemetry-parser-service-iac (Terraform infra)
-- ~/workplace/telemetry-parser-service (parser + registry Lambda)
-- ~/workplace/signals-pipeline-dbt (dbt models / Iceberg maintenance)
-- ~/workplace/signals-pipeline-ingester (ingest app)
-- ~/workplace/platform-tools (telemetry-redrive, telemetry-verify)
-- ~/workplace/bixby-rs (telemetry schema / parquet FFI)
-- ~/workplace/llm/signals-pipeline/*.md (architecture + investigation notes)
