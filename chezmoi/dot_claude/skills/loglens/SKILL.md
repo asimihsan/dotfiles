@@ -7,13 +7,27 @@ description: Query signals pipeline OTLP logs via the loglens Athena-backed CLI.
 
 ## Quick start
 
-To use loglens the working directory is `~/workplace/platform-tools/`.
+To use loglens, set the working directory to `~/workplace/platform-tools/`. The loglens source code and built binary both live in this repo.
 
 - Ensure AWS credentials for the target environment. If you are using AWS_PROFILE/SSO credentials directly, add `--no-assume-role`.
 - Run from repo: `go run ./cmd/loglens ...` (or use `build/loglens` if already built).
+- Preferred LLM workflow: use `--output json --out-file <path>` (not shell redirection) so output is captured predictably. Use `go run ./cmd/loglens --help`, `go run ./cmd/loglens <subcommand> --help`, or `build/loglens --help` to verify exact flag behavior before running.
 - Confirm environments: `loglens envs`.
 - Run a bounded query (required): `--day`/`--hour` or `--since`/`--until`.
 - Prod note: ensure your AWS profile can assume `prod-tps-signals-human-ro-role` (via the `ReadOnlyAccessSignalsPipeline` permission set). The legacy `prod-tps-signals-e2e-audit-role` will fail against the human workgroup.
+
+Preferred query pattern for LLM-run evidence capture:
+
+```bash
+cd ~/workplace/platform-tools
+AWS_PROFILE=platform-prod AWS_REGION=us-west-2 GOTOOLCHAIN=local \
+  /Users/asimi/.local/share/mise/installs/go/1.25.6/bin/go run ./cmd/loglens \
+  --no-assume-role --env prod \
+  --workgroup prod-tps-telemetry-human-wg \
+  --output-location s3://prod-athena-query-results-19303e8d/manual/ \
+  query --sql "<SQL>" --limit 0 --output json \
+  --out-file ~/workplace/llm/<ticket>/evidence/<date>/loglens/<name>.jsonl
+```
 
 Example:
 

@@ -1,6 +1,23 @@
 # Loglens Reference
 
-To use loglens the working directory is `~/workplace/platform-tools/`.
+To use loglens, set the working directory to `~/workplace/platform-tools/`. The loglens source code and built binary both live in this repo.
+
+Preferred LLM workflow:
+- Use `--output json --out-file <path>` (not shell redirection) so results are captured reproducibly.
+- Run `go run ./cmd/loglens --help`, `go run ./cmd/loglens <subcommand> --help`, or `build/loglens --help` to confirm exact flags supported by the current version.
+
+Recommended command pattern:
+
+```bash
+cd ~/workplace/platform-tools
+AWS_PROFILE=platform-prod AWS_REGION=us-west-2 GOTOOLCHAIN=local \
+  /Users/asimi/.local/share/mise/installs/go/1.25.6/bin/go run ./cmd/loglens \
+  --no-assume-role --env prod \
+  --workgroup prod-tps-telemetry-human-wg \
+  --output-location s3://prod-athena-query-results-19303e8d/manual/ \
+  query --sql "<SQL>" --limit 0 --output json \
+  --out-file ~/workplace/llm/<ticket>/evidence/<date>/loglens/<name>.jsonl
+```
 
 ## Config loading order
 
