@@ -2,10 +2,11 @@
 name: jujutsu
 description: |
   Jujutsu (jj) version control commands. Use when working in a jj repository, 
-  running version control operations, viewing commit history, managing bookmarks 
-  (branches), creating or splitting commits, pushing to Git remotes, or any VCS 
-  task in a repo with a .jj directory. Also use when the user mentions jj, 
+  running version control operations, viewing commit history, managing bookmarks
+  (branches), creating or splitting commits, pushing to Git remotes, or any VCS
+  task in a repo with a .jj directory. Also use when the user mentions jj,
   change IDs, revsets, or working-copy commits.
+  Check local docs in `docs/` for exact command behavior when uncertain.
 ---
 
 # Jujutsu (jj) Version Control
@@ -268,6 +269,36 @@ jj op restore <op-id>
    jj bookmark set feature-x
    jj git push --allow-new
    ```
+
+## Local Documentation
+
+Use the local mirror in `docs/` for exact command syntax, flag semantics,
+and edge-case behavior.
+
+- Consult docs before providing high-confidence guidance for unfamiliar
+  operations or risky commands.
+- Prefer the local docs over memory when behavior depends on version or options.
+- Reference relevant files in `docs/` when resolving ambiguous output or errors.
+
+
+## Documentation Map
+
+When a command is ambiguous, potentially destructive, or behavior-sensitive, check the specific docs before giving final instructions.
+
+- `working-copy.md` for snapshot/workspace behavior and when changes are written.
+- `operation-log.md` for undo/redo/restore and concurrency context.
+- `revsets.md` for revision expression syntax and visibility.
+- `guides/cli-revision-options.md` for `-r`, `--from`, `--to`, `--into`, and destination/source behavior.
+- `bookmarks.md` for creating, tracking, and moving bookmarks.
+- `config.md` for bookmark-tracking and push-related configuration.
+- `guides/multiple-remotes.md` for fork/upstream workflow and trunk setup.
+- `conflicts.md` for conflict semantics and resolution model.
+- `working-copy.md#conflicts` for conflict materialization in the working copy.
+- `git-compatibility.md` for Git interoperability behavior and colocated repo caveats.
+- `FAQ.md` for practical edge cases (for example, interactive split/squash/rebase guidance).
+- `github.md` for hosted-repository push/review flow.
+
+If exact CLI flags or command-specific details are needed, run `jj help <command>` first, then use these docs for semantics.
 
 ## Tips for Agents
 
