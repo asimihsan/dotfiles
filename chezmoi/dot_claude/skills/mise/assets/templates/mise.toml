@@ -1,0 +1,25 @@
+[tools]
+python = "prefix:3.12"
+uv = "latest"
+node = "latest"
+just = "latest"
+
+[env]
+MISE_PYTHON_UV_VENV_AUTO = "true"
+_.source = "{{ config_root }}/scripts/env.sh"
+
+[task_config]
+includes = [
+  "tasks.core.toml",
+]
+
+[hooks]
+postinstall = [
+  "./scripts/postinstall.sh",
+]
+enter = [
+  "mise run doctor || true",
+]
+
+[settings]
+experimental = true
