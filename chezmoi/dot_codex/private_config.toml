@@ -47,12 +47,12 @@ args = ["mcp-server-fetch"]
 # bearer_token_env_var = "GITHUB_LEVELSERVER_PAT"
 
 [features]
+mult_agent = true
 rmcp_client = true
-skills = true
-unified_exec = true
 shell_snapshot = true
+skills = true
 steer = true
-collab = true
+unified_exec = true
 
 [notice]
 hide_gpt5_1_migration_prompt = true
