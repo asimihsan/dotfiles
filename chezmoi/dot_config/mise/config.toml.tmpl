@@ -88,7 +88,11 @@ zoxide = "latest"
 AWS_ASSUME_ROLE_TTL = "4h"
 AWS_CHAINED_SESSION_TOKEN_TTL = "4h"
 SCCACHE_CACHE_SIZE="50G"
-SCCACHE_DIR="{{env.HOME}}/.cache/sccache"
+SCCACHE_DIR="{{ .chezmoi.homeDir }}/.cache/sccache"
+{{ if eq .chezmoi.hostname "okzf68" -}}
+NODE_USE_SYSTEM_CA = "1"
+NODE_EXTRA_CA_CERTS = "{{ .chezmoi.homeDir }}/.config/certs/node-extra-ca.pem"
+{{- end }}
 
 [settings]
 experimental = true
