@@ -47,7 +47,7 @@ args = ["mcp-server-fetch"]
 # bearer_token_env_var = "GITHUB_LEVELSERVER_PAT"
 
 [features]
-mult_agent = true
+multi_agent = true
 rmcp_client = true
 shell_snapshot = true
 skills = true
