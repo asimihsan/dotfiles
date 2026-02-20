@@ -8,7 +8,6 @@ model_reasoning_effort = "xhigh"
 model_reasoning_summary = "detailed" # auto, concise, detailed
 model_verbosity = "high" # low, medium, high
 web_search = "live"
-personality = "pragmatic"
 
 # [mcp_servers.context7]
 # command = "npx"
