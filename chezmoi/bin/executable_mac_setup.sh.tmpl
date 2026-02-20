@@ -233,21 +233,201 @@ EOF_SUDO
   rm -f "$tmp"
 }
 
-ensure_restic_keychain_password() {
-  local service="restic-repo-main"
-  local account="$USER"
-  local keychain="${RESTIC_KEYCHAIN_PATH:-$HOME/Library/Keychains/login.keychain-db}"
-  local op_password_path="${RESTIC_SECRET_PATH:-}"
+restic_backup_config_path() {
+  local default_config_home="$HOME/.config"
+  local xdg_config_home="${XDG_CONFIG_HOME:-$default_config_home}"
+  if [[ -n "${RESTIC_BACKUP_CONFIG:-}" ]]; then
+    printf "%s\n" "$RESTIC_BACKUP_CONFIG"
+  else
+    printf "%s/restic-backup/config.toml\n" "$xdg_config_home"
+  fi
+}
 
-{{ if eq .chezmoi.hostname "yov3bc" }}
-  op_password_path="${op_password_path:-op://Private/restic-backup-yov3bc-202407 backup password/password}"
-{{ else if eq .chezmoi.hostname "okzf68" }}
-  op_password_path="${op_password_path:-op://Private/restic-backup-okzf68-202507 backup password/password}"
-{{ else if eq .chezmoi.hostname "hlru5i" }}
-  op_password_path="${op_password_path:-op://Private/restic-backup-hlru5i-202407 backup password/password}"
-{{ else if eq .chezmoi.hostname "im9ibk" }}
-  op_password_path="${op_password_path:-op://Private/restic-backup-im9ibk-202507 backup password/password}"
-{{ end }}
+restic_secret_specs_for_host() {
+  local host="$1"
+  case "$host" in
+    yov3bc)
+      cat <<'EOF'
+restic-repo-main|op://Private/restic-backup-yov3bc-202407 backup password/password
+EOF
+      ;;
+    okzf68)
+      cat <<'EOF'
+restic-repo-main|op://Private/restic-backup-okzf68-202507 backup password/password
+EOF
+      ;;
+    hlru5i)
+      cat <<'EOF'
+restic-repo-main|op://Private/restic-backup-hlru5i-202407 backup password/password
+EOF
+      ;;
+    im9ibk)
+      cat <<'EOF'
+restic-repo-main|op://Private/restic-backup-im9ibk-202507 backup password/password
+EOF
+      ;;
+  esac
+}
+
+print_restic_secret_requirements() {
+  cat <<'EOF'
+Required 1Password secret mappings for restic keychain provisioning:
+  service: restic-repo-main
+    yov3bc -> op://Private/restic-backup-yov3bc-202407 backup password/password
+    okzf68 -> op://Private/restic-backup-okzf68-202507 backup password/password
+    hlru5i -> op://Private/restic-backup-hlru5i-202407 backup password/password
+    im9ibk -> op://Private/restic-backup-im9ibk-202507 backup password/password
+
+Notes:
+  - Expected field is the `password` field on each item.
+  - Override per-run with RESTIC_SECRET_PATH (+ optional RESTIC_SECRET_SERVICE).
+  - Force update existing keychain values with RESTIC_KEYCHAIN_FORCE_UPDATE=1.
+EOF
+}
+
+restic_services_from_config() {
+  local config_path="$1"
+  if [[ ! -r "$config_path" ]]; then
+    echo "Error: restic config not found: $config_path" >&2
+    return 1
+  fi
+
+  restic_services_from_config_fallback() {
+    local fallback_path="$1"
+    local detected=()
+    local line=""
+    local service=""
+
+    while IFS= read -r line; do
+      [[ "$line" == *"password_command"* ]] || continue
+      service="$(printf "%s\n" "$line" | sed -nE "s/.*(--service=|-s[[:space:]]+)([^[:space:]\"']+).*/\\2/p")"
+      [[ -n "$service" ]] && detected+=("$service")
+    done <"$fallback_path"
+
+    if [[ ${#detected[@]} -eq 0 ]]; then
+      detected=("restic-repo-main")
+    fi
+
+    printf "%s\n" "${detected[@]}" | awk '!seen[$0]++'
+  }
+
+  if ! command_exists python3; then
+    echo "Warning: python3 unavailable; using fallback parser for $config_path" >&2
+    restic_services_from_config_fallback "$config_path"
+    return 0
+  fi
+  if ! python3 - <<'PY' >/dev/null 2>&1
+import tomllib  # noqa: F401
+PY
+  then
+    echo "Warning: python3 lacks tomllib; using fallback parser for $config_path" >&2
+    restic_services_from_config_fallback "$config_path"
+    return 0
+  fi
+
+  if ! python3 - "$config_path" <<'PY'
+import shlex
+import sys
+import tomllib
+from pathlib import Path
+
+path = Path(sys.argv[1]).expanduser()
+with path.open("rb") as handle:
+    data = tomllib.load(handle)
+
+services: list[str] = []
+
+
+def add_service_from_command(command: object) -> None:
+    if not isinstance(command, str):
+        return
+    tokens = shlex.split(command)
+    for index, token in enumerate(tokens):
+        if token == "-s" and index + 1 < len(tokens):
+            candidate = tokens[index + 1].strip()
+            if candidate and candidate not in services:
+                services.append(candidate)
+            return
+        if token.startswith("--service="):
+            candidate = token.split("=", 1)[1].strip()
+            if candidate and candidate not in services:
+                services.append(candidate)
+            return
+
+
+repository = data.get("repository")
+if isinstance(repository, dict):
+    add_service_from_command(repository.get("password_command"))
+
+repositories = data.get("repositories")
+if isinstance(repositories, dict):
+    for value in repositories.values():
+        if isinstance(value, dict):
+            add_service_from_command(value.get("password_command"))
+
+if not services:
+    services.append("restic-repo-main")
+
+for service in services:
+    print(service)
+PY
+  then
+    echo "Warning: failed to parse $config_path with python tomllib; using fallback parser" >&2
+    restic_services_from_config_fallback "$config_path"
+  fi
+}
+
+op_path_for_service() {
+  local wanted_service="$1"
+  local specs="$2"
+  local spec_service=""
+  local spec_path=""
+
+  while IFS='|' read -r spec_service spec_path; do
+    [[ -z "$spec_service" ]] && continue
+    if [[ "$spec_service" == "$wanted_service" ]]; then
+      printf "%s\n" "$spec_path"
+      return 0
+    fi
+  done <<<"$specs"
+  return 1
+}
+
+ensure_restic_mapping_coverage() {
+  local host="$1"
+  local specs="$2"
+  shift 2
+  local services=("$@")
+  local missing=()
+  local service=""
+
+  for service in "${services[@]}"; do
+    if ! op_path_for_service "$service" "$specs" >/dev/null; then
+      missing+=("$service")
+    fi
+  done
+
+  if [[ ${#missing[@]} -gt 0 ]]; then
+    echo "Error: missing 1Password mappings for restic service(s): ${missing[*]} on host '$host'" >&2
+    print_restic_secret_requirements >&2
+    exit 1
+  fi
+
+  if [[ "$host" == "hlru5i" ]]; then
+    local hlru5i_path=""
+    hlru5i_path="$(op_path_for_service "restic-repo-main" "$specs" || true)"
+    if [[ -z "$hlru5i_path" || "$hlru5i_path" != *"restic-backup-hlru5i-"* ]]; then
+      echo "Error: hlru5i mapping for restic-repo-main is missing or unexpected: $hlru5i_path" >&2
+      exit 1
+    fi
+  fi
+}
+
+ensure_keychain_item_from_1password() {
+  local service="$1"
+  local op_password_path="$2"
+  local account="$3"
+  local keychain="$4"
 
   if security find-generic-password -a "$account" -s "$service" "$keychain" >/dev/null 2>&1 \
     && [[ "${RESTIC_KEYCHAIN_FORCE_UPDATE:-0}" != "1" ]]; then
@@ -262,28 +442,108 @@ ensure_restic_keychain_password() {
   fi
 
   if ! command_exists op; then
-    echo "Error: 1Password CLI (op) not found; cannot fetch restic password." >&2
+    echo "Error: 1Password CLI (op) not found; cannot fetch restic secret for '$service'." >&2
     exit 1
   fi
 
   if [[ -z "$op_password_path" ]]; then
-    echo "Error: 1Password password path not configured for this host." >&2
+    echo "Error: 1Password path for restic service '$service' is empty." >&2
+    print_restic_secret_requirements >&2
     exit 1
   fi
 
   local restic_pass=""
   if ! restic_pass=$(op read "$op_password_path"); then
-    echo "Error: failed to read restic password from 1Password." >&2
+    echo "Error: failed to read restic secret for '$service' from '$op_password_path'." >&2
     exit 1
   fi
   if [[ -z "$restic_pass" ]]; then
-    echo "Error: restic password from 1Password is empty." >&2
+    echo "Error: 1Password secret for '$service' from '$op_password_path' is empty." >&2
     exit 1
   fi
 
   security add-generic-password -a "$account" -s "$service" -w "$restic_pass" -U \
     -T /usr/bin/security \
     "$keychain" >/dev/null
+}
+
+verify_restic_keychain_passwords() {
+  local account="$1"
+  local keychain="$2"
+  shift 2
+  local services=("$@")
+  local service=""
+  local missing=()
+
+  for service in "${services[@]}"; do
+    if ! security find-generic-password -a "$account" -s "$service" "$keychain" >/dev/null 2>&1; then
+      missing+=("$service")
+    fi
+  done
+
+  if [[ ${#missing[@]} -gt 0 ]]; then
+    echo "Error: missing restic keychain item(s) after provisioning: ${missing[*]}" >&2
+    exit 1
+  fi
+
+  fancy_echo "Verified restic keychain item(s): %s" "${services[*]}"
+}
+
+ensure_restic_keychain_passwords() {
+  local account="$USER"
+  local keychain="${RESTIC_KEYCHAIN_PATH:-$HOME/Library/Keychains/login.keychain-db}"
+  local current_host
+  current_host="$(scutil --get ComputerName 2>/dev/null || hostname)"
+  current_host="${current_host%%.*}"
+
+  local config_path
+  config_path="$(restic_backup_config_path)"
+
+  local configured_services=()
+  while IFS= read -r service; do
+    [[ -n "$service" ]] && configured_services+=("$service")
+  done < <(restic_services_from_config "$config_path")
+
+  if [[ ${#configured_services[@]} -eq 0 ]]; then
+    echo "Error: no restic services discovered from config: $config_path" >&2
+    exit 1
+  fi
+
+  local secret_specs=""
+  if [[ -n "${RESTIC_SECRET_PATH:-}" ]]; then
+    local override_service="${RESTIC_SECRET_SERVICE:-}"
+    if [[ -z "$override_service" ]]; then
+      if [[ ${#configured_services[@]} -eq 1 ]]; then
+        override_service="${configured_services[0]}"
+      else
+        override_service="restic-repo-main"
+      fi
+    fi
+    secret_specs="${override_service}|${RESTIC_SECRET_PATH}"
+  else
+    secret_specs="$(restic_secret_specs_for_host "$current_host")"
+  fi
+
+  if [[ -z "$secret_specs" ]]; then
+    echo "Error: no restic 1Password mapping configured for host '$current_host'." >&2
+    print_restic_secret_requirements >&2
+    exit 1
+  fi
+
+  ensure_restic_mapping_coverage "$current_host" "$secret_specs" "${configured_services[@]}"
+
+  local service=""
+  local op_password_path=""
+  for service in "${configured_services[@]}"; do
+    op_password_path="$(op_path_for_service "$service" "$secret_specs" || true)"
+    if [[ -z "$op_password_path" ]]; then
+      echo "Error: missing 1Password mapping for restic service '$service' on '$current_host'." >&2
+      exit 1
+    fi
+    ensure_keychain_item_from_1password "$service" "$op_password_path" "$account" "$keychain"
+  done
+
+  verify_restic_keychain_passwords "$account" "$keychain" "${configured_services[@]}"
 }
 
 update_homebrew() {
@@ -305,8 +565,8 @@ update_mise() {
 }
 
 install_awscli() {
-  mise install awscli ref:$(mise latest awscli 2)
-  mise use -g awscli@$(mise latest awscli 2)
+  mise install awscli "ref:$(mise latest awscli 2)"
+  mise use -g "awscli@$(mise latest awscli 2)"
 }
 
 install_pragmasevka_font() {
@@ -439,7 +699,6 @@ main() {
   # Parse CLI flags early
   local PROFILE=""
   local NEW_HOSTNAME=""
-  local HOSTNAME_ONLY="0"
   while getopts "p:n:h" opt; do
     case $opt in
       p) PROFILE=$OPTARG ;;
@@ -481,7 +740,7 @@ main() {
   install_1password_cli
   install_gh_cli
   init_chezmoi
-  ensure_restic_keychain_password
+  ensure_restic_keychain_passwords
   ensure_restic_sudoers
 
   mac_system_setup
@@ -493,6 +752,14 @@ main() {
   update_cursor_agent
   fancy_echo "Mac setup/update complete for profile '$PROFILE'."
 }
+
+# Allow unit-style function testing without running main.
+if [[ "${MAC_SETUP_SKIP_MAIN:-0}" == "1" ]]; then
+  if [[ "${BASH_SOURCE[0]}" != "$0" ]]; then
+    return 0
+  fi
+  exit 0
+fi
 
 # If invoked directly with --hostname-only NEWNAME, handle it before main()
 if [[ ${1:-} == "--hostname-only" ]]; then
