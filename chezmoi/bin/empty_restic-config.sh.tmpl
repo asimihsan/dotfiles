@@ -1,58 +1,209 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# Configuration file for restic backup script
+# Legacy config shim for executable_restic-backup.sh.
+# Canonical config now lives in:
+#   ${RESTIC_BACKUP_CONFIG:-${XDG_CONFIG_HOME:-$HOME/.config}/restic-backup/config.toml}
+#
+# During migration this file attempts to bridge TOML config into legacy shell env vars.
+# If bridge loading fails, it falls back to host-specific defaults.
 
-# Rclone configuration
 DROPBOX_REMOTE="dropbox"
+ALIAS_REMOTE="${ALIAS_REMOTE:-}"
+DROPBOX_PATH="${DROPBOX_PATH:-}"
+PASSWORD_COMMAND="${PASSWORD_COMMAND:-}"
+BACKUP_PATHS=()
 
+restic_backup_config_path() {
+  if [[ -n "${RESTIC_BACKUP_CONFIG:-}" ]]; then
+    printf "%s\n" "$RESTIC_BACKUP_CONFIG"
+  elif [[ -n "${XDG_CONFIG_HOME:-}" ]]; then
+    printf "%s/restic-backup/config.toml\n" "$XDG_CONFIG_HOME"
+  else
+    printf "%s/.config/restic-backup/config.toml\n" "$HOME"
+  fi
+}
+
+load_legacy_env_from_xdg_config() {
+  local config_path="$1"
+  [[ -r "$config_path" ]] || return 2
+  if ! command -v python3 >/dev/null 2>&1; then
+    echo "Warning: python3 not found; cannot bridge restic legacy env from $config_path" >&2
+    return 1
+  fi
+  if ! python3 - <<'PY' >/dev/null 2>&1
+import tomllib  # noqa: F401
+PY
+  then
+    echo "Warning: python3 lacks tomllib (requires Python 3.11+); cannot bridge $config_path" >&2
+    return 1
+  fi
+
+  local bridge_output=""
+  if ! bridge_output="$(python3 - "$config_path" <<'PY'
+import shlex
+import sys
+import tomllib
+from pathlib import Path
+
+path = Path(sys.argv[1]).expanduser()
+with path.open("rb") as handle:
+    data = tomllib.load(handle)
+
+repository = data.get("repository")
+if not isinstance(repository, dict):
+    repository = {}
+
+uri = repository.get("uri", "")
+if not isinstance(uri, str):
+    uri = ""
+
+alias_remote = ""
+if uri.startswith("rclone:") and uri.endswith(":"):
+    alias_remote = uri[len("rclone:"):-1]
+
+password_command = repository.get("password_command", "")
+if not isinstance(password_command, str):
+    password_command = ""
+
+legacy = data.get("legacy")
+if not isinstance(legacy, dict):
+    legacy = {}
+
+dropbox_remote = legacy.get("dropbox_remote", "dropbox")
+if not isinstance(dropbox_remote, str):
+    dropbox_remote = "dropbox"
+
+dropbox_path = legacy.get("dropbox_path", "")
+if not isinstance(dropbox_path, str):
+    dropbox_path = ""
+
+defaults = data.get("defaults")
+if not isinstance(defaults, dict):
+    defaults = {}
+
+jobs = data.get("jobs")
+if not isinstance(jobs, dict):
+    jobs = {}
+
+default_job = defaults.get("default_job")
+if not isinstance(default_job, str) or not default_job:
+    if len(jobs) == 1:
+        default_job = next(iter(jobs))
+    else:
+        default_job = ""
+
+backup_paths: list[str] = []
+if default_job and isinstance(jobs.get(default_job), dict):
+    raw_paths = jobs[default_job].get("paths")
+    if isinstance(raw_paths, list):
+        for path_item in raw_paths:
+            if isinstance(path_item, str) and path_item.strip():
+                normalized = path_item.strip()
+                if normalized == "~":
+                    backup_paths.append(normalized)
+                    continue
+                if normalized.startswith("~/"):
+                    backup_paths.append(normalized)
+                    continue
+                if normalized.startswith("$HOME/"):
+                    backup_paths.append("~/" + normalized[len("$HOME/"):])
+                    continue
+                if normalized.startswith("${HOME}/"):
+                    backup_paths.append("~/" + normalized[len("${HOME}/"):])
+                    continue
+                home = str(Path.home())
+                if normalized == home:
+                    backup_paths.append("~")
+                    continue
+                if normalized.startswith(home + "/"):
+                    backup_paths.append("~/" + normalized[len(home) + 1 :])
+                    continue
+                print(
+                    "Warning: backup path does not use home-relative syntax and may bypass "
+                    "legacy APFS snapshot handling: "
+                    + normalized,
+                    file=sys.stderr,
+                )
+                backup_paths.append(normalized)
+
+print(f"ALIAS_REMOTE={shlex.quote(alias_remote)}")
+print(f"PASSWORD_COMMAND={shlex.quote(password_command)}")
+print(f"DROPBOX_REMOTE={shlex.quote(dropbox_remote)}")
+print(f"DROPBOX_PATH={shlex.quote(dropbox_path)}")
+print("BACKUP_PATHS=(")
+for backup_path in backup_paths:
+    print(f"  {shlex.quote(backup_path)}")
+print(")")
+PY
+)"; then
+    echo "Warning: failed to parse restic TOML bridge config at $config_path" >&2
+    return 1
+  fi
+
+  eval "$bridge_output"
+}
+
+load_host_defaults() {
+  DROPBOX_REMOTE="dropbox"
 {{ if eq .chezmoi.hostname "yov3bc" }}
-ALIAS_REMOTE="dropbox-alias-backup-yov3bc"
-DROPBOX_PATH="/Asim Ihsan/Apps/restic-backup-yov3bc-202407"
-PASSWORD_COMMAND='security find-generic-password -a "{{ .chezmoi.username }}" -s restic-repo-main -w "{{ .chezmoi.homeDir }}/Library/Keychains/login.keychain-db"'
+  ALIAS_REMOTE="dropbox-alias-backup-yov3bc"
+  DROPBOX_PATH="/Asim Ihsan/Apps/restic-backup-yov3bc-202407"
 {{ else if eq .chezmoi.hostname "okzf68" }}
-ALIAS_REMOTE="dropbox-alias-backup-okzf68"
-DROPBOX_PATH="/Asim Ihsan/Apps/restic-backup-okzf68-202507"
-PASSWORD_COMMAND='security find-generic-password -a "{{ .chezmoi.username }}" -s restic-repo-main -w "{{ .chezmoi.homeDir }}/Library/Keychains/login.keychain-db"'
+  ALIAS_REMOTE="dropbox-alias-backup-okzf68"
+  DROPBOX_PATH="/Asim Ihsan/Apps/restic-backup-okzf68-202507"
 {{ else if eq .chezmoi.hostname "hlru5i" }}
-ALIAS_REMOTE="dropbox-alias-backup-hlru5i"
-DROPBOX_PATH="/Asim Ihsan/Apps/restic-backup-hlru5i-202407"
-PASSWORD_COMMAND='security find-generic-password -a "{{ .chezmoi.username }}" -s restic-repo-main -w "{{ .chezmoi.homeDir }}/Library/Keychains/login.keychain-db"'
+  ALIAS_REMOTE="dropbox-alias-backup-hlru5i"
+  DROPBOX_PATH="/Asim Ihsan/Apps/restic-backup-hlru5i-202407"
 {{ else if eq .chezmoi.hostname "im9ibk" }}
-ALIAS_REMOTE="dropbox-alias-backup-im9ibk"
-DROPBOX_PATH="/Asim Ihsan/Apps/restic-backup-im9ibk-202507"
-PASSWORD_COMMAND='security find-generic-password -a "{{ .chezmoi.username }}" -s restic-repo-main -w "{{ .chezmoi.homeDir }}/Library/Keychains/login.keychain-db"'
+  ALIAS_REMOTE="dropbox-alias-backup-im9ibk"
+  DROPBOX_PATH="/Asim Ihsan/Apps/restic-backup-im9ibk-202507"
+{{ else }}
+  ALIAS_REMOTE="dropbox-alias-backup-{{ .chezmoi.hostname }}"
+  DROPBOX_PATH=""
 {{ end }}
-
-# Backup paths
-BACKUP_PATHS=(
-    "$HOME/.claude"
-    "$HOME/.codex"
-    "$HOME/.config"
-    "$HOME/.cursor"
-    "$HOME/.gnupg"
-    "$HOME/.local/share"
-    "$HOME/Desktop"
-    "$HOME/Documents"
-    "$HOME/Downloads"
-    "$HOME/Library/Application Support/Cursor/User"
-    "$HOME/Library/Application Support/Firefox"
-    "$HOME/Library/Keychains"
-    "$HOME/Library/Preferences"
-    "$HOME/Library/Thunderbird"
-    "$HOME/logs"
-    "$HOME/Movies"
-    "$HOME/Music"
-    "$HOME/workplace"
-)
-
+  PASSWORD_COMMAND='security find-generic-password -a "{{ .chezmoi.username }}" -s restic-repo-main -w "{{ .chezmoi.homeDir }}/Library/Keychains/login.keychain-db"'
+  BACKUP_PATHS=(
+    "~/.claude"
+    "~/.codex"
+    "~/.config"
+    "~/.cursor"
+    "~/.gnupg"
+    "~/.local/share"
+    "~/Desktop"
+    "~/Documents"
+    "~/Downloads"
+    "~/Library/Application Support/Cursor/User"
+    "~/Library/Application Support/Firefox"
+    "~/Library/Keychains"
+    "~/Library/Preferences"
+    "~/Library/Thunderbird"
+    "~/logs"
+    "~/Movies"
+    "~/Music"
+    "~/workplace"
 {{ if eq .chezmoi.hostname "hlru5i" }}
-BACKUP_PATHS+=(
-    "$HOME/Obsidian"
-    "$HOME/personal-documents-copy/PD07Subset02.sparsebundle"
-    "$HOME/Dropbox/Private/Personal Documents (dropbox)"
-)
+    "~/Obsidian"
+    "~/personal-documents-copy/PD07Subset02.sparsebundle"
+    "~/Dropbox/Private/Personal Documents (dropbox)"
 {{ else if eq .chezmoi.hostname "okzf68" }}
-BACKUP_PATHS+=(
-    "$HOME/Obsidian"
-)
+    "~/Obsidian"
 {{ end }}
+  )
+}
+
+bridge_failed=false
+if [[ -z "$ALIAS_REMOTE" || -z "$PASSWORD_COMMAND" || ${#BACKUP_PATHS[@]} -eq 0 ]]; then
+  config_path="$(restic_backup_config_path)"
+  if ! load_legacy_env_from_xdg_config "$config_path"; then
+    if [[ -r "$config_path" ]]; then
+      bridge_failed=true
+    fi
+  fi
+fi
+
+if [[ -z "$ALIAS_REMOTE" || -z "$PASSWORD_COMMAND" || ${#BACKUP_PATHS[@]} -eq 0 ]]; then
+  if [[ "$bridge_failed" == "true" ]]; then
+    echo "Warning: falling back to host defaults after bridge failure for ${config_path}" >&2
+  fi
+  load_host_defaults
+fi

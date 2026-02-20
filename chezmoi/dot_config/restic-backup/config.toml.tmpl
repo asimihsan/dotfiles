@@ -1,0 +1,78 @@
+# restic-backup TOML config (managed by chezmoi).
+# Primary runtime: python CLI in ~/workplace/asim-utilities.
+# Compatibility: legacy shell script bridge reads this file when possible.
+
+[repository]
+{{ if eq .chezmoi.hostname "yov3bc" }}
+uri = "rclone:dropbox-alias-backup-yov3bc:"
+{{ else if eq .chezmoi.hostname "okzf68" }}
+uri = "rclone:dropbox-alias-backup-okzf68:"
+{{ else if eq .chezmoi.hostname "hlru5i" }}
+uri = "rclone:dropbox-alias-backup-hlru5i:"
+{{ else if eq .chezmoi.hostname "im9ibk" }}
+uri = "rclone:dropbox-alias-backup-im9ibk:"
+{{ else }}
+uri = "rclone:dropbox-alias-backup-{{ .chezmoi.hostname }}:"
+{{ end }}
+password_command = 'security find-generic-password -a "{{ .chezmoi.username }}" -s restic-repo-main -w "{{ .chezmoi.homeDir }}/Library/Keychains/login.keychain-db"'
+limit_download = 5120
+limit_upload = 2048
+rclone_connections = 5
+verbose = true
+
+[defaults]
+default_job = "main"
+forget_group_by = "host,paths"
+
+[jobs.main]
+paths = [
+  "~/.claude",
+  "~/.codex",
+  "~/.config",
+  "~/.cursor",
+  "~/.gnupg",
+  "~/.local/share",
+  "~/Desktop",
+  "~/Documents",
+  "~/Downloads",
+  "~/Library/Application Support/Cursor/User",
+  "~/Library/Application Support/Firefox",
+  "~/Library/Keychains",
+  "~/Library/Preferences",
+  "~/Library/Thunderbird",
+  "~/logs",
+  "~/Movies",
+  "~/Music",
+  "~/workplace",
+{{ if eq .chezmoi.hostname "hlru5i" }}
+  "~/Obsidian",
+  "~/personal-documents-copy/PD07Subset02.sparsebundle",
+  "~/Dropbox/Private/Personal Documents (dropbox)",
+{{ else if eq .chezmoi.hostname "okzf68" }}
+  "~/Obsidian",
+{{ end }}
+]
+exclude_caches = true
+exclude_file = "{{ .chezmoi.homeDir }}/bin/restic-excludes"
+pack_size = 16
+read_concurrency = 4
+
+[jobs.main.retention]
+keep_hourly = 4
+keep_daily = 7
+keep_weekly = 4
+keep_monthly = 1
+
+[legacy]
+dropbox_remote = "dropbox"
+{{ if eq .chezmoi.hostname "yov3bc" }}
+dropbox_path = "/Asim Ihsan/Apps/restic-backup-yov3bc-202407"
+{{ else if eq .chezmoi.hostname "okzf68" }}
+dropbox_path = "/Asim Ihsan/Apps/restic-backup-okzf68-202507"
+{{ else if eq .chezmoi.hostname "hlru5i" }}
+dropbox_path = "/Asim Ihsan/Apps/restic-backup-hlru5i-202407"
+{{ else if eq .chezmoi.hostname "im9ibk" }}
+dropbox_path = "/Asim Ihsan/Apps/restic-backup-im9ibk-202507"
+{{ else }}
+dropbox_path = ""
+{{ end }}
