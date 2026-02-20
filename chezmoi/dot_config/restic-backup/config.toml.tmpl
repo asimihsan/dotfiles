@@ -67,7 +67,7 @@ paths = [
 {{ end }}
 ]
 exclude_caches = true
-exclude_file = "{{ .chezmoi.homeDir }}/bin/restic-excludes"
+exclude_file = "{{ .chezmoi.homeDir }}/.config/restic-backup/excludes.txt"
 pack_size = 16
 read_concurrency = 4
 

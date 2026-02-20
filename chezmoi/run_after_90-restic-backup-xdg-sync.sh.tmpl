@@ -9,18 +9,24 @@ if [[ "$xdg_config_home" == "$default_config_home" ]]; then
   exit 0
 fi
 
-source_config="${default_config_home}/restic-backup/config.toml"
-target_config="${xdg_config_home}/restic-backup/config.toml"
+sync_file() {
+  local name="$1"
+  local source_config="${default_config_home}/restic-backup/${name}"
+  local target_config="${xdg_config_home}/restic-backup/${name}"
 
-if [[ ! -f "$source_config" ]]; then
-  exit 0
-fi
+  if [[ ! -f "$source_config" ]]; then
+    return 0
+  fi
 
-mkdir -p "$(dirname "$target_config")"
+  mkdir -p "$(dirname "$target_config")"
 
-if [[ -f "$target_config" ]]; then
-  exit 0
-fi
+  if [[ -f "$target_config" ]]; then
+    return 0
+  fi
 
-install -m 600 "$source_config" "$target_config"
-echo "Seeded restic-backup config at ${target_config}"
+  install -m 600 "$source_config" "$target_config"
+  echo "Seeded restic-backup file at ${target_config}"
+}
+
+sync_file "config.toml"
+sync_file "excludes.txt"

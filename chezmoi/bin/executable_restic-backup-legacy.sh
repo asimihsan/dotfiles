@@ -11,6 +11,8 @@ if command -v mise >/dev/null 2>&1; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+RESTIC_CONFIG_HOME="${XDG_CONFIG_HOME:-${HOME}/.config}"
+RESTIC_EXCLUDES_FILE="${RESTIC_CONFIG_HOME}/restic-backup/excludes.txt"
 
 ORIGINAL_ALIAS_REMOTE="${ALIAS_REMOTE:-}"
 ORIGINAL_PASSWORD_COMMAND="${PASSWORD_COMMAND:-}"
@@ -578,10 +580,14 @@ do_backup() {
         tag-cache-dirs --root-dir ~/workplace --root-dir ~/Downloads
     fi
 
+    if [[ ! -f "$RESTIC_EXCLUDES_FILE" ]]; then
+        error "Restic excludes file not found: $RESTIC_EXCLUDES_FILE"
+    fi
+
     export MISE_DISABLE_TRUST_CHECK=1
     run_restic backup \
         --exclude-caches \
-        --exclude-file "${SCRIPT_DIR}/restic-excludes" \
+        --exclude-file "$RESTIC_EXCLUDES_FILE" \
         --pack-size 16 \
         --read-concurrency 4 \
         "${snap_paths[@]}"
