@@ -243,90 +243,92 @@ restic_backup_config_path() {
   fi
 }
 
-restic_secret_specs_for_host() {
-  local host="$1"
-  case "$host" in
-    yov3bc)
-      cat <<'EOF'
-restic-repo-main|op://Private/restic-backup-yov3bc-202407 backup password/password
-EOF
-      ;;
-    okzf68)
-      cat <<'EOF'
-restic-repo-main|op://Private/restic-backup-okzf68-202507 backup password/password
-EOF
-      ;;
-    hlru5i)
-      cat <<'EOF'
-restic-repo-main|op://Private/restic-backup-hlru5i-202407 backup password/password
-EOF
-      ;;
-    im9ibk)
-      cat <<'EOF'
-restic-repo-main|op://Private/restic-backup-im9ibk-202507 backup password/password
-EOF
-      ;;
-  esac
+restic_config_python() {
+  if [[ -n "${RESTIC_CONFIG_PYTHON_PATH:-}" ]]; then
+    printf "%s\n" "$RESTIC_CONFIG_PYTHON_PATH"
+    return 0
+  fi
+
+  if command_exists python3 && python3 - <<'PY' >/dev/null 2>&1
+import tomllib  # noqa: F401
+PY
+  then
+    RESTIC_CONFIG_PYTHON_PATH="$(command -v python3)"
+    printf "%s\n" "$RESTIC_CONFIG_PYTHON_PATH"
+    return 0
+  fi
+
+  if ! command_exists mise; then
+    echo "Error: python3 with tomllib is required to parse restic config and mise is unavailable." >&2
+    return 1
+  fi
+
+  fancy_echo "Installing Python runtime via mise for restic config parsing..."
+  local python_version=""
+  if ! python_version="$(mise latest python 3)"; then
+    echo "Error: unable to determine latest Python 3 via mise." >&2
+    return 1
+  fi
+  if [[ -z "$python_version" ]]; then
+    echo "Error: mise returned empty Python version." >&2
+    return 1
+  fi
+
+  if ! mise install "python@${python_version}"; then
+    echo "Error: failed to install python@${python_version} via mise." >&2
+    return 1
+  fi
+  if ! mise use -g "python@${python_version}"; then
+    echo "Error: failed to activate python@${python_version} globally via mise." >&2
+    return 1
+  fi
+  eval "$(mise activate bash)" || true
+
+  if command_exists python3 && python3 - <<'PY' >/dev/null 2>&1
+import tomllib  # noqa: F401
+PY
+  then
+    RESTIC_CONFIG_PYTHON_PATH="$(command -v python3)"
+    printf "%s\n" "$RESTIC_CONFIG_PYTHON_PATH"
+    return 0
+  fi
+
+  echo "Error: python3 with tomllib remains unavailable after mise install." >&2
+  return 1
 }
 
 print_restic_secret_requirements() {
   cat <<'EOF'
-Required 1Password secret mappings for restic keychain provisioning:
-  service: restic-repo-main
-    yov3bc -> op://Private/restic-backup-yov3bc-202407 backup password/password
-    okzf68 -> op://Private/restic-backup-okzf68-202507 backup password/password
-    hlru5i -> op://Private/restic-backup-hlru5i-202407 backup password/password
-    im9ibk -> op://Private/restic-backup-im9ibk-202507 backup password/password
+Restic keychain provisioning requirements:
+  [defaults]
+  target_host = "<configured host>"
+
+  [repositories.<host>]
+  uri = "rclone:..."
+  password_service = "restic-repo-<host>"
+  onepassword_ref = "op://... password/password"
 
 Notes:
-  - Expected field is the `password` field on each item.
-  - Override per-run with RESTIC_SECRET_PATH (+ optional RESTIC_SECRET_SERVICE).
-  - Force update existing keychain values with RESTIC_KEYCHAIN_FORCE_UPDATE=1.
+  - On hlru5i, mac_setup provisions all configured repository services.
+  - On other hosts, mac_setup provisions the current host service (or defaults.target_host fallback).
+  - Expected 1Password field is `password`.
+  - A Python runtime with tomllib is required and will be installed via mise when missing.
 EOF
 }
 
-restic_services_from_config() {
+restic_target_host_from_config() {
   local config_path="$1"
   if [[ ! -r "$config_path" ]]; then
     echo "Error: restic config not found: $config_path" >&2
     return 1
   fi
 
-  restic_services_from_config_fallback() {
-    local fallback_path="$1"
-    local detected=()
-    local line=""
-    local service=""
-
-    while IFS= read -r line; do
-      [[ "$line" == *"password_command"* ]] || continue
-      service="$(printf "%s\n" "$line" | sed -nE "s/.*(--service=|-s[[:space:]]+)([^[:space:]\"']+).*/\\2/p")"
-      [[ -n "$service" ]] && detected+=("$service")
-    done <"$fallback_path"
-
-    if [[ ${#detected[@]} -eq 0 ]]; then
-      detected=("restic-repo-main")
-    fi
-
-    printf "%s\n" "${detected[@]}" | awk '!seen[$0]++'
-  }
-
-  if ! command_exists python3; then
-    echo "Warning: python3 unavailable; using fallback parser for $config_path" >&2
-    restic_services_from_config_fallback "$config_path"
-    return 0
-  fi
-  if ! python3 - <<'PY' >/dev/null 2>&1
-import tomllib  # noqa: F401
-PY
-  then
-    echo "Warning: python3 lacks tomllib; using fallback parser for $config_path" >&2
-    restic_services_from_config_fallback "$config_path"
-    return 0
+  local parser_python=""
+  if ! parser_python="$(restic_config_python)"; then
+    return 1
   fi
 
-  if ! python3 - "$config_path" <<'PY'
-import shlex
+  if ! "$parser_python" - "$config_path" <<'PY'
 import sys
 import tomllib
 from pathlib import Path
@@ -335,92 +337,116 @@ path = Path(sys.argv[1]).expanduser()
 with path.open("rb") as handle:
     data = tomllib.load(handle)
 
-services: list[str] = []
-
-
-def add_service_from_command(command: object) -> None:
-    if not isinstance(command, str):
-        return
-    tokens = shlex.split(command)
-    for index, token in enumerate(tokens):
-        if token == "-s" and index + 1 < len(tokens):
-            candidate = tokens[index + 1].strip()
-            if candidate and candidate not in services:
-                services.append(candidate)
-            return
-        if token.startswith("--service="):
-            candidate = token.split("=", 1)[1].strip()
-            if candidate and candidate not in services:
-                services.append(candidate)
-            return
-
-
-repository = data.get("repository")
-if isinstance(repository, dict):
-    add_service_from_command(repository.get("password_command"))
-
 repositories = data.get("repositories")
-if isinstance(repositories, dict):
-    for value in repositories.values():
-        if isinstance(value, dict):
-            add_service_from_command(value.get("password_command"))
+if not isinstance(repositories, dict) or not repositories:
+    print("Error: expected non-empty [repositories] table in restic config", file=sys.stderr)
+    raise SystemExit(1)
 
-if not services:
-    services.append("restic-repo-main")
+defaults = data.get("defaults")
+if not isinstance(defaults, dict):
+    print("Error: missing [defaults] table in restic config", file=sys.stderr)
+    raise SystemExit(1)
 
-for service in services:
-    print(service)
+target_host = defaults.get("target_host")
+if not isinstance(target_host, str) or not target_host.strip():
+    print("Error: defaults.target_host must be a non-empty string", file=sys.stderr)
+    raise SystemExit(1)
+
+target_host = target_host.strip()
+if target_host not in repositories:
+    print(
+        f"Error: defaults.target_host '{target_host}' is not defined under [repositories]",
+        file=sys.stderr,
+    )
+    raise SystemExit(1)
+
+print(target_host)
 PY
   then
-    echo "Warning: failed to parse $config_path with python tomllib; using fallback parser" >&2
-    restic_services_from_config_fallback "$config_path"
+    return 1
   fi
 }
 
-op_path_for_service() {
-  local wanted_service="$1"
-  local specs="$2"
-  local spec_service=""
-  local spec_path=""
+restic_repository_specs_from_config() {
+  local config_path="$1"
+  if [[ ! -r "$config_path" ]]; then
+    echo "Error: restic config not found: $config_path" >&2
+    return 1
+  fi
+  local parser_python=""
+  if ! parser_python="$(restic_config_python)"; then
+    return 1
+  fi
 
-  while IFS='|' read -r spec_service spec_path; do
-    [[ -z "$spec_service" ]] && continue
-    if [[ "$spec_service" == "$wanted_service" ]]; then
-      printf "%s\n" "$spec_path"
+  if ! "$parser_python" - "$config_path" <<'PY'
+import sys
+import tomllib
+from pathlib import Path
+
+
+def fail(message: str) -> "None":
+    print(f"Error: {message}", file=sys.stderr)
+    raise SystemExit(1)
+
+
+path = Path(sys.argv[1]).expanduser()
+with path.open("rb") as handle:
+    data = tomllib.load(handle)
+
+repositories = data.get("repositories")
+if not isinstance(repositories, dict) or not repositories:
+    fail("expected non-empty [repositories] table in restic config")
+
+seen_services: dict[str, str] = {}
+
+for host in sorted(repositories):
+    value = repositories[host]
+    if not isinstance(value, dict):
+        fail(f"[repositories.{host}] must be a table")
+
+    uri = value.get("uri")
+    service = value.get("password_service")
+    onepassword_ref = value.get("onepassword_ref")
+
+    if not isinstance(uri, str) or not uri.strip():
+        fail(f"[repositories.{host}].uri must be a non-empty string")
+    if not isinstance(service, str) or not service.strip():
+        fail(f"[repositories.{host}].password_service must be a non-empty string")
+    if not isinstance(onepassword_ref, str) or not onepassword_ref.strip():
+        fail(f"[repositories.{host}].onepassword_ref must be a non-empty string")
+
+    service = service.strip()
+    onepassword_ref = onepassword_ref.strip()
+    if "|" in service or "|" in onepassword_ref:
+        fail(f"[repositories.{host}] values may not include '|'")
+    if service in seen_services:
+        previous_host = seen_services[service]
+        fail(
+            f"duplicate password_service '{service}' in [repositories.{host}] "
+            f"and [repositories.{previous_host}]"
+        )
+    seen_services[service] = host
+    print(f"{host}|{service}|{onepassword_ref}")
+PY
+  then
+    return 1
+  fi
+}
+
+restic_repository_spec_for_host() {
+  local wanted_host="$1"
+  shift
+
+  local spec=""
+  local spec_host=""
+  for spec in "$@"; do
+    IFS='|' read -r spec_host _ <<<"$spec"
+    if [[ "$spec_host" == "$wanted_host" ]]; then
+      printf "%s\n" "$spec"
       return 0
     fi
-  done <<<"$specs"
-  return 1
-}
-
-ensure_restic_mapping_coverage() {
-  local host="$1"
-  local specs="$2"
-  shift 2
-  local services=("$@")
-  local missing=()
-  local service=""
-
-  for service in "${services[@]}"; do
-    if ! op_path_for_service "$service" "$specs" >/dev/null; then
-      missing+=("$service")
-    fi
   done
-
-  if [[ ${#missing[@]} -gt 0 ]]; then
-    echo "Error: missing 1Password mappings for restic service(s): ${missing[*]} on host '$host'" >&2
-    print_restic_secret_requirements >&2
-    exit 1
-  fi
-
-  if [[ "$host" == "hlru5i" ]]; then
-    local hlru5i_path=""
-    hlru5i_path="$(op_path_for_service "restic-repo-main" "$specs" || true)"
-    if [[ -z "$hlru5i_path" || "$hlru5i_path" != *"restic-backup-hlru5i-"* ]]; then
-      echo "Error: hlru5i mapping for restic-repo-main is missing or unexpected: $hlru5i_path" >&2
-      exit 1
-    fi
-  fi
+  return 1
 }
 
 ensure_keychain_item_from_1password() {
@@ -499,51 +525,59 @@ ensure_restic_keychain_passwords() {
   local config_path
   config_path="$(restic_backup_config_path)"
 
-  local configured_services=()
-  while IFS= read -r service; do
-    [[ -n "$service" ]] && configured_services+=("$service")
-  done < <(restic_services_from_config "$config_path")
+  local target_host
+  target_host="$(restic_target_host_from_config "$config_path")"
 
-  if [[ ${#configured_services[@]} -eq 0 ]]; then
-    echo "Error: no restic services discovered from config: $config_path" >&2
+  local repository_specs=()
+  while IFS= read -r spec; do
+    [[ -n "$spec" ]] && repository_specs+=("$spec")
+  done < <(restic_repository_specs_from_config "$config_path")
+
+  if [[ ${#repository_specs[@]} -eq 0 ]]; then
+    echo "Error: no restic repositories discovered from config: $config_path" >&2
     exit 1
   fi
 
-  local secret_specs=""
-  if [[ -n "${RESTIC_SECRET_PATH:-}" ]]; then
-    local override_service="${RESTIC_SECRET_SERVICE:-}"
-    if [[ -z "$override_service" ]]; then
-      if [[ ${#configured_services[@]} -eq 1 ]]; then
-        override_service="${configured_services[0]}"
-      else
-        override_service="restic-repo-main"
-      fi
-    fi
-    secret_specs="${override_service}|${RESTIC_SECRET_PATH}"
+  local selected_specs=()
+  if [[ "$current_host" == "hlru5i" ]]; then
+    selected_specs=("${repository_specs[@]}")
+    fancy_echo "Provisioning restic keychain items for all configured hosts on %s." "$current_host"
   else
-    secret_specs="$(restic_secret_specs_for_host "$current_host")"
-  fi
+    local selected_host="$current_host"
+    local selected_spec=""
+    selected_spec="$(restic_repository_spec_for_host "$selected_host" "${repository_specs[@]}" || true)"
 
-  if [[ -z "$secret_specs" ]]; then
-    echo "Error: no restic 1Password mapping configured for host '$current_host'." >&2
-    print_restic_secret_requirements >&2
-    exit 1
-  fi
+    if [[ -z "$selected_spec" ]]; then
+      selected_host="$target_host"
+      selected_spec="$(restic_repository_spec_for_host "$selected_host" "${repository_specs[@]}" || true)"
+    fi
 
-  ensure_restic_mapping_coverage "$current_host" "$secret_specs" "${configured_services[@]}"
-
-  local service=""
-  local op_password_path=""
-  for service in "${configured_services[@]}"; do
-    op_password_path="$(op_path_for_service "$service" "$secret_specs" || true)"
-    if [[ -z "$op_password_path" ]]; then
-      echo "Error: missing 1Password mapping for restic service '$service' on '$current_host'." >&2
+    if [[ -z "$selected_spec" ]]; then
+      echo "Error: no repository mapping found for current host '$current_host' or target host '$target_host'." >&2
+      print_restic_secret_requirements >&2
       exit 1
     fi
+
+    selected_specs=("$selected_spec")
+    fancy_echo "Provisioning restic keychain item for host %s." "$selected_host"
+  fi
+
+  local services_to_verify=()
+  local spec=""
+  local spec_host=""
+  local service=""
+  local op_password_path=""
+  for spec in "${selected_specs[@]}"; do
+    IFS='|' read -r spec_host service op_password_path <<<"$spec"
+    if [[ -z "$service" || -z "$op_password_path" ]]; then
+      echo "Error: invalid repository spec for host '$spec_host': $spec" >&2
+      exit 1
+    fi
+    services_to_verify+=("$service")
     ensure_keychain_item_from_1password "$service" "$op_password_path" "$account" "$keychain"
   done
 
-  verify_restic_keychain_passwords "$account" "$keychain" "${configured_services[@]}"
+  verify_restic_keychain_passwords "$account" "$keychain" "${services_to_verify[@]}"
 }
 
 update_homebrew() {

@@ -1,26 +1,40 @@
 # restic-backup TOML config (managed by chezmoi).
-# Primary runtime: python CLI in ~/workplace/asim-utilities.
-# Compatibility: legacy shell script bridge reads this file when possible.
+# Canonical repository schema:
+#   [repositories.<host>] with uri, password_service, and onepassword_ref.
+#
+# The CLI resolves repository target host from [defaults].target_host unless
+# overridden by CLI flags.
 
-[repository]
-{{ if eq .chezmoi.hostname "yov3bc" }}
-uri = "rclone:dropbox-alias-backup-yov3bc:"
-{{ else if eq .chezmoi.hostname "okzf68" }}
-uri = "rclone:dropbox-alias-backup-okzf68:"
-{{ else if eq .chezmoi.hostname "hlru5i" }}
-uri = "rclone:dropbox-alias-backup-hlru5i:"
-{{ else if eq .chezmoi.hostname "im9ibk" }}
-uri = "rclone:dropbox-alias-backup-im9ibk:"
-{{ else }}
-uri = "rclone:dropbox-alias-backup-{{ .chezmoi.hostname }}:"
-{{ end }}
-password_command = 'security find-generic-password -a "{{ .chezmoi.username }}" -s restic-repo-main -w "{{ .chezmoi.homeDir }}/Library/Keychains/login.keychain-db"'
+[repository_defaults]
 limit_download = 5120
 limit_upload = 2048
 rclone_connections = 5
 verbose = true
+keychain_account = "{{ .chezmoi.username }}"
+keychain_path = "{{ .chezmoi.homeDir }}/Library/Keychains/login.keychain-db"
+
+[repositories.yov3bc]
+uri = "rclone:dropbox-alias-backup-yov3bc:"
+password_service = "restic-repo-yov3bc"
+onepassword_ref = "op://Private/restic-backup-yov3bc-202407 backup password/password"
+
+[repositories.okzf68]
+uri = "rclone:dropbox-alias-backup-okzf68:"
+password_service = "restic-repo-okzf68"
+onepassword_ref = "op://Private/restic-backup-okzf68-202507 backup password/password"
+
+[repositories.hlru5i]
+uri = "rclone:dropbox-alias-backup-hlru5i:"
+password_service = "restic-repo-hlru5i"
+onepassword_ref = "op://Private/restic-backup-hlru5i-202407 backup password/password"
+
+[repositories.im9ibk]
+uri = "rclone:dropbox-alias-backup-im9ibk:"
+password_service = "restic-repo-im9ibk"
+onepassword_ref = "op://Private/restic-backup-im9ibk-202507 backup password/password"
 
 [defaults]
+target_host = "{{ .chezmoi.hostname }}"
 default_job = "main"
 forget_group_by = "host,paths"
 
@@ -62,17 +76,3 @@ keep_hourly = 4
 keep_daily = 7
 keep_weekly = 4
 keep_monthly = 1
-
-[legacy]
-dropbox_remote = "dropbox"
-{{ if eq .chezmoi.hostname "yov3bc" }}
-dropbox_path = "/Asim Ihsan/Apps/restic-backup-yov3bc-202407"
-{{ else if eq .chezmoi.hostname "okzf68" }}
-dropbox_path = "/Asim Ihsan/Apps/restic-backup-okzf68-202507"
-{{ else if eq .chezmoi.hostname "hlru5i" }}
-dropbox_path = "/Asim Ihsan/Apps/restic-backup-hlru5i-202407"
-{{ else if eq .chezmoi.hostname "im9ibk" }}
-dropbox_path = "/Asim Ihsan/Apps/restic-backup-im9ibk-202507"
-{{ else }}
-dropbox_path = ""
-{{ end }}
