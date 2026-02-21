@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if ! command -v rclone >/dev/null 2>&1; then
+  echo "Skipping restic rclone alias sync: rclone not found on PATH."
+  exit 0
+fi
+
+if ! command -v python3 >/dev/null 2>&1; then
+  echo "Skipping restic rclone alias sync: python3 not found on PATH."
+  exit 0
+fi
+
+if ! python3 - <<'PY' >/dev/null 2>&1
+import tomllib  # noqa: F401
+PY
+then
+  echo "restic rclone alias sync requires python3 with tomllib (Python 3.11+)." >&2
+  exit 1
+fi
+
+default_config_home="${HOME}/.config"
+xdg_config_home="${XDG_CONFIG_HOME:-$default_config_home}"
+config_path="${RESTIC_BACKUP_CONFIG:-${xdg_config_home}/restic-backup/config.toml}"
+
+if [[ ! -f "$config_path" ]]; then
+  echo "Skipping restic rclone alias sync: config not found at ${config_path}."
+  exit 0
+fi
+
+python3 - "$config_path" <<'PY' | while IFS=$'\t' read -r host alias_name expected_remote; do
+import re
+import sys
+import tomllib
+from pathlib import Path
+
+config_path = Path(sys.argv[1])
+data = tomllib.loads(config_path.read_text())
+repositories = data.get("repositories", {})
+if not isinstance(repositories, dict):
+    raise SystemExit("[repositories] must be a TOML table")
+
+rclone_uri_re = re.compile(r"^rclone:([^:]+):$")
+
+for host, raw_value in sorted(repositories.items()):
+    context = f"repositories.{host}"
+    if not isinstance(raw_value, dict):
+        raise SystemExit(f"{context} must be a TOML table")
+
+    uri = raw_value.get("uri")
+    if not isinstance(uri, str):
+        raise SystemExit(f"{context}.uri must be a string")
+
+    match = rclone_uri_re.match(uri)
+    if match is None:
+        continue
+
+    remote = raw_value.get("rclone_alias_remote")
+    if not isinstance(remote, str) or not remote.strip():
+        raise SystemExit(
+            f"{context} uses rclone URI '{uri}' and must define "
+            "a non-empty rclone_alias_remote"
+        )
+
+    alias = match.group(1)
+    print(f"{host}\t{alias}\t{remote.strip()}")
+PY
+  if [[ -z "$host" || -z "$alias_name" || -z "$expected_remote" ]]; then
+    continue
+  fi
+
+  alias_show_output="$(rclone config show "$alias_name" 2>/dev/null || true)"
+  alias_type="$(printf '%s\n' "$alias_show_output" | sed -n 's/^type = //p' | head -n 1)"
+  alias_remote="$(printf '%s\n' "$alias_show_output" | sed -n 's/^remote = //p' | head -n 1)"
+
+  if [[ -z "$alias_type" ]]; then
+    rclone config create "$alias_name" alias remote="$expected_remote" >/dev/null
+    echo "Created rclone alias ${alias_name} -> ${expected_remote} (from repositories.${host})"
+    continue
+  fi
+
+  if [[ "$alias_type" != "alias" ]]; then
+    echo "rclone remote '${alias_name}' exists with type '${alias_type}', expected type 'alias'." >&2
+    exit 1
+  fi
+
+  if [[ "$alias_remote" == "$expected_remote" ]]; then
+    continue
+  fi
+
+  rclone config update "$alias_name" remote="$expected_remote" >/dev/null
+  echo "Updated rclone alias ${alias_name} -> ${expected_remote} (from repositories.${host})"
+done

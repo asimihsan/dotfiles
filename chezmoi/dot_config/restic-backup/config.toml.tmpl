@@ -1,6 +1,6 @@
 # restic-backup TOML config (managed by chezmoi).
 # Canonical repository schema:
-#   [repositories.<host>] with uri, password_service, and onepassword_ref.
+#   [repositories.<host>] with uri, rclone_alias_remote, password_service, and onepassword_ref.
 #
 # The CLI resolves repository target host from [defaults].target_host unless
 # overridden by CLI flags.
@@ -15,21 +15,25 @@ keychain_path = "{{ .chezmoi.homeDir }}/Library/Keychains/login.keychain-db"
 
 [repositories.yov3bc]
 uri = "rclone:dropbox-alias-backup-yov3bc:"
+rclone_alias_remote = "dropbox:/Asim Ihsan/Apps/restic-backup-yov3bc-202407"
 password_service = "restic-repo-yov3bc"
 onepassword_ref = "op://Private/restic-backup-yov3bc-202407 backup password/password"
 
 [repositories.okzf68]
 uri = "rclone:dropbox-alias-backup-okzf68:"
+rclone_alias_remote = "dropbox:/Asim Ihsan/Apps/restic-backup-okzf68-202507"
 password_service = "restic-repo-okzf68"
 onepassword_ref = "op://Private/restic-backup-okzf68-202507 backup password/password"
 
 [repositories.hlru5i]
 uri = "rclone:dropbox-alias-backup-hlru5i:"
+rclone_alias_remote = "dropbox:/Asim Ihsan/Apps/restic-backup-hlru5i-202407"
 password_service = "restic-repo-hlru5i"
 onepassword_ref = "op://Private/restic-backup-hlru5i-202407 backup password/password"
 
 [repositories.im9ibk]
 uri = "rclone:dropbox-alias-backup-im9ibk:"
+rclone_alias_remote = "dropbox:/Asim Ihsan/Apps/restic-backup-im9ibk-202507"
 password_service = "restic-repo-im9ibk"
 onepassword_ref = "op://Private/restic-backup-im9ibk-202507 backup password/password"
 
