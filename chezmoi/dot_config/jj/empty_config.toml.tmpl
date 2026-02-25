@@ -41,6 +41,12 @@ default-command = "log"
 diff-formatter = ":git"
 paginate = "auto"
 
+[fsmonitor]
+backend = "watchman"
+
+[fsmonitor.watchman]
+register-snapshot-trigger = true
+
 [revsets]
 log = "connected(@ | trunk() | my_bookmarks())"
 

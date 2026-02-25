@@ -1,0 +1,38 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+if [[ -n "${CHEZMOI_SOURCE_DIR:-}" ]]; then
+  source_config="${CHEZMOI_SOURCE_DIR}/dot_config/watchman/watchman.json"
+else
+  source_config={{ joinPath .chezmoi.sourceDir "dot_config/watchman/watchman.json" | quote }}
+fi
+target_config="/etc/watchman.json"
+
+if [[ ! -f "$source_config" ]]; then
+  echo "Skipping Watchman global config sync: source config missing at ${source_config}." >&2
+  exit 0
+fi
+
+if [[ -f "$target_config" ]] && cmp -s "$source_config" "$target_config"; then
+  exit 0
+fi
+
+if [[ "$EUID" -eq 0 ]]; then
+  install -m 0644 "$source_config" "$target_config"
+else
+  sudo install -m 0644 "$source_config" "$target_config"
+fi
+echo "Installed Watchman global config to ${target_config}"
+
+if command -v watchman >/dev/null 2>&1; then
+  if watchman shutdown-server >/dev/null 2>&1; then
+    echo "Requested Watchman server restart."
+  else
+    echo "Watchman restart request failed; continuing." >&2
+  fi
+else
+  echo "Watchman not found on PATH; skipped restart."
+fi
+{{- end -}}

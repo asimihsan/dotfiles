@@ -1,0 +1,10 @@
+{
+  "root_files": [
+    ".watchmanconfig",
+    ".git",
+    ".hg",
+    ".svn",
+    ".jj"
+  ],
+  "enforce_root_files": true
+}
