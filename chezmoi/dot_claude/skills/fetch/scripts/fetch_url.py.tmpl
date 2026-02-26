@@ -1,0 +1,259 @@
+#!/usr/bin/env python3
+"""Fetch URL content and return structured JSON for LLM workflows."""
+
+from __future__ import annotations
+
+import argparse
+import inspect
+import json
+import ssl
+import sys
+from pathlib import Path
+from typing import Any
+from urllib.parse import urlparse
+
+import httpx
+import markdownify
+import readabilipy.simple_json
+
+EXTRA_CA_CERT = {{ if eq .chezmoi.hostname "okzf68" }}"{{ .chezmoi.homeDir }}/.config/certs/node-extra-ca.pem"{{ else }}None{{ end }}
+
+
+class FetchError(RuntimeError):
+    """Represent a fetch configuration or runtime failure."""
+
+
+def eprint(message: str) -> None:
+    print(message, file=sys.stderr)
+
+
+def parse_query_args(items: list[str]) -> dict[str, str]:
+    params: dict[str, str] = {}
+    for item in items:
+        if "=" not in item:
+            raise FetchError(f"Invalid --query value {item!r}; expected KEY=VALUE")
+        key, value = item.split("=", 1)
+        key = key.strip()
+        if not key:
+            raise FetchError(f"Invalid --query value {item!r}; key cannot be empty")
+        params[key] = value
+    return params
+
+
+def parse_header_args(items: list[str]) -> dict[str, str]:
+    headers: dict[str, str] = {}
+    for item in items:
+        if ":" not in item:
+            raise FetchError(f"Invalid --header value {item!r}; expected 'Name: Value'")
+        key, value = item.split(":", 1)
+        key = key.strip()
+        value = value.strip()
+        if not key:
+            raise FetchError(f"Invalid --header value {item!r}; header name cannot be empty")
+        headers[key] = value
+    return headers
+
+
+def validate_url(url: str) -> None:
+    parsed = urlparse(url)
+    if parsed.scheme not in {"http", "https"}:
+        raise FetchError(f"Unsupported URL scheme {parsed.scheme!r}; only http/https are allowed")
+    if not parsed.netloc:
+        raise FetchError("URL must include a hostname")
+
+
+def build_verify(extra_ca_cert: str | None) -> tuple[ssl.SSLContext | bool, bool, bool, str | None]:
+    configured = bool(extra_ca_cert)
+    loaded = False
+    path_for_output = str(extra_ca_cert) if configured else None
+
+    if not configured:
+        return True, configured, loaded, path_for_output
+
+    cert_path = Path(str(extra_ca_cert))
+    if not cert_path.exists():
+        eprint(f"warning: configured CA file not found: {cert_path}; using system trust store")
+        return True, configured, loaded, path_for_output
+
+    ctx = ssl.create_default_context()
+    try:
+        ctx.load_verify_locations(cafile=str(cert_path))
+    except OSError as exc:
+        raise FetchError(f"Failed to load CA certificate {cert_path}: {exc}") from exc
+
+    loaded = True
+    return ctx, configured, loaded, path_for_output
+
+
+def html_to_markdown(source_html: str) -> tuple[str, bool]:
+    try:
+        simplified = readabilipy.simple_json.simple_json_from_html_string(
+            source_html,
+            use_readability=True,
+        )
+    except Exception as exc:
+        eprint(f"warning: readability parse failed: {exc}")
+        return source_html, False
+
+    content_html = simplified.get("content")
+    if not isinstance(content_html, str) or not content_html.strip():
+        return source_html, False
+
+    markdown = markdownify.markdownify(content_html, heading_style="ATX")
+    return markdown, True
+
+
+def chunk_text(text: str, start_index: int, max_chars: int) -> tuple[str, bool, int | None]:
+    if start_index >= len(text):
+        return "", False, None
+
+    end_index = min(start_index + max_chars, len(text))
+    chunk = text[start_index:end_index]
+    has_more = end_index < len(text)
+    next_start_index = end_index if has_more else None
+    return chunk, has_more, next_start_index
+
+
+def fetch(args: argparse.Namespace) -> dict[str, Any]:
+    validate_url(args.url)
+
+    if args.timeout <= 0:
+        raise FetchError("--timeout must be > 0")
+    if args.max_bytes <= 0:
+        raise FetchError("--max-bytes must be > 0")
+    if args.max_chars <= 0:
+        raise FetchError("--max-chars must be > 0")
+    if args.start_index < 0:
+        raise FetchError("--start-index must be >= 0")
+
+    params = parse_query_args(args.query)
+    headers = parse_header_args(args.header)
+    headers.setdefault("User-Agent", args.user_agent)
+
+    verify_value, tls_configured, tls_loaded, tls_path = build_verify(EXTRA_CA_CERT)
+
+    client_kwargs: dict[str, Any] = {
+        "verify": verify_value,
+        "timeout": httpx.Timeout(args.timeout),
+        "follow_redirects": True,
+    }
+    if args.proxy:
+        signature = inspect.signature(httpx.Client)
+        if "proxy" in signature.parameters:
+            client_kwargs["proxy"] = args.proxy
+        else:
+            client_kwargs["proxies"] = args.proxy
+
+    response_bytes = bytearray()
+    response_bytes_truncated = False
+
+    with httpx.Client(**client_kwargs) as client:
+        with client.stream("GET", args.url, params=params, headers=headers) as response:
+            status_code = response.status_code
+            final_url = str(response.url)
+            content_type = response.headers.get("content-type", "")
+
+            for chunk in response.iter_bytes():
+                if not chunk:
+                    continue
+                remaining = args.max_bytes - len(response_bytes)
+                if remaining <= 0:
+                    response_bytes_truncated = True
+                    break
+                if len(chunk) > remaining:
+                    response_bytes.extend(chunk[:remaining])
+                    response_bytes_truncated = True
+                    break
+                response_bytes.extend(chunk)
+
+    if status_code >= 400:
+        raise FetchError(f"HTTP {status_code} returned for {final_url}")
+
+    decoded_text = bytes(response_bytes).decode("utf-8", errors="replace")
+    content_type_lower = content_type.lower()
+    is_html = "text/html" in content_type_lower or "application/xhtml+xml" in content_type_lower
+
+    html_simplified = False
+    if is_html and not args.raw:
+        decoded_text, html_simplified = html_to_markdown(decoded_text)
+
+    content_chunk, content_truncated, next_start_index = chunk_text(
+        decoded_text,
+        start_index=args.start_index,
+        max_chars=args.max_chars,
+    )
+
+    return {
+        "ok": True,
+        "url": args.url,
+        "final_url": final_url,
+        "status_code": status_code,
+        "content_type": content_type,
+        "query_params": params,
+        "headers_sent": headers,
+        "raw_mode": bool(args.raw),
+        "html_simplified": html_simplified,
+        "response_bytes": len(response_bytes),
+        "response_bytes_truncated": response_bytes_truncated,
+        "content_total_chars": len(decoded_text),
+        "start_index": args.start_index,
+        "max_chars": args.max_chars,
+        "content_truncated": content_truncated,
+        "next_start_index": next_start_index,
+        "tls_extra_ca_configured": tls_configured,
+        "tls_extra_ca_loaded": tls_loaded,
+        "tls_extra_ca_path": tls_path,
+        "content": content_chunk,
+    }
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Fetch URL content with optional HTML simplification")
+    parser.add_argument("--url", required=True, help="HTTP(S) URL to fetch")
+    parser.add_argument(
+        "--query",
+        action="append",
+        default=[],
+        metavar="KEY=VALUE",
+        help="Add query parameter (repeatable)",
+    )
+    parser.add_argument(
+        "--header",
+        action="append",
+        default=[],
+        metavar="NAME: VALUE",
+        help="Add request header (repeatable)",
+    )
+    parser.add_argument("--timeout", type=float, default=30.0, help="Request timeout in seconds")
+    parser.add_argument("--max-bytes", type=int, default=2_000_000, help="Maximum response bytes to keep")
+    parser.add_argument("--max-chars", type=int, default=5000, help="Maximum output characters per call")
+    parser.add_argument("--start-index", type=int, default=0, help="Start index for paged content")
+    parser.add_argument("--proxy", default=None, help="Proxy URL")
+    parser.add_argument("--raw", action="store_true", help="Disable HTML simplification")
+    parser.add_argument("--user-agent", default="fetch-skill/1.0", help="Request User-Agent header")
+    return parser
+
+
+def main() -> int:
+    parser = build_parser()
+    args = parser.parse_args()
+
+    try:
+        payload = fetch(args)
+    except Exception as exc:
+        error_payload = {
+            "ok": False,
+            "error": str(exc),
+            "tls_extra_ca_configured": bool(EXTRA_CA_CERT),
+            "tls_extra_ca_loaded": False,
+            "tls_extra_ca_path": EXTRA_CA_CERT if EXTRA_CA_CERT else None,
+        }
+        print(json.dumps(error_payload, indent=2, sort_keys=True))
+        return 1
+
+    print(json.dumps(payload, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
