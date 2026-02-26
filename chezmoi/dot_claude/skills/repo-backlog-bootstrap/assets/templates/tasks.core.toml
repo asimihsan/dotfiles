@@ -1,31 +1,31 @@
-[tasks.fmt]
+[fmt]
 description = "Run formatting checks"
 run = [
   "echo 'TODO: replace with project formatter command'",
 ]
 
-[tasks.lint]
+[lint]
 description = "Run lint checks"
 run = [
   "echo 'TODO: replace with project lint command'",
 ]
 
-[tasks.test]
+[test]
 description = "Run tests"
 alias = ["t"]
 run = [
   "echo 'TODO: replace with project test command'",
 ]
 
-[tasks.dev]
+[dev]
 description = "Default local quality loop"
 run = [
-  "mise run fmt",
-  "mise run lint",
-  "mise run test",
+  { task = "fmt" },
+  { task = "lint" },
+  { task = "test" },
 ]
 
-[tasks.doctor]
+[doctor]
 description = "Print core mise diagnostics"
 run = [
   "mise doctor",

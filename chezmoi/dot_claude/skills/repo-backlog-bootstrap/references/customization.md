@@ -33,10 +33,10 @@ mise run dev
 
 ## 4) Decide backlog tracking policy
 
-This bootstrap adds `backlog/` to `.git/info/exclude` (local ignore only).
+Default behavior keeps backlog local-only by adding `backlog/` to `.git/info/exclude`.
 
 If you want backlog files tracked in Git:
-1. Remove `backlog/` from `.git/info/exclude`.
+1. Run bootstrap with `--track-backlog` (or remove `backlog/` from `.git/info/exclude`).
 2. Add and commit backlog files normally.
 
 ## 5) Validate jujutsu status

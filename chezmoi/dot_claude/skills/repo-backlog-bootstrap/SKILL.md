@@ -28,6 +28,9 @@ python scripts/bootstrap_repo.py \
 
 # Initialize jj automatically when .jj is missing and .git exists
 python scripts/bootstrap_repo.py --repo /path/to/repo --init-jj
+
+# Optional: keep backlog tracked in Git (instead of local-only)
+python scripts/bootstrap_repo.py --repo /path/to/repo --track-backlog
 ```
 
 ## Workflow
@@ -39,15 +42,21 @@ python scripts/bootstrap_repo.py --repo /path/to/repo --init-jj
    - `backlog/tasks/`
    - `backlog/tasks/completed/`
 3. Install backlog templates from `assets/templates/backlog/`.
-4. Ensure `backlog/` is listed in `.git/info/exclude` when `.git/` exists.
+4. Backlog tracking policy:
+   - default: add `backlog/` to `.git/info/exclude` (local-only planning artifacts).
+   - optional: keep `backlog/` tracked with `--track-backlog`.
 5. Update AGENTS.md:
    - `overwrite` mode: write `assets/templates/AGENTS.new.md` (for new repos).
    - `merge` mode: append missing workflow and backlog sections to existing AGENTS.md.
-6. Ensure mise bootstrap defaults when missing:
+6. Ensure mise bootstrap defaults:
    - `mise.toml`
    - `tasks.core.toml`
    - `scripts/env.sh`
    - `scripts/postinstall.sh`
+   - For existing `mise.toml`, merge missing keys required by templates:
+     - `[task_config].includes` contains `"tasks.core.toml"`
+     - `[env]` contains `_.source = "{{ config_root }}/scripts/env.sh"`
+     - `[hooks].postinstall` includes `"./scripts/postinstall.sh"`
 7. Ensure jujutsu readiness:
    - If `.jj` exists, leave it unchanged.
    - If `.jj` is missing, recommend `jj git init --colocate`.
@@ -63,8 +72,20 @@ Key flags:
 - `--project-goal "<text>"`: project-goal sentence for AGENTS overwrite template.
 - `--force`: overwrite generated templates.
 - `--skip-mise`: skip mise bootstrap files.
+- `--track-backlog`: keep `backlog/` tracked in git (remove `backlog/` from `.git/info/exclude`).
 - `--init-jj`: run `jj git init --colocate` if `.jj` is missing and `.git` exists.
 - `--dry-run`: print planned changes without writing.
+
+## Mise Retrofit Guardrail
+
+When working with retrofit repos, explicitly use `$mise` references before changing `mise.toml` behavior:
+- `../mise/references/docs/tasks/task-configuration.md` (`task_config.includes` file format)
+- `../mise/references/docs/environments/index.md` (`[env]` + `_.source`)
+- `../mise/references/docs/hooks.md` (`[hooks].postinstall` semantics)
+
+After bootstrap, validate:
+- `mise tasks`
+- `mise run dev --help` (or equivalent project lifecycle task)
 
 ## Resources
 

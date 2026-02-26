@@ -4,10 +4,14 @@
 from __future__ import annotations
 
 import argparse
+import json
 import subprocess
 import sys
+import tomllib
+from datetime import date, datetime, time
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 
 BOOTSTRAP_HEADER = "## Repo Bootstrap Standards"
@@ -133,6 +137,213 @@ def ensure_backlog_excluded(repo: Path, dry_run: bool, actions: list[Action]) ->
     emit(actions, "write", exclude_path, "added `backlog/` to git exclude")
 
 
+def ensure_backlog_tracked(repo: Path, dry_run: bool, actions: list[Action]) -> None:
+    git_dir = repo / ".git"
+    exclude_path = git_dir / "info" / "exclude"
+
+    if not git_dir.exists():
+        emit(actions, "skip", exclude_path, ".git not found; skipped exclude update")
+        return
+
+    existing = read_text(exclude_path) if exclude_path.exists() else ""
+    lines = existing.splitlines()
+    if "backlog/" not in lines:
+        emit(actions, "ok", exclude_path, "`backlog/` is not excluded")
+        return
+
+    updated_lines = [line for line in lines if line != "backlog/"]
+    updated = "\n".join(updated_lines)
+    if existing.endswith("\n"):
+        updated += "\n"
+
+    if dry_run:
+        emit(actions, "plan", exclude_path, "remove `backlog/` from git exclude")
+        return
+
+    exclude_path.parent.mkdir(parents=True, exist_ok=True)
+    exclude_path.write_text(updated, encoding="utf-8")
+    emit(actions, "write", exclude_path, "removed `backlog/` from git exclude")
+
+
+def _is_bare_key(key: str) -> bool:
+    if not key:
+        return False
+    for char in key:
+        if not (char.isalnum() or char in {"_", "-"}):
+            return False
+    return True
+
+
+def _format_key(key: str) -> str:
+    return key if _is_bare_key(key) else json.dumps(key)
+
+
+def _format_value(value: Any) -> str:
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, int):
+        return str(value)
+    if isinstance(value, float):
+        return repr(value)
+    if isinstance(value, datetime):
+        return value.isoformat()
+    if isinstance(value, date):
+        return value.isoformat()
+    if isinstance(value, time):
+        return value.isoformat()
+    if isinstance(value, str):
+        return json.dumps(value)
+    if isinstance(value, list):
+        return "[" + ", ".join(_format_value(item) for item in value) + "]"
+    if isinstance(value, dict):
+        parts = [f"{_format_key(str(k))} = {_format_value(v)}" for k, v in value.items()]
+        return "{ " + ", ".join(parts) + " }"
+    raise RuntimeError(f"unsupported TOML value type: {type(value).__name__}")
+
+
+def _flatten_assignments(
+    data: dict[str, Any],
+    prefix: tuple[str, ...] = (),
+) -> list[tuple[tuple[str, ...], Any]]:
+    flattened: list[tuple[tuple[str, ...], Any]] = []
+    for key, value in data.items():
+        key_path = prefix + (str(key),)
+        if isinstance(value, dict) and value:
+            flattened.extend(_flatten_assignments(value, key_path))
+        else:
+            flattened.append((key_path, value))
+    return flattened
+
+
+def _dump_toml(doc: dict[str, Any]) -> str:
+    lines: list[str] = []
+
+    root_scalars = [(k, v) for k, v in doc.items() if not isinstance(v, dict)]
+    root_tables = [(k, v) for k, v in doc.items() if isinstance(v, dict)]
+
+    for key, value in root_scalars:
+        lines.append(f"{_format_key(str(key))} = {_format_value(value)}")
+
+    for table_name, table_data in root_tables:
+        if lines:
+            lines.append("")
+        lines.append(f"[{_format_key(str(table_name))}]")
+        for key_path, value in _flatten_assignments(table_data):
+            dotted_key = ".".join(_format_key(part) for part in key_path)
+            lines.append(f"{dotted_key} = {_format_value(value)}")
+
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def _as_dict_table(value: Any, table_name: str, path: Path) -> dict[str, Any]:
+    if value is None:
+        return {}
+    if isinstance(value, dict):
+        return value
+    raise RuntimeError(
+        f"{path.name}: expected `{table_name}` to be a TOML table, got {type(value).__name__}"
+    )
+
+
+def ensure_mise_integrations(repo: Path, dry_run: bool, actions: list[Action]) -> None:
+    mise_path = repo / "mise.toml"
+    if not mise_path.exists():
+        emit(actions, "skip", mise_path, "not found; skipped mise integration merge")
+        return
+
+    existing = read_text(mise_path)
+    try:
+        parsed = tomllib.loads(existing)
+    except tomllib.TOMLDecodeError as exc:
+        raise RuntimeError(f"failed to parse {mise_path.name}: {exc}") from exc
+
+    if not isinstance(parsed, dict):
+        raise RuntimeError(f"failed to parse {mise_path.name}: root document is not a table")
+
+    merged_fields: list[str] = []
+
+    task_config = _as_dict_table(parsed.get("task_config"), "task_config", mise_path)
+    if "task_config" not in parsed:
+        parsed["task_config"] = task_config
+
+    includes = task_config.get("includes")
+    if includes is None:
+        task_config["includes"] = ["tasks.core.toml"]
+        merged_fields.append("task_config.includes")
+    elif isinstance(includes, list):
+        if any(not isinstance(item, str) for item in includes):
+            raise RuntimeError(
+                f"{mise_path.name}: expected `task_config.includes` to be an array of strings"
+            )
+        if "tasks.core.toml" not in includes:
+            includes.append("tasks.core.toml")
+            merged_fields.append("task_config.includes")
+    else:
+        raise RuntimeError(
+            f"{mise_path.name}: expected `task_config.includes` to be an array, "
+            f"got {type(includes).__name__}"
+        )
+
+    env = _as_dict_table(parsed.get("env"), "env", mise_path)
+    if "env" not in parsed:
+        parsed["env"] = env
+
+    env_private = env.get("_")
+    if env_private is None:
+        env_private = {"source": "{{ config_root }}/scripts/env.sh"}
+        env["_"] = env_private
+        merged_fields.append("env._.source")
+    elif isinstance(env_private, dict):
+        if "source" not in env_private:
+            env_private["source"] = "{{ config_root }}/scripts/env.sh"
+            merged_fields.append("env._.source")
+    else:
+        raise RuntimeError(
+            f"{mise_path.name}: expected `env._` to be a table, got {type(env_private).__name__}"
+        )
+
+    hooks = _as_dict_table(parsed.get("hooks"), "hooks", mise_path)
+    if "hooks" not in parsed:
+        parsed["hooks"] = hooks
+
+    postinstall = hooks.get("postinstall")
+    if postinstall is None:
+        hooks["postinstall"] = ["./scripts/postinstall.sh"]
+        merged_fields.append("hooks.postinstall")
+    elif isinstance(postinstall, str):
+        if postinstall != "./scripts/postinstall.sh":
+            hooks["postinstall"] = [postinstall, "./scripts/postinstall.sh"]
+            merged_fields.append("hooks.postinstall")
+    elif isinstance(postinstall, list):
+        if any(not isinstance(item, str) for item in postinstall):
+            raise RuntimeError(
+                f"{mise_path.name}: expected `hooks.postinstall` to be an array of strings"
+            )
+        if "./scripts/postinstall.sh" not in postinstall:
+            postinstall.append("./scripts/postinstall.sh")
+            merged_fields.append("hooks.postinstall")
+    else:
+        raise RuntimeError(
+            f"{mise_path.name}: expected `hooks.postinstall` to be string or array, "
+            f"got {type(postinstall).__name__}"
+        )
+
+    if not merged_fields:
+        emit(actions, "ok", mise_path, "already has task include + env source + postinstall hook")
+        return
+
+    rendered = _dump_toml(parsed)
+    details = ", ".join(merged_fields)
+    write_content(
+        target=mise_path,
+        content=rendered,
+        force=True,
+        dry_run=dry_run,
+        actions=actions,
+        label=f"merged mise defaults ({details})",
+    )
+
+
 def normalize_goal(goal: str) -> str:
     normalized = " ".join(goal.split())
     if not normalized:
@@ -242,6 +453,8 @@ def ensure_mise_defaults(
         if changed and target_relative.endswith(".sh"):
             mark_executable(repo / target_relative, dry_run=dry_run, actions=actions)
 
+    ensure_mise_integrations(repo=repo, dry_run=dry_run, actions=actions)
+
 
 def ensure_jujutsu(
     repo: Path,
@@ -325,6 +538,11 @@ def parse_args() -> argparse.Namespace:
         help="Skip mise.toml/task script bootstrap.",
     )
     parser.add_argument(
+        "--track-backlog",
+        action="store_true",
+        help="Keep `backlog/` tracked in git (remove `backlog/` from .git/info/exclude).",
+    )
+    parser.add_argument(
         "--init-jj",
         action="store_true",
         help="Initialize jujutsu automatically (`jj git init --colocate`) when needed.",
@@ -398,7 +616,10 @@ def main() -> int:
             dry_run=args.dry_run,
             actions=actions,
         )
-        ensure_backlog_excluded(repo=repo, dry_run=args.dry_run, actions=actions)
+        if args.track_backlog:
+            ensure_backlog_tracked(repo=repo, dry_run=args.dry_run, actions=actions)
+        else:
+            ensure_backlog_excluded(repo=repo, dry_run=args.dry_run, actions=actions)
 
         update_agents(
             repo=repo,

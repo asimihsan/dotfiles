@@ -13,7 +13,8 @@ Use `jj` to look at previous few commits to get a sense of recent changes. Analy
 
 ## Backlog plans and tasks
 
-Note that `backlog/` can be ignored with `.git/info/exclude` to keep it out of repo history when desired.
+Backlog is local-only by default via `.git/info/exclude` (`backlog/`).
+If you choose to track backlog files in Git, remove that local exclude and keep task references auditable in PRs.
 
 When creating a new plan or task, once you think you are finished, iteratively review with an independent sub-agent and make fix-ups and re-reviews until both of you are satisfied.
 
@@ -29,7 +30,7 @@ Plans should use the template in `backlog/plans/_template.md`.
 A task is a specific, actionable item that is part of a plan. Tasks are stored
 in `backlog/tasks/`.
 
-- Each commit/PR should reference an existing `backlog/tasks/task-<eight-digit-id>_<title>.md` (for example `task-00000042_fix-retry-loop.md`).
+- Each commit/PR should reference a task ID from `backlog/tasks/task-<eight-digit-id>_<title>.md` (for example `task-00000042_fix-retry-loop.md`).
 - Do not start implementing before converting an idea into a task with clear Acceptance Criteria.
 - Tasks must be atomic, independent, and testable.
 - New tasks must follow the template in `backlog/tasks/_template.md`.

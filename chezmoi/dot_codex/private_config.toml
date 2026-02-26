@@ -13,9 +13,9 @@ web_search = "live"
 # command = "npx"
 # args = ["-y", "@upstash/context7-mcp"]
 
-[mcp_servers.fetch]
-command = "uvx"
-args = ["mcp-server-fetch"]
+# [mcp_servers.fetch]
+# command = "uvx"
+# args = ["mcp-server-fetch"]
 
 # [mcp_servers.aws-api]
 # command = "uvx"
