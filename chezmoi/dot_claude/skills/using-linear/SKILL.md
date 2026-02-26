@@ -15,15 +15,8 @@ If it's not clear which project a new ticket belongs to, stop and ask the user. 
 
 The return values of the `issues` commands contain an `embeds` array which holds the URLs of the screenshots, documents, etc. that are part of the ticket description. If a ticket or comment contains such embeds, and they seem relevant to the ticket, fetch and view them as well. Use local caching when needed.
 
-## Updating tickets
-
-When you work on a ticket, and the the status of a task in the ticket description has changed (task incomplete -> task done), update the description.
-
-When updating a ticket with a progress report that is more than just a checkbox change, add that report as a ticket comment.
-
-General rule: The ticket description is the starting point for planning. But when work is ongoing, I want to be able to retrace our steps by looking at the ticket and its comments.
-
 ## Writing Ticket Bodies And Comments (Required)
+- You must ask the user for confirmation before writing a ticket description or comment.
 - Whenever posting a ticket description or comment, **do not** inline the body text.
 - First write the content to a file using a heredoc, then pass the file to `linearis` as needed.
 - Always prefix the body with a first, standalone paragraph: `(This is from an LLM)`
