@@ -1,0 +1,4 @@
+interface:
+  display_name: "PR Context Review"
+  short_description: "Review PRs with system context and pedagogy"
+  default_prompt: "Use $pr-context-review with DOC_OUTPUT_PATH=<path/to/analysis.md> and PR_URL=<https://github.com/owner/repo/pull/123>."
