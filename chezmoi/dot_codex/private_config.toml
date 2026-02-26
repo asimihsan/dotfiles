@@ -52,6 +52,7 @@ shell_snapshot = true
 skills = true
 steer = true
 unified_exec = true
+prevent_idle_sleep = true
 
 [notice]
 hide_gpt5_1_migration_prompt = true
