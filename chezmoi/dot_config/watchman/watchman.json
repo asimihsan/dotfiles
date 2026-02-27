@@ -1,10 +1,11 @@
 {
+  "content_hash_max_items": 999999,
+  "enforce_root_files": true,
   "root_files": [
     ".watchmanconfig",
     ".git",
     ".hg",
     ".svn",
     ".jj"
-  ],
-  "enforce_root_files": true
+  ]
 }
