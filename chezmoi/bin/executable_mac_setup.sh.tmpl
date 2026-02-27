@@ -647,8 +647,51 @@ update_system() {
 
 init_chezmoi() {
   install_chezmoi
-  fancy_echo "Initializing chezmoi from $SCRIPT_DIR"
-  chezmoi init --source "$SCRIPT_DIR" --apply
+
+  local source_dir=""
+  local existing_source=""
+  local config_file=""
+  local err_file=""
+  if [[ -n "${CHEZMOI_SOURCE_DIR:-}" && -d "${CHEZMOI_SOURCE_DIR}" ]]; then
+    source_dir="${CHEZMOI_SOURCE_DIR}"
+  elif [[ -f "$SCRIPT_DIR/.chezmoiroot" ]]; then
+    source_dir="$SCRIPT_DIR"
+  elif [[ -d "$SCRIPT_DIR/chezmoi" ]]; then
+    source_dir="$SCRIPT_DIR/chezmoi"
+  else
+    err_file=$(mktemp)
+    if ! existing_source=$(chezmoi source-path 2>"$err_file"); then
+      echo "Error: failed to read current chezmoi source path." >&2
+      cat "$err_file" >&2
+      rm -f "$err_file"
+      exit 1
+    fi
+    rm -f "$err_file"
+    if [[ -d "$existing_source" ]]; then
+      source_dir="$existing_source"
+    else
+      echo "Error: could not determine chezmoi source directory." >&2
+      echo "Set CHEZMOI_SOURCE_DIR to your dotfiles repo path and re-run." >&2
+      exit 1
+    fi
+  fi
+
+  err_file=$(mktemp)
+  if ! config_file=$(chezmoi execute-template '{{ .chezmoi.configFile }}' 2>"$err_file"); then
+    echo "Error: failed to resolve chezmoi config file path." >&2
+    cat "$err_file" >&2
+    rm -f "$err_file"
+    exit 1
+  fi
+  rm -f "$err_file"
+
+  if [[ -f "$config_file" ]]; then
+    fancy_echo "Applying chezmoi from $source_dir"
+    chezmoi apply --source "$source_dir"
+  else
+    fancy_echo "Initializing chezmoi from $source_dir"
+    chezmoi init --source "$source_dir" --apply
+  fi
 }
 
 mac_system_setup() {
