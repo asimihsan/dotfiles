@@ -12,5 +12,31 @@
 **/Media.localized/*
 **/Movies/TV/*
 **/node_modules/*
+**/.next/*
+**/.nuxt/*
+**/.turbo/*
+**/.cache/*
+**/.pytest_cache/*
+**/.mypy_cache/*
+**/.venv/*
+**/.terraform/*
+**/target/*
+**/build/*
+**/dist/*
+**/out/*
+**/workplace/**/.next/*
+**/workplace/**/.nuxt/*
+**/workplace/**/.turbo/*
+**/workplace/**/.cache/*
+**/workplace/**/.pytest_cache/*
+**/workplace/**/.mypy_cache/*
+**/workplace/**/.venv/*
+**/workplace/**/.terraform/*
+**/workplace/**/target/*
+**/workplace/**/build/*
+**/workplace/**/dist/*
+**/workplace/**/out/*
+**/Library/Application Support/Cursor/User/workspaceStorage/*
+**/Library/Application Support/Cursor/User/globalStorage/*
 /Library/Keychains/*
 /Library/Preferences/SystemConfiguration/*
